@@ -1,0 +1,158 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --font-inter: 'Inter', system-ui, sans-serif;
+    --font-playfair: 'Playfair Display', Georgia, serif;
+  }
+  
+  body {
+    font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-playfair);
+    letter-spacing: -0.025em;
+  }
+  
+  ::selection {
+    background-color: #0A0A0A;
+    color: #FFFEF9;
+  }
+  
+  *:focus {
+    outline: none;
+  }
+  
+  *:focus-visible {
+    box-shadow: 0 0 0 1px rgba(10, 10, 10, 0.2), 0 0 0 3px #FFFEF9;
+  }
+}
+
+@layer components {
+  /* Premium button base */
+  .btn-premium {
+    position: relative;
+    overflow: hidden;
+    transition: all 500ms ease-out;
+  }
+  
+  /* Elegant underline */
+  .link-underline {
+    position: relative;
+  }
+  
+  .link-underline::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 1px;
+    width: 100%;
+    transform-origin: left;
+    transform: scaleX(0);
+    background: currentColor;
+    transition: transform 500ms ease-out;
+  }
+  
+  .link-underline:hover::after {
+    transform: scaleX(1);
+  }
+  
+  /* Luxury card */
+  .card-luxury {
+    background-color: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(4px);
+    transition: all 700ms ease-out;
+  }
+  
+  .card-luxury:hover {
+    background-color: rgba(255, 255, 255, 0.7);
+  }
+  
+  /* Italian divider */
+  .divider-italian {
+    position: relative;
+    height: 1px;
+    width: 100%;
+    background: linear-gradient(to right, transparent, rgba(10, 10, 10, 0.1), transparent);
+  }
+}
+
+@layer utilities {
+  /* Subtle gradient overlay */
+  .gradient-overlay {
+    background: linear-gradient(
+      180deg,
+      rgba(255, 254, 249, 0) 0%,
+      rgba(255, 254, 249, 0.5) 50%,
+      rgba(255, 254, 249, 0.9) 100%
+    );
+  }
+  
+  /* Premium text gradient */
+  .text-gradient {
+    background: linear-gradient(to right, #0A0A0A, #4F4F4F, #0A0A0A);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+  }
+  
+  /* Subtle shadow */
+  .shadow-italian {
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.03),
+                0 2px 4px 0 rgba(0, 0, 0, 0.02),
+                0 4px 8px 0 rgba(0, 0, 0, 0.01);
+  }
+}
+
+/* Custom scrollbar - minimal and elegant */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #FFFDF7;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(10, 10, 10, 0.1);
+  transition: background-color 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(10, 10, 10, 0.2);
+}
+
+/* Smooth scroll behavior */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 80px;
+}
+
+/* Premium loading animation */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.loading-shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 254, 249, 0) 0%,
+    rgba(255, 254, 249, 0.5) 50%,
+    rgba(255, 254, 249, 0) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 2s ease-in-out infinite;
+}
