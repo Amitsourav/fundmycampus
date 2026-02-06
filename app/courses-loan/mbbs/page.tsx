@@ -239,7 +239,7 @@ export default function MBBSEducationLoanPage() {
       </section>
 
       {/* Loan Features */}
-      <section className="py-20 bg-gradient-to-r from-amber-50 to-white">
+      <section className="py-20 bg-gradient-to-r from-teal-50 to-white">
         <div className="max-w-screen-xl mx-auto px-6 md:px-8">
           <div className="text-center mb-16">
             <h2 className="font-serif text-display-md text-black mb-4">
@@ -308,7 +308,7 @@ export default function MBBSEducationLoanPage() {
       </section>
 
       {/* MBBS Specializations */}
-      <section className="py-20 bg-gradient-to-bl from-white via-teal-50 to-amber-50">
+      <section className="py-20 bg-gradient-to-bl from-white via-teal-50 to-teal-50">
         <div className="max-w-screen-xl mx-auto px-6 md:px-8">
           <div className="text-center mb-16">
             <h2 className="font-serif text-display-md text-black mb-4">

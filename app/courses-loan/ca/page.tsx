@@ -366,7 +366,7 @@ export default function CAEducationLoanPage() {
       </section>
 
       {/* CA Course Structure */}
-      <section className="py-20 bg-gradient-to-bl from-white via-teal-50 to-amber-50">
+      <section className="py-20 bg-gradient-to-bl from-white via-teal-50 to-teal-50">
         <div className="max-w-screen-xl mx-auto px-6 md:px-8">
           <div className="text-center mb-16">
             <h2 className="font-serif text-display-md text-black mb-4">
@@ -466,7 +466,7 @@ export default function CAEducationLoanPage() {
       </section>
 
       {/* Top CA Institutes */}
-      <section className="py-20 bg-gradient-to-r from-amber-50 to-white">
+      <section className="py-20 bg-gradient-to-r from-teal-50 to-white">
         <div className="max-w-screen-xl mx-auto px-6 md:px-8">
           <div className="text-center mb-16">
             <h2 className="font-serif text-display-md text-black mb-4">

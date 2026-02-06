@@ -309,7 +309,7 @@ export default function MBAEducationLoanPage() {
       </section>
 
       {/* MBA Specializations */}
-      <section className="py-20 bg-gradient-to-r from-amber-50 to-white">
+      <section className="py-20 bg-gradient-to-r from-teal-50 to-white">
         <div className="max-w-screen-xl mx-auto px-6 md:px-8">
           <div className="text-center mb-16">
             <h2 className="font-serif text-display-md text-black mb-4">
