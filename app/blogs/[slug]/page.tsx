@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { use } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { Calendar, Clock, ArrowLeft, User, Share2, Bookmark, ChevronRight } from "lucide-react";
@@ -119,8 +119,9 @@ const defaultPost = {
   tags: ["Education Loan", "Student Finance"]
 };
 
-export default function BlogPostPage({ params }: { params: { slug: string } }) {
-  const post = blogPosts[params.slug] || defaultPost;
+export default function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = use(params);
+  const post = blogPosts[slug] || defaultPost;
 
   const relatedPosts = [
     {
