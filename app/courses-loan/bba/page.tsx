@@ -233,8 +233,9 @@ export default function BBAEducationLoanPage() {
                 <Button variant="secondary" size="lg">
                   Check Eligibility
                 </Button>
+              </motion.div>
             </motion.div>
-          </motion.div>
+          </div>
         </div>
       </section>
 
