@@ -120,8 +120,8 @@ export const ToolsPreview: React.FC = () => {
             <div className="flex flex-col md:flex-row items-center justify-between gap-6">
               <div className="text-center md:text-left">
                 <div className="flex items-center justify-center md:justify-start gap-2 mb-2">
-                  <Sparkles className="w-5 h-5 text-teal-500" />
-                  <span className="text-teal-500 font-medium">100% Free</span>
+                  <Sparkles className="w-5 h-5 text-teal-400" />
+                  <span className="text-teal-400 font-medium">100% Free</span>
                 </div>
                 <h3 className="font-serif text-2xl text-white mb-2">
                   All Tools, No Hidden Costs

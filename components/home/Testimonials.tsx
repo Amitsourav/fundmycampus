@@ -104,16 +104,16 @@ export const Testimonials: React.FC = () => {
           <div className="bg-black rounded-xl p-8 md:p-10">
             <div className="grid grid-cols-3 gap-8 text-center">
               <div>
-                <p className="font-serif text-2xl md:text-3xl text-teal-500 mb-1">15,000+</p>
-                <p className="text-gray-700 text-sm">Happy Students</p>
+                <p className="font-serif text-2xl md:text-3xl text-teal-400 mb-1">15,000+</p>
+                <p className="text-gray-300 text-sm">Happy Students</p>
               </div>
-              <div className="border-l border-r border-gray-800">
-                <p className="font-serif text-2xl md:text-3xl text-teal-500 mb-1">98%</p>
-                <p className="text-gray-700 text-sm">Success Rate</p>
+              <div className="border-l border-r border-gray-700">
+                <p className="font-serif text-2xl md:text-3xl text-teal-400 mb-1">98%</p>
+                <p className="text-gray-300 text-sm">Success Rate</p>
               </div>
               <div>
-                <p className="font-serif text-2xl md:text-3xl text-teal-500 mb-1">50+</p>
-                <p className="text-gray-700 text-sm">Partner Institutions</p>
+                <p className="font-serif text-2xl md:text-3xl text-teal-400 mb-1">50+</p>
+                <p className="text-gray-300 text-sm">Partner Institutions</p>
               </div>
             </div>
           </div>
