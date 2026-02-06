@@ -1,6 +1,6 @@
 /**
  * Premium Button Component - Fundmycampus
- * Black/Yellow/White color scheme
+ * Black/Teal/White color scheme
  * Bold, modern design with high contrast
  */
 
@@ -31,12 +31,12 @@ export const Button: React.FC<ButtonProps> = ({
   onClick,
   type = "button"
 }) => {
-  const baseStyles = "relative inline-flex items-center justify-center font-sans font-medium rounded-lg transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow/50 focus-visible:ring-offset-2 focus-visible:ring-offset-black disabled:opacity-40 disabled:cursor-not-allowed";
-  
+  const baseStyles = "relative inline-flex items-center justify-center font-sans font-medium rounded-lg transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-500/50 focus-visible:ring-offset-2 focus-visible:ring-offset-black disabled:opacity-40 disabled:cursor-not-allowed";
+
   const variants = {
-    primary: "bg-yellow text-black hover:bg-yellow-500 active:bg-yellow-600 shadow-soft hover:shadow-soft-lg font-semibold",
-    secondary: "bg-black text-white border-2 border-yellow hover:bg-black-800 active:bg-black-700",
-    ghost: "text-white hover:text-yellow hover:bg-black-800",
+    primary: "bg-teal-500 text-white hover:bg-teal-600 active:bg-teal-700 shadow-soft hover:shadow-soft-lg font-semibold",
+    secondary: "bg-black text-white border-2 border-teal-500 hover:bg-black-800 active:bg-black-700",
+    ghost: "text-white hover:text-teal-400 hover:bg-black-800",
   };
   
   const sizes = {

@@ -22,8 +22,8 @@ export const WhyFundMyCampus: React.FC = () => {
     {
       icon: DollarSign,
       title: "Competitive Rates",
-      description: "Starting from 8.5% per annum with flexible EMI options tailored to your future income.",
-      highlight: "From 8.5% p.a."
+      description: "Starting from 6.75% per annum with flexible EMI options tailored to your future income.",
+      highlight: "From 6.75% p.a."
     },
     {
       icon: Globe,
@@ -72,11 +72,11 @@ export const WhyFundMyCampus: React.FC = () => {
             variants={fadeInUp}
             className="font-serif text-4xl md:text-5xl text-black mb-4"
           >
-            Why Choose <span className="text-yellow">FundMyCampus</span>?
+            Why Choose <span className="text-teal-500">FundMyCampus</span>?
           </motion.h2>
           <motion.p 
             variants={staggerItem}
-            className="text-xl text-gray-600 max-w-3xl mx-auto"
+            className="text-xl text-gray-800 max-w-3xl mx-auto"
           >
             We're committed to making education accessible with transparent processes, 
             competitive rates, and personalized support every step of the way.
@@ -99,8 +99,8 @@ export const WhyFundMyCampus: React.FC = () => {
               className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100 group cursor-pointer"
             >
               {/* Icon */}
-              <div className="w-16 h-16 bg-yellow/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-yellow/20 transition-colors duration-300">
-                <feature.icon className="w-8 h-8 text-yellow" />
+              <div className="w-16 h-16 bg-teal-50 rounded-xl flex items-center justify-center mb-6 group-hover:bg-teal-100 transition-colors duration-300">
+                <feature.icon className="w-8 h-8 text-teal-500" />
               </div>
 
               {/* Title */}
@@ -109,13 +109,13 @@ export const WhyFundMyCampus: React.FC = () => {
               </h3>
 
               {/* Description */}
-              <p className="text-gray-600 text-sm leading-relaxed mb-4">
+              <p className="text-gray-800 text-sm leading-relaxed mb-4">
                 {feature.description}
               </p>
 
               {/* Highlight */}
-              <div className="inline-flex items-center px-3 py-1 bg-yellow/10 rounded-full">
-                <span className="text-xs font-medium text-yellow-700">
+              <div className="inline-flex items-center px-3 py-1 bg-teal-50 rounded-full">
+                <span className="text-xs font-medium text-teal-700">
                   {feature.highlight}
                 </span>
               </div>
@@ -133,19 +133,19 @@ export const WhyFundMyCampus: React.FC = () => {
         >
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 text-center">
             <div>
-              <h4 className="font-serif text-3xl md:text-4xl text-yellow mb-2">₹500Cr+</h4>
+              <h4 className="font-serif text-3xl md:text-4xl text-teal-500 mb-2">₹500Cr+</h4>
               <p className="text-gray-300">Loans Disbursed</p>
             </div>
             <div>
-              <h4 className="font-serif text-3xl md:text-4xl text-yellow mb-2">15,000+</h4>
+              <h4 className="font-serif text-3xl md:text-4xl text-teal-500 mb-2">15,000+</h4>
               <p className="text-gray-300">Students Funded</p>
             </div>
             <div>
-              <h4 className="font-serif text-3xl md:text-4xl text-yellow mb-2">50+</h4>
+              <h4 className="font-serif text-3xl md:text-4xl text-teal-500 mb-2">50+</h4>
               <p className="text-gray-300">Countries</p>
             </div>
             <div>
-              <h4 className="font-serif text-3xl md:text-4xl text-yellow mb-2">98%</h4>
+              <h4 className="font-serif text-3xl md:text-4xl text-teal-500 mb-2">98%</h4>
               <p className="text-gray-300">Approval Rate</p>
             </div>
           </div>

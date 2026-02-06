@@ -4,6 +4,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { Computer, CheckCircle, ArrowRight, GraduationCap, DollarSign, FileText, Clock, Shield, Award, BookOpen, Users, Target, Code, Database, Smartphone } from "lucide-react";
 import { Button } from "@/components/ui/Button";
+import { FAQ } from "@/components/ui/FAQ";
 import { fadeInUp, staggerContainer, staggerItem, scrollReveal, cardHover } from "@/lib/animations";
 
 export default function BCAEducationLoanPage() {
@@ -124,70 +125,88 @@ export default function BCAEducationLoanPage() {
 
   return (
     <div className="pt-20 bg-white">
-      {/* Hero Section */}
-      <section className="relative py-20 md:py-32 overflow-hidden">
-        <div className="absolute inset-0">
-          <img
-            src="https://images.unsplash.com/photo-1517180102446-f3ece451e9d8?w=1920"
-            alt="Computer programming and coding environment"
-            className="w-full h-full object-cover"
-            loading="lazy"
-          />
-          <div className="absolute inset-0 bg-gradient-to-br from-black/60 via-black/40 to-black/60" />
-          <div className="absolute inset-0 bg-gradient-to-br from-yellow-400/20 to-transparent" />
-        </div>
-        
+      {/* Hero Section - Split Layout */}
+      <section className="relative py-16 md:py-24 overflow-hidden bg-white">
+        <div className="absolute top-0 left-0 w-1/2 h-full bg-teal-50 skew-x-12 -translate-x-20 hidden lg:block" />
+
         <div className="relative z-10 max-w-screen-xl mx-auto px-6 md:px-8">
-          <motion.div
-            initial="hidden"
-            animate="visible"
-            variants={staggerContainer}
-            className="text-center max-w-4xl mx-auto"
-          >
-            <motion.div variants={staggerItem} className="mb-6">
-              <Computer className="h-16 w-16 text-yellow-400 mx-auto" />
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <motion.div initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.6, delay: 0.2 }} className="relative order-2 lg:order-1">
+              <img src="https://images.unsplash.com/photo-1517180102446-f3ece451e9d8?w=800&auto=format&fit=crop&q=90" alt="Computer programming and coding" className="w-full h-[400px] md:h-[500px] object-cover rounded-2xl shadow-2xl" />
+              <div className="absolute -bottom-6 -right-6 bg-white p-4 rounded-xl shadow-lg border border-gray-100">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 bg-teal-100 rounded-full flex items-center justify-center">
+                    <Code className="w-6 h-6 text-teal-600" />
+                  </div>
+                  <div>
+                    <p className="font-bold text-black">IT Career Ready</p>
+                    <p className="text-sm text-gray-700">High Placement Rate</p>
+                  </div>
+                </div>
+              </div>
             </motion.div>
-            
-            <motion.h1 
-              variants={fadeInUp}
-              className="font-serif text-display-lg text-white mb-6"
-            >
-              Education Loan for BCA
-              <span className="block text-yellow-400 mt-2">Bachelor of Computer Applications</span>
-            </motion.h1>
-            
-            <motion.p 
-              variants={staggerItem}
-              className="text-xl text-white/90 mb-10 leading-relaxed"
-            >
-              Launch your career in Information Technology with a BCA degree. 
-              Get comprehensive loan coverage up to ₹15 Lakhs for your computer applications education.
-            </motion.p>
-            
-            <motion.div 
-              variants={staggerItem}
-              className="flex flex-col sm:flex-row gap-4 justify-center"
-            >
-              <Button variant="primary" size="lg">
-                Apply for BCA Loan
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
-              <Button variant="secondary" size="lg">
-                Check Eligibility
-              </Button>
+
+            <motion.div initial="hidden" animate="visible" variants={staggerContainer} className="order-1 lg:order-2">
+              <motion.div variants={staggerItem} className="mb-4">
+                <span className="inline-flex items-center gap-2 px-4 py-2 bg-teal-100 rounded-full">
+                  <Computer className="h-5 w-5 text-teal-600" />
+                  <span className="text-sm font-medium text-teal-500-800">BCA Education Loan</span>
+                </span>
+              </motion.div>
+
+              <motion.h1 variants={fadeInUp} className="font-serif text-4xl md:text-5xl lg:text-6xl text-black mb-6 leading-tight">
+                Bachelor of
+                <span className="block text-teal-600">Computer Applications</span>
+              </motion.h1>
+
+              <motion.p variants={staggerItem} className="text-lg text-gray-800 mb-8 leading-relaxed max-w-lg">
+                Launch your career in Information Technology with a BCA degree.
+                Get comprehensive loan coverage up to ₹15 Lakhs for your computer applications education.
+              </motion.p>
+
+              <motion.div variants={staggerItem} className="flex flex-wrap gap-6 mb-8">
+                <div className="flex items-center gap-2">
+                  <div className="w-10 h-10 bg-teal-500 rounded-lg flex items-center justify-center">
+                    <DollarSign className="w-5 h-5 text-black" />
+                  </div>
+                  <div>
+                    <p className="font-bold text-black">₹15 Lakhs</p>
+                    <p className="text-xs text-gray-700">Max Loan</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-10 h-10 bg-teal-500 rounded-lg flex items-center justify-center">
+                    <Clock className="w-5 h-5 text-black" />
+                  </div>
+                  <div>
+                    <p className="font-bold text-black">7-10 Days</p>
+                    <p className="text-xs text-gray-700">Approval</p>
+                  </div>
+                </div>
+              </motion.div>
+
+              <motion.div variants={staggerItem} className="flex flex-col sm:flex-row gap-4">
+                <Button variant="primary" size="lg">
+                  Apply for BCA Loan
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+                <Button variant="secondary" size="lg">
+                  Check Eligibility
+                </Button>
+              </motion.div>
             </motion.div>
-          </motion.div>
+          </div>
         </div>
       </section>
 
       {/* Loan Features */}
-      <section className="py-20 bg-gradient-to-br from-yellow-50 via-white to-yellow-100">
+      <section className="py-20 bg-gradient-to-br from-teal-50 via-white to-teal-100">
         <div className="max-w-screen-xl mx-auto px-6 md:px-8">
           <div className="text-center mb-16">
             <h2 className="font-serif text-display-md text-black mb-4">
               BCA Education Loan Features
             </h2>
-            <p className="text-lg text-gray-600">
+            <p className="text-lg text-gray-800">
               Specialized financing for computer applications education
             </p>
           </div>
@@ -206,9 +225,9 @@ export default function BCAEducationLoanPage() {
                 whileHover={{ y: -4 }}
                 className="bg-white/70 backdrop-blur-xl rounded-card p-8 text-center border border-white/20 shadow-[0_8px_32px_rgba(251,191,36,0.15)] hover:shadow-[0_12px_48px_rgba(251,191,36,0.25)] transition-all duration-500 hover:scale-105 hover:bg-white/80"
               >
-                <feature.icon className="h-12 w-12 text-yellow-600 mx-auto mb-4" />
+                <feature.icon className="h-12 w-12 text-teal-600 mx-auto mb-4" />
                 <h3 className="font-serif text-xl text-black mb-2">{feature.title}</h3>
-                <p className="text-gray-600 text-sm">{feature.description}</p>
+                <p className="text-gray-800 text-sm">{feature.description}</p>
               </motion.div>
             ))}
           </motion.div>
@@ -222,7 +241,7 @@ export default function BCAEducationLoanPage() {
             <h2 className="font-serif text-display-md text-black mb-4">
               BCA Specializations & Career Paths
             </h2>
-            <p className="text-lg text-gray-600">
+            <p className="text-lg text-gray-800">
               Choose from diverse specializations in computer applications
             </p>
           </div>
@@ -241,20 +260,20 @@ export default function BCAEducationLoanPage() {
                 className="bg-white/70 backdrop-blur-xl rounded-card p-8 border border-white/20 shadow-[0_8px_32px_rgba(251,191,36,0.15)] hover:shadow-[0_12px_48px_rgba(251,191,36,0.25)] hover:scale-[1.02] transition-all duration-500"
               >
                 <div className="flex items-center space-x-4 mb-4">
-                  <div className="w-12 h-12 bg-gradient-to-br from-yellow-400/20 to-yellow-500/30 backdrop-blur-sm rounded-lg flex items-center justify-center shadow-inner border border-yellow-400/40">
-                    <spec.icon className="h-6 w-6 text-yellow-600" />
+                  <div className="w-12 h-12 bg-gradient-to-br from-teal-500/20 to-teal-500/30 backdrop-blur-sm rounded-lg flex items-center justify-center shadow-inner border border-teal-500/40">
+                    <spec.icon className="h-6 w-6 text-teal-600" />
                   </div>
                   <h3 className="font-serif text-xl text-black">{spec.name}</h3>
                 </div>
-                <p className="text-gray-600 mb-4">{spec.description}</p>
+                <p className="text-gray-800 mb-4">{spec.description}</p>
                 <div className="space-y-2">
                   <div className="flex items-center space-x-2">
                     <Target className="h-4 w-4 text-green-500" />
                     <span className="text-green-600 text-sm">{spec.careerPath}</span>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <DollarSign className="h-4 w-4 text-yellow-600" />
-                    <span className="text-yellow-600 text-sm">{spec.avgSalary}</span>
+                    <DollarSign className="h-4 w-4 text-teal-600" />
+                    <span className="text-teal-600 text-sm">{spec.avgSalary}</span>
                   </div>
                 </div>
               </motion.div>
@@ -270,7 +289,7 @@ export default function BCAEducationLoanPage() {
             <h2 className="font-serif text-display-md text-black mb-4">
               Top BCA Colleges in India
             </h2>
-            <p className="text-lg text-gray-600">
+            <p className="text-lg text-gray-800">
               Premier institutions offering quality BCA education
             </p>
             
@@ -306,23 +325,23 @@ export default function BCAEducationLoanPage() {
                 <div className="mb-4">
                   <h3 className="font-serif text-lg text-black mb-2">{college.name}</h3>
                   <div className="flex items-center space-x-2 mb-2">
-                    <span className="text-xs bg-yellow-400/20 text-yellow-700 px-2 py-1 rounded">{college.type}</span>
+                    <span className="text-xs bg-teal-500/20 text-teal-700 px-2 py-1 rounded">{college.type}</span>
                     <span className="text-xs bg-green-500/20 text-green-600 px-2 py-1 rounded">{college.accreditation}</span>
                   </div>
                 </div>
                 
                 <div className="space-y-3 text-sm">
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Course Fee:</span>
+                    <span className="text-gray-800">Course Fee:</span>
                     <span className="text-black">{college.fees}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Duration:</span>
+                    <span className="text-gray-800">Duration:</span>
                     <span className="text-black">{college.duration}</span>
                   </div>
                   <div>
-                    <span className="text-gray-600">Specialities:</span>
-                    <p className="text-gray-600 text-xs mt-1">{college.specialities}</p>
+                    <span className="text-gray-800">Specialities:</span>
+                    <p className="text-gray-800 text-xs mt-1">{college.specialities}</p>
                   </div>
                 </div>
               </motion.div>
@@ -338,7 +357,7 @@ export default function BCAEducationLoanPage() {
             <h2 className="font-serif text-display-md text-black mb-4">
               BCA Career Prospects
             </h2>
-            <p className="text-lg text-gray-600">
+            <p className="text-lg text-gray-800">
               Excellent job opportunities in the IT industry
             </p>
             
@@ -380,7 +399,7 @@ export default function BCAEducationLoanPage() {
             variants={fadeInUp}
             className="bg-white/70 backdrop-blur-xl rounded-card overflow-hidden border border-white/20 shadow-[0_8px_32px_rgba(251,191,36,0.15)] hover:shadow-[0_16px_64px_rgba(251,191,36,0.25)] hover:scale-[1.02] transition-all duration-500"
           >
-            <div className="bg-gradient-to-r from-yellow-600 to-yellow-500 text-white px-6 py-4">
+            <div className="bg-gradient-to-r from-teal-600 to-teal-500 text-white px-6 py-4">
               <div className="grid grid-cols-4 gap-4 text-sm font-medium">
                 <div>Job Role</div>
                 <div>Average Salary</div>
@@ -397,11 +416,11 @@ export default function BCAEducationLoanPage() {
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
-                  className="px-6 py-4 hover:bg-yellow-50 transition-colors duration-200"
+                  className="px-6 py-4 hover:bg-teal-50 transition-colors duration-200"
                 >
                   <div className="grid grid-cols-4 gap-4 items-center text-sm">
                     <div className="font-medium text-black">{career.role}</div>
-                    <div className="text-yellow-600">{career.avgSalary}</div>
+                    <div className="text-teal-600">{career.avgSalary}</div>
                     <div className="text-green-600">{career.growth}</div>
                     <div className="text-blue-600">{career.demand}</div>
                   </div>
@@ -413,7 +432,7 @@ export default function BCAEducationLoanPage() {
       </section>
 
       {/* Eligibility & Documents */}
-      <section className="py-20 bg-gradient-to-bl from-white via-yellow-50 to-amber-50">
+      <section className="py-20 bg-gradient-to-bl from-white via-teal-50 to-amber-50">
         <div className="max-w-screen-xl mx-auto px-6 md:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             {/* Eligibility */}
@@ -430,7 +449,7 @@ export default function BCAEducationLoanPage() {
               <ul className="space-y-3">
                 {eligibilityBCA.map((item, index) => (
                   <li key={index} className="flex items-start space-x-3">
-                    <CheckCircle className="h-5 w-5 text-yellow-600 mt-0.5 flex-shrink-0" />
+                    <CheckCircle className="h-5 w-5 text-teal-600 mt-0.5 flex-shrink-0" />
                     <span className="text-gray-700">{item}</span>
                   </li>
                 ))}
@@ -451,7 +470,7 @@ export default function BCAEducationLoanPage() {
               <ul className="space-y-3">
                 {documentsBCA.map((item, index) => (
                   <li key={index} className="flex items-start space-x-3">
-                    <FileText className="h-5 w-5 text-yellow-600 mt-0.5 flex-shrink-0" />
+                    <FileText className="h-5 w-5 text-teal-600 mt-0.5 flex-shrink-0" />
                     <span className="text-gray-700">{item}</span>
                   </li>
                 ))}
@@ -461,8 +480,40 @@ export default function BCAEducationLoanPage() {
         </div>
       </section>
 
+      {/* FAQ Section */}
+      <FAQ
+        title="BCA Education Loan FAQs"
+        subtitle="Common questions about financing your BCA degree"
+        faqs={[
+          {
+            question: "What is the typical loan amount needed for BCA?",
+            answer: "BCA programs typically cost ₹2-6 Lakhs for the entire 3-year course at most colleges. Education loans of ₹3-8 Lakhs are usually sufficient to cover tuition, hostel, and other expenses. This falls within the collateral-free loan limit at most banks."
+          },
+          {
+            question: "Is BCA eligible for education loan from all banks?",
+            answer: "Yes, BCA from UGC-recognized universities is eligible for education loans from all major banks. The course should be from an AICTE-approved or university-affiliated college. Both government and private banks offer BCA education loans."
+          },
+          {
+            question: "Can I pursue MCA after BCA with the same loan?",
+            answer: "Education loans are typically course-specific. For MCA, you'll need to apply for a separate loan. However, if you have a good repayment track record with your BCA loan, getting an MCA loan becomes easier with potentially better terms."
+          },
+          {
+            question: "What are the job prospects after BCA for loan repayment?",
+            answer: "BCA graduates start with salaries ranging from ₹2.5-5 LPA in roles like software developer, web developer, and IT support. With skills in trending technologies, salaries can be higher. The relatively lower course cost makes loan repayment manageable."
+          },
+          {
+            question: "Are there scholarships available to reduce loan burden?",
+            answer: "Yes, several scholarships are available for BCA students including merit-based university scholarships, state government scholarships for SC/ST/OBC students, and corporate scholarships. These can significantly reduce your loan requirement."
+          },
+          {
+            question: "What documents are needed for a BCA education loan?",
+            answer: "Required documents include admission letter, fee structure, 10th and 12th marksheets, income proof of parent/guardian, bank statements, KYC documents, and passport-size photographs. The process is simpler for smaller loan amounts."
+          }
+        ]}
+      />
+
       {/* CTA Section */}
-      <section className="py-20 bg-yellow-400">
+      <section className="py-20 bg-teal-500">
         <div className="max-w-screen-xl mx-auto px-6 md:px-8">
           <motion.div
             initial="hidden"

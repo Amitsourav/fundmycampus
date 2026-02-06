@@ -4,6 +4,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { Hotel, CheckCircle, ArrowRight, GraduationCap, DollarSign, FileText, Clock, Shield, Award, BookOpen, Users, Target, ChefHat, Globe, Utensils, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/Button";
+import { FAQ } from "@/components/ui/FAQ";
 import { fadeInUp, staggerContainer, staggerItem, scrollReveal, cardHover } from "@/lib/animations";
 
 export default function HotelManagementEducationLoanPage() {
@@ -164,70 +165,122 @@ export default function HotelManagementEducationLoanPage() {
 
   return (
     <div className="pt-20 bg-white">
-      {/* Hero Section */}
-      <section className="relative py-20 md:py-32 overflow-hidden">
-        <div className="absolute inset-0">
-          <img
-            src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1920"
-            alt="Luxury hotel lobby and hospitality environment"
-            className="w-full h-full object-cover"
-            loading="lazy"
-          />
-          <div className="absolute inset-0 bg-gradient-to-br from-black/60 via-black/40 to-black/60" />
-          <div className="absolute inset-0 bg-gradient-to-br from-yellow-400/20 to-transparent" />
-        </div>
-        
-        <div className="relative z-10 max-w-screen-xl mx-auto px-6 md:px-8">
-          <motion.div
-            initial="hidden"
-            animate="visible"
-            variants={staggerContainer}
-            className="text-center max-w-4xl mx-auto"
-          >
-            <motion.div variants={staggerItem} className="mb-6">
-              <Hotel className="h-16 w-16 text-yellow-400 mx-auto" />
+      {/* Hero Section - Split Layout */}
+      <section className="relative py-16 md:py-24 overflow-hidden bg-gradient-to-br from-white via-teal-50/30 to-white">
+        <div className="max-w-screen-xl mx-auto px-6 md:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            {/* Content Side */}
+            <motion.div
+              initial="hidden"
+              animate="visible"
+              variants={staggerContainer}
+              className="order-2 lg:order-1"
+            >
+              <motion.div variants={staggerItem} className="mb-6">
+                <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-teal-500 to-teal-500 shadow-lg">
+                  <Hotel className="h-8 w-8 text-black" />
+                </div>
+              </motion.div>
+
+              <motion.h1
+                variants={fadeInUp}
+                className="font-serif text-display-md md:text-display-lg text-black mb-4"
+              >
+                Education Loan for Hotel Management
+                <span className="block text-teal-600 mt-2">BHMCT Program</span>
+              </motion.h1>
+
+              <motion.p
+                variants={staggerItem}
+                className="text-lg text-gray-800 mb-8 leading-relaxed"
+              >
+                Build your career in the thriving hospitality industry with comprehensive loan coverage
+                up to ₹20 Lakhs for hotel management and culinary programs.
+              </motion.p>
+
+              {/* Quick Stats */}
+              <motion.div
+                variants={staggerItem}
+                className="grid grid-cols-3 gap-4 mb-8"
+              >
+                <div className="text-center p-4 bg-white rounded-xl shadow-md border border-gray-100">
+                  <DollarSign className="h-6 w-6 text-teal-600 mx-auto mb-2" />
+                  <div className="font-bold text-black">₹20 Lakhs</div>
+                  <div className="text-xs text-gray-700">Max Loan</div>
+                </div>
+                <div className="text-center p-4 bg-white rounded-xl shadow-md border border-gray-100">
+                  <Clock className="h-6 w-6 text-teal-600 mx-auto mb-2" />
+                  <div className="font-bold text-black">4 Years</div>
+                  <div className="text-xs text-gray-700">Course Duration</div>
+                </div>
+                <div className="text-center p-4 bg-white rounded-xl shadow-md border border-gray-100">
+                  <Award className="h-6 w-6 text-teal-600 mx-auto mb-2" />
+                  <div className="font-bold text-black">6.75%</div>
+                  <div className="text-xs text-gray-700">Interest Rate</div>
+                </div>
+              </motion.div>
+
+              <motion.div
+                variants={staggerItem}
+                className="flex flex-col sm:flex-row gap-4"
+              >
+                <Button variant="primary" size="lg">
+                  Apply for Hotel Management Loan
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+                <Button variant="secondary" size="lg">
+                  Check Eligibility
+                </Button>
+              </motion.div>
             </motion.div>
-            
-            <motion.h1 
-              variants={fadeInUp}
-              className="font-serif text-display-lg text-white mb-6"
+
+            {/* Image Side */}
+            <motion.div
+              initial={{ opacity: 0, x: 50 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="relative order-1 lg:order-2"
             >
-              Education Loan for Hotel Management
-              <span className="block text-yellow-400 mt-2">Bachelor of Hotel Management & Catering Technology</span>
-            </motion.h1>
-            
-            <motion.p 
-              variants={staggerItem}
-              className="text-xl text-white/90 mb-10 leading-relaxed"
-            >
-              Build your career in the thriving hospitality industry with comprehensive loan coverage 
-              up to ₹20 Lakhs for hotel management and culinary programs.
-            </motion.p>
-            
-            <motion.div 
-              variants={staggerItem}
-              className="flex flex-col sm:flex-row gap-4 justify-center"
-            >
-              <Button variant="primary" size="lg">
-                Apply for Hotel Management Loan
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
-              <Button variant="secondary" size="lg">
-                Check Eligibility
-              </Button>
+              <div className="relative rounded-3xl overflow-hidden shadow-2xl">
+                <img
+                  src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800"
+                  alt="Luxury hotel lobby and hospitality environment"
+                  className="w-full h-[400px] md:h-[500px] object-cover"
+                  loading="lazy"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
+              </div>
+
+              {/* Floating Card */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.6 }}
+                className="absolute -bottom-6 -left-6 bg-white rounded-2xl shadow-xl p-4 border border-gray-100"
+              >
+                <div className="flex items-center space-x-3">
+                  <div className="w-12 h-12 bg-gradient-to-br from-teal-500 to-teal-500 rounded-xl flex items-center justify-center">
+                    <Globe className="h-6 w-6 text-black" />
+                  </div>
+                  <div>
+                    <div className="font-bold text-black">15%</div>
+                    <div className="text-sm text-gray-700">Annual Industry Growth</div>
+                  </div>
+                </div>
+              </motion.div>
             </motion.div>
-          </motion.div>
+          </div>
         </div>
       </section>
 
       {/* Loan Features */}
-      <section className="py-20 bg-gradient-to-tr from-yellow-100 via-white to-yellow-50">
+      <section className="py-20 bg-gradient-to-tr from-teal-100 via-white to-teal-50">
         <div className="max-w-screen-xl mx-auto px-6 md:px-8">
           <div className="text-center mb-16">
             <h2 className="font-serif text-display-md text-black mb-4">
               Hotel Management Education Loan Features
             </h2>
-            <p className="text-lg text-gray-600">
+            <p className="text-lg text-gray-800">
               Specialized financing for hospitality industry education
             </p>
           </div>
@@ -246,9 +299,9 @@ export default function HotelManagementEducationLoanPage() {
                 whileHover={{ y: -4 }}
                 className="bg-white/70 backdrop-blur-xl rounded-card p-8 text-center border border-white/20 shadow-[0_8px_32px_rgba(251,191,36,0.15)] hover:shadow-[0_12px_48px_rgba(251,191,36,0.25)] transition-all duration-500 hover:scale-105 hover:bg-white/80"
               >
-                <feature.icon className="h-12 w-12 text-yellow-600 mx-auto mb-4" />
+                <feature.icon className="h-12 w-12 text-teal-600 mx-auto mb-4" />
                 <h3 className="font-serif text-xl text-black mb-2">{feature.title}</h3>
-                <p className="text-gray-600 text-sm">{feature.description}</p>
+                <p className="text-gray-800 text-sm">{feature.description}</p>
               </motion.div>
             ))}
           </motion.div>
@@ -262,7 +315,7 @@ export default function HotelManagementEducationLoanPage() {
             <h2 className="font-serif text-display-md text-black mb-4">
               Why Choose Hotel Management?
             </h2>
-            <p className="text-lg text-gray-600">
+            <p className="text-lg text-gray-800">
               Industry insights and growth opportunities
             </p>
           </div>
@@ -280,9 +333,9 @@ export default function HotelManagementEducationLoanPage() {
                 variants={staggerItem}
                 className="bg-white/70 backdrop-blur-xl rounded-card p-6 text-center border border-white/20 shadow-[0_8px_32px_rgba(251,191,36,0.15)] hover:shadow-[0_12px_48px_rgba(251,191,36,0.25)] hover:scale-105 hover:bg-white/80 transition-all duration-500"
               >
-                <h3 className="font-serif text-2xl text-yellow-600 mb-2">{fact.value}</h3>
+                <h3 className="font-serif text-2xl text-teal-600 mb-2">{fact.value}</h3>
                 <h4 className="font-medium text-black mb-3">{fact.title}</h4>
-                <p className="text-gray-600 text-sm">{fact.description}</p>
+                <p className="text-gray-800 text-sm">{fact.description}</p>
               </motion.div>
             ))}
           </motion.div>
@@ -290,13 +343,13 @@ export default function HotelManagementEducationLoanPage() {
       </section>
 
       {/* Hotel Management Specializations */}
-      <section className="py-20 bg-gradient-to-bl from-white via-yellow-50 to-amber-50">
+      <section className="py-20 bg-gradient-to-bl from-white via-teal-50 to-amber-50">
         <div className="max-w-screen-xl mx-auto px-6 md:px-8">
           <div className="text-center mb-16">
             <h2 className="font-serif text-display-md text-black mb-4">
               Hotel Management Specializations
             </h2>
-            <p className="text-lg text-gray-600">
+            <p className="text-lg text-gray-800">
               Diverse career paths in hospitality and tourism
             </p>
           </div>
@@ -315,20 +368,20 @@ export default function HotelManagementEducationLoanPage() {
                 className="bg-white/70 backdrop-blur-xl rounded-card p-6 border border-white/20 shadow-[0_8px_32px_rgba(251,191,36,0.15)] hover:shadow-[0_12px_48px_rgba(251,191,36,0.25)] hover:scale-[1.02] transition-all duration-500"
               >
                 <div className="flex items-center space-x-3 mb-4">
-                  <div className="w-10 h-10 bg-gradient-to-br from-yellow-400/20 to-yellow-500/30 backdrop-blur-sm rounded-lg flex items-center justify-center shadow-inner border border-yellow-400/40">
-                    <spec.icon className="h-5 w-5 text-yellow-600" />
+                  <div className="w-10 h-10 bg-gradient-to-br from-teal-500/20 to-teal-500/30 backdrop-blur-sm rounded-lg flex items-center justify-center shadow-inner border border-teal-500/40">
+                    <spec.icon className="h-5 w-5 text-teal-600" />
                   </div>
                   <h3 className="font-serif text-lg text-black">{spec.name}</h3>
                 </div>
-                <p className="text-gray-600 text-sm mb-4">{spec.description}</p>
+                <p className="text-gray-800 text-sm mb-4">{spec.description}</p>
                 <div className="space-y-2">
                   <div className="flex items-center space-x-2">
                     <Target className="h-4 w-4 text-green-500" />
                     <span className="text-green-600 text-xs">{spec.careerPath}</span>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <DollarSign className="h-4 w-4 text-yellow-600" />
-                    <span className="text-yellow-600 text-xs">{spec.avgSalary}</span>
+                    <DollarSign className="h-4 w-4 text-teal-600" />
+                    <span className="text-teal-600 text-xs">{spec.avgSalary}</span>
                   </div>
                 </div>
               </motion.div>
@@ -344,7 +397,7 @@ export default function HotelManagementEducationLoanPage() {
             <h2 className="font-serif text-display-md text-black mb-4">
               Top Hotel Management Institutes in India
             </h2>
-            <p className="text-lg text-gray-600">
+            <p className="text-lg text-gray-800">
               Premier institutions for hospitality education
             </p>
           </div>
@@ -365,23 +418,23 @@ export default function HotelManagementEducationLoanPage() {
                 <div className="mb-4">
                   <h3 className="font-serif text-lg text-black mb-2">{college.name}</h3>
                   <div className="flex items-center space-x-2 mb-2">
-                    <span className="text-xs bg-yellow-400/20 text-yellow-600 px-2 py-1 rounded">{college.type}</span>
+                    <span className="text-xs bg-teal-500/20 text-teal-600 px-2 py-1 rounded">{college.type}</span>
                     <span className="text-xs bg-green-500/20 text-green-600 px-2 py-1 rounded">{college.accreditation}</span>
                   </div>
                 </div>
                 
                 <div className="space-y-3 text-sm">
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Course Fee:</span>
+                    <span className="text-gray-800">Course Fee:</span>
                     <span className="text-black">{college.fees}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Duration:</span>
+                    <span className="text-gray-800">Duration:</span>
                     <span className="text-black">{college.duration}</span>
                   </div>
                   <div>
-                    <span className="text-gray-600">Specialities:</span>
-                    <p className="text-gray-600 text-xs mt-1">{college.specialities}</p>
+                    <span className="text-gray-800">Specialities:</span>
+                    <p className="text-gray-800 text-xs mt-1">{college.specialities}</p>
                   </div>
                 </div>
               </motion.div>
@@ -397,7 +450,7 @@ export default function HotelManagementEducationLoanPage() {
             <h2 className="font-serif text-display-md text-black mb-4">
               Hotel Management Career Prospects
             </h2>
-            <p className="text-lg text-gray-600">
+            <p className="text-lg text-gray-800">
               Diverse opportunities in hospitality, travel, and tourism
             </p>
           </div>
@@ -409,7 +462,7 @@ export default function HotelManagementEducationLoanPage() {
             variants={fadeInUp}
             className="bg-white/70 backdrop-blur-xl rounded-card overflow-hidden border border-white/20 shadow-[0_8px_32px_rgba(251,191,36,0.15)] hover:shadow-[0_16px_64px_rgba(251,191,36,0.25)] hover:scale-[1.02] transition-all duration-500"
           >
-            <div className="bg-gradient-to-r from-yellow-600 to-yellow-500 text-white px-6 py-4">
+            <div className="bg-gradient-to-r from-teal-600 to-teal-500 text-white px-6 py-4">
               <div className="grid grid-cols-4 gap-4 text-sm font-medium">
                 <div>Job Role</div>
                 <div>Average Salary</div>
@@ -426,11 +479,11 @@ export default function HotelManagementEducationLoanPage() {
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
-                  className="px-6 py-4 hover:bg-yellow-50 transition-colors duration-200"
+                  className="px-6 py-4 hover:bg-teal-50 transition-colors duration-200"
                 >
                   <div className="grid grid-cols-4 gap-4 items-center text-sm">
                     <div className="font-medium text-black">{career.role}</div>
-                    <div className="text-yellow-600">{career.avgSalary}</div>
+                    <div className="text-teal-600">{career.avgSalary}</div>
                     <div className="text-green-600">{career.growth}</div>
                     <div className="text-blue-600">{career.demand}</div>
                   </div>
@@ -459,8 +512,8 @@ export default function HotelManagementEducationLoanPage() {
               <ul className="space-y-3">
                 {eligibilityHM.map((item, index) => (
                   <li key={index} className="flex items-start space-x-3">
-                    <CheckCircle className="h-5 w-5 text-yellow-600 mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-600">{item}</span>
+                    <CheckCircle className="h-5 w-5 text-teal-600 mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-800">{item}</span>
                   </li>
                 ))}
               </ul>
@@ -480,8 +533,8 @@ export default function HotelManagementEducationLoanPage() {
               <ul className="space-y-3">
                 {documentsHM.map((item, index) => (
                   <li key={index} className="flex items-start space-x-3">
-                    <FileText className="h-5 w-5 text-yellow-600 mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-600">{item}</span>
+                    <FileText className="h-5 w-5 text-teal-600 mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-800">{item}</span>
                   </li>
                 ))}
               </ul>
@@ -490,8 +543,40 @@ export default function HotelManagementEducationLoanPage() {
         </div>
       </section>
 
+      {/* FAQ Section */}
+      <FAQ
+        title="Hotel Management Education Loan FAQs"
+        subtitle="Common questions about financing your hospitality education"
+        faqs={[
+          {
+            question: "What is the cost of hotel management courses?",
+            answer: "Hotel management courses (BHMCT/BHM) cost ₹1.5-3 Lakhs at government IHMs and ₹5-12 Lakhs at private institutes for the 4-year program. Premium institutes like Welcomgroup and Oberoi STEP may cost more. Loans of ₹8-20 Lakhs cover all expenses."
+          },
+          {
+            question: "Are IHM students eligible for special loan benefits?",
+            answer: "Students at government IHMs (Institute of Hotel Management) enjoy lower fees and often qualify for collateral-free loans. Many banks have tie-ups with premier IHMs offering faster processing and competitive interest rates."
+          },
+          {
+            question: "What are the career prospects in hotel management?",
+            answer: "Hotel management offers diverse careers in hotels, airlines, cruise ships, event management, and food chains. Starting salaries range from ₹2.5-5 LPA domestically, while international placements (cruise ships, Middle East hotels) offer ₹8-20 LPA."
+          },
+          {
+            question: "Can I work internationally after hotel management?",
+            answer: "Yes, hotel management qualifications are globally recognized. Cruise ship jobs, Middle East hotels, and international hotel chains actively recruit Indian graduates. International jobs significantly ease loan repayment with higher salaries."
+          },
+          {
+            question: "Does the loan cover industrial training expenses?",
+            answer: "Yes, education loans typically cover industrial training and internship period expenses, which are part of the curriculum. Some premium hotels provide stipends during training, which can supplement your finances."
+          },
+          {
+            question: "Is hotel management a good investment post-COVID?",
+            answer: "The hospitality industry has rebounded strongly post-pandemic with tourism growth. Hotel management remains a solid investment with diverse career options in hotels, events, airlines, and the growing food service industry."
+          }
+        ]}
+      />
+
       {/* CTA Section */}
-      <section className="py-20 bg-yellow-400">
+      <section className="py-20 bg-teal-500">
         <div className="max-w-screen-xl mx-auto px-6 md:px-8">
           <motion.div
             initial="hidden"

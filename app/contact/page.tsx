@@ -6,6 +6,7 @@ import { Mail, Phone, MapPin, Clock, Send } from "lucide-react";
 import { SectionTitle } from "@/components/ui/SectionTitle";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
+import { FAQ } from "@/components/ui/FAQ";
 import { fadeInUp } from "@/lib/animations";
 
 export default function ContactPage() {
@@ -66,7 +67,7 @@ export default function ContactPage() {
             <h1 className="text-4xl md:text-5xl font-display font-bold text-gray-900 mb-6">
               Get in Touch
             </h1>
-            <p className="text-xl text-gray-600">
+            <p className="text-xl text-gray-800">
               Have questions about education loans? Our expert team is here to help you 
               navigate your financing options.
             </p>
@@ -186,7 +187,7 @@ export default function ContactPage() {
                 <h2 className="text-2xl font-display font-bold text-gray-900 mb-6">
                   Contact Information
                 </h2>
-                <p className="text-gray-600 mb-8">
+                <p className="text-gray-800 mb-8">
                   Reach out to us through any of the following channels. 
                   Our team typically responds within 24 hours.
                 </p>
@@ -205,7 +206,7 @@ export default function ContactPage() {
                           {info.title}
                         </h3>
                         {info.details.map((detail, idx) => (
-                          <p key={idx} className="text-gray-600 text-sm">
+                          <p key={idx} className="text-gray-800 text-sm">
                             {detail}
                           </p>
                         ))}
@@ -215,22 +216,42 @@ export default function ContactPage() {
                 );
               })}
 
-              {/* FAQ Link */}
-              <Card padding="md" className="bg-gradient-to-br from-primary-50 to-white border-primary-200">
-                <h3 className="font-semibold text-gray-900 mb-2">
-                  Frequently Asked Questions
-                </h3>
-                <p className="text-gray-600 text-sm mb-4">
-                  Find quick answers to common questions about education loans.
-                </p>
-                <Button variant="ghost" size="sm">
-                  View FAQs
-                </Button>
-              </Card>
             </motion.div>
           </div>
         </div>
       </section>
+
+      {/* FAQ Section */}
+      <FAQ
+        title="Contact & Support FAQs"
+        subtitle="Common questions about getting help with your education loan"
+        faqs={[
+          {
+            question: "How quickly will I get a response to my inquiry?",
+            answer: "We aim to respond to all inquiries within 24 hours on business days. For urgent loan-related queries, you can call our helpline for immediate assistance. Email responses are typically sent within 4-6 hours during business hours."
+          },
+          {
+            question: "What information should I include in my inquiry?",
+            answer: "Please include your full name, contact number, the course and college you're interested in, approximate loan amount needed, and any specific questions. This helps us provide accurate and relevant information quickly."
+          },
+          {
+            question: "Can I visit your office for in-person consultation?",
+            answer: "Yes, we welcome in-person consultations. Please schedule an appointment through our contact form or phone to ensure a counselor is available. Walk-ins are also accepted during business hours but may involve waiting."
+          },
+          {
+            question: "Do you charge for consultation services?",
+            answer: "No, our consultation services are completely free. We help you understand your loan options, compare lenders, and guide you through the application process at no cost. We're compensated by partner lenders upon successful disbursement."
+          },
+          {
+            question: "Can you help if I'm having issues with my existing loan?",
+            answer: "While we primarily help with new loan applications, we can provide guidance on issues like EMI restructuring, prepayment, and documentation problems. Contact us with your specific concern, and we'll try to assist or direct you appropriately."
+          },
+          {
+            question: "What are your support hours?",
+            answer: "Our support team is available Monday to Saturday, 9:00 AM to 7:00 PM IST. For urgent queries outside these hours, you can email us and we'll respond first thing the next business day."
+          }
+        ]}
+      />
     </div>
   );
 }

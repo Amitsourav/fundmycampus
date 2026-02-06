@@ -4,7 +4,8 @@ import React from "react";
 import { motion } from "framer-motion";
 import { Building, CheckCircle, ArrowRight, GraduationCap, DollarSign, FileText, Clock, Shield, Award, MapPin, BookOpen, Users, Target } from "lucide-react";
 import { Button } from "@/components/ui/Button";
-import { fadeInUp, staggerContainer, staggerItem, scrollReveal, cardHover } from "@/lib/animations";
+import { FAQ } from "@/components/ui/FAQ";
+import { fadeInUp, staggerContainer, staggerItem } from "@/lib/animations";
 
 export default function IndiaStudyLoanPage() {
   const topInstitutions = [
@@ -56,7 +57,7 @@ export default function IndiaStudyLoanPage() {
     { icon: DollarSign, title: "Up to ₹40 Lakhs", description: "Complete financing for tuition, hostel and other expenses" },
     { icon: Shield, title: "No Collateral", description: "Up to ₹7.5 Lakhs without any security for premier institutions" },
     { icon: Clock, title: "Quick Approval", description: "Loan approval within 7-10 working days" },
-    { icon: Award, title: "Best Interest Rates", description: "Starting from 8.5% per annum with flexible terms" },
+    { icon: Award, title: "Best Interest Rates", description: "Starting from 6.75% per annum with flexible terms" },
   ];
 
   const eligibilityIndia = [
@@ -106,69 +107,128 @@ export default function IndiaStudyLoanPage() {
 
   return (
     <div className="pt-20 bg-white">
-      {/* Hero Section */}
-      <section className="relative py-20 md:py-32 overflow-hidden">
-        {/* Hero Background Image */}
-        <div className="absolute inset-0">
-          <img 
-            src="https://images.unsplash.com/photo-1607237138185-eedd9c632b0b?w=1920&auto=format&fit=crop&q=80"
-            alt="Indian university campus with students"
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-br from-black/60 via-black/40 to-black/60" />
-          <div className="absolute inset-0 bg-gradient-to-br from-yellow-400/20 to-transparent" />
-        </div>
-        
+      {/* Hero Section - Split Layout */}
+      <section className="relative py-16 md:py-24 overflow-hidden bg-white">
+        {/* Background decoration */}
+        <div className="absolute top-0 left-0 w-1/2 h-full bg-teal-50 skew-x-12 -translate-x-20 hidden lg:block" />
+
         <div className="relative z-10 max-w-screen-xl mx-auto px-6 md:px-8">
-          <motion.div
-            initial="hidden"
-            animate="visible"
-            variants={staggerContainer}
-            className="text-center max-w-4xl mx-auto"
-          >
-            <motion.div variants={staggerItem} className="mb-6">
-              <MapPin className="h-16 w-16 text-yellow-600 mx-auto" />
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            {/* Left - Image */}
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="relative order-2 lg:order-1"
+            >
+              <div className="relative">
+                <img
+                  src="https://images.unsplash.com/photo-1607237138185-eedd9c632b0b?w=800&auto=format&fit=crop&q=90"
+                  alt="Indian university campus with students"
+                  className="w-full h-[400px] md:h-[500px] object-cover rounded-2xl shadow-2xl"
+                />
+                {/* Floating card */}
+                <div className="absolute -bottom-6 -right-6 bg-white p-4 rounded-xl shadow-lg border border-gray-100">
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 bg-teal-100 rounded-full flex items-center justify-center">
+                      <Building className="w-6 h-6 text-teal-600" />
+                    </div>
+                    <div>
+                      <p className="font-bold text-black">500+ Institutions</p>
+                      <p className="text-sm text-gray-700">IITs, IIMs, AIIMS & more</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </motion.div>
-            
-            <motion.h1 
-              variants={fadeInUp}
-              className="font-serif text-display-lg text-black mb-6"
+
+            {/* Right - Content */}
+            <motion.div
+              initial="hidden"
+              animate="visible"
+              variants={staggerContainer}
+              className="order-1 lg:order-2"
             >
-              Education Loans for Study in India
-            </motion.h1>
-            
-            <motion.p 
-              variants={staggerItem}
-              className="text-xl text-gray-600 mb-10 leading-relaxed"
-            >
-              Achieve your academic dreams at India's premier institutions with our 
-              comprehensive education loan solutions. Get up to ₹40 Lakhs with competitive rates.
-            </motion.p>
-            
-            <motion.div 
-              variants={staggerItem}
-              className="flex flex-col sm:flex-row gap-4 justify-center"
-            >
-              <Button variant="primary" size="lg">
-                Apply Now
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
-              <Button variant="secondary" size="lg">
-                Check Eligibility
-              </Button>
+              <motion.div variants={staggerItem} className="mb-4">
+                <span className="inline-flex items-center gap-2 px-4 py-2 bg-teal-100 rounded-full">
+                  <MapPin className="h-5 w-5 text-teal-600" />
+                  <span className="text-sm font-medium text-teal-800">Study in India</span>
+                </span>
+              </motion.div>
+
+              <motion.h1
+                variants={fadeInUp}
+                className="font-serif text-4xl md:text-5xl lg:text-6xl text-black mb-6 leading-tight"
+              >
+                Fund Your
+                <span className="block text-teal-600">Indian Education</span>
+                Dreams
+              </motion.h1>
+
+              <motion.p
+                variants={staggerItem}
+                className="text-lg text-gray-800 mb-8 leading-relaxed max-w-lg"
+              >
+                Achieve your academic dreams at India's premier institutions with our
+                comprehensive education loan solutions. Get up to ₹40 Lakhs with competitive rates.
+              </motion.p>
+
+              {/* Quick Stats */}
+              <motion.div variants={staggerItem} className="flex flex-wrap gap-6 mb-8">
+                <div className="flex items-center gap-2">
+                  <div className="w-10 h-10 bg-teal-500 rounded-lg flex items-center justify-center">
+                    <DollarSign className="w-5 h-5 text-black" />
+                  </div>
+                  <div>
+                    <p className="font-bold text-black">₹40 Lakhs</p>
+                    <p className="text-xs text-gray-700">Max Loan</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-10 h-10 bg-teal-500 rounded-lg flex items-center justify-center">
+                    <Clock className="w-5 h-5 text-black" />
+                  </div>
+                  <div>
+                    <p className="font-bold text-black">7-10 Days</p>
+                    <p className="text-xs text-gray-700">Approval</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-10 h-10 bg-teal-500 rounded-lg flex items-center justify-center">
+                    <Award className="w-5 h-5 text-black" />
+                  </div>
+                  <div>
+                    <p className="font-bold text-black">6.75%</p>
+                    <p className="text-xs text-gray-700">Interest Rate</p>
+                  </div>
+                </div>
+              </motion.div>
+
+              <motion.div
+                variants={staggerItem}
+                className="flex flex-col sm:flex-row gap-4"
+              >
+                <Button variant="primary" size="lg">
+                  Apply Now
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+                <Button variant="secondary" size="lg">
+                  Check Eligibility
+                </Button>
+              </motion.div>
             </motion.div>
-          </motion.div>
+          </div>
         </div>
       </section>
 
       {/* Loan Features */}
-      <section className="py-20 bg-gradient-to-tr from-yellow-100 via-white to-yellow-50">
+      <section className="py-20 bg-gradient-to-tr from-teal-100 via-white to-teal-50">
         <div className="max-w-screen-xl mx-auto px-6 md:px-8">
           <div className="text-center mb-16">
             <h2 className="font-serif text-display-md text-black mb-4">
               Why Choose Our India Study Loans
             </h2>
-            <p className="text-lg text-gray-600">
+            <p className="text-lg text-gray-800">
               Tailored features for Indian education aspirants
             </p>
           </div>
@@ -184,12 +244,11 @@ export default function IndiaStudyLoanPage() {
               <motion.div 
                 key={index} 
                 variants={staggerItem}
-                whileHover={{ y: -4 }}
-                className="bg-white/70 backdrop-blur-xl rounded-card p-8 text-center border border-white/20 shadow-[0_8px_32px_rgba(251,191,36,0.15)] hover:shadow-[0_12px_48px_rgba(251,191,36,0.25)] transition-all duration-500 hover:scale-105 hover:bg-white/80"
+                                className="bg-white rounded-xl p-8 text-center border border-gray-100 shadow-sm hover:shadow-md transition-shadow duration-300"
               >
-                <feature.icon className="h-12 w-12 text-yellow-600 mx-auto mb-4" />
+                <feature.icon className="h-12 w-12 text-teal-600 mx-auto mb-4" />
                 <h3 className="font-serif text-xl text-black mb-2">{feature.title}</h3>
-                <p className="text-gray-600 text-sm">{feature.description}</p>
+                <p className="text-gray-800 text-sm">{feature.description}</p>
               </motion.div>
             ))}
           </motion.div>
@@ -203,7 +262,7 @@ export default function IndiaStudyLoanPage() {
             <h2 className="font-serif text-display-md text-black mb-4">
               Premier Institutions We Cover
             </h2>
-            <p className="text-lg text-gray-600">
+            <p className="text-lg text-gray-800">
               Finance your education at India's top universities and colleges
             </p>
           </div>
@@ -219,13 +278,9 @@ export default function IndiaStudyLoanPage() {
               <motion.div 
                 key={index} 
                 variants={staggerItem}
-                whileHover="hover"
-                initial="rest"
-                animate="rest"
-              >
-                <motion.div 
-                  variants={cardHover}
-                  className="bg-white/70 backdrop-blur-xl rounded-card overflow-hidden cursor-pointer border border-white/20 shadow-[0_8px_32px_rgba(251,191,36,0.15)] hover:shadow-[0_16px_64px_rgba(251,191,36,0.25)] hover:scale-[1.02] transition-all duration-500"
+                              >
+                <div
+                  className="bg-white rounded-xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-md transition-shadow duration-300"
                 >
                   <div className="h-48 relative overflow-hidden">
                     <img 
@@ -242,11 +297,11 @@ export default function IndiaStudyLoanPage() {
                   <div className="p-6">
                     <h4 className="font-medium text-black mb-2 text-sm">{institution.name}</h4>
                     <div className="flex justify-between items-center">
-                      <span className="text-sm text-gray-600">Average Fees</span>
-                      <span className="text-lg font-serif text-yellow-600">{institution.avgFees}</span>
+                      <span className="text-sm text-gray-800">Average Fees</span>
+                      <span className="text-lg font-serif text-teal-600">{institution.avgFees}</span>
                     </div>
                   </div>
-                </motion.div>
+                </div>
               </motion.div>
             ))}
           </motion.div>
@@ -254,13 +309,13 @@ export default function IndiaStudyLoanPage() {
       </section>
 
       {/* Government Schemes Section */}
-      <section className="py-20 bg-gradient-to-tr from-yellow-100 via-white to-yellow-50">
+      <section className="py-20 bg-gradient-to-tr from-teal-100 via-white to-teal-50">
         <div className="max-w-screen-xl mx-auto px-6 md:px-8">
           <div className="text-center mb-16">
             <h2 className="font-serif text-display-md text-black mb-4">
               Government Schemes & Benefits
             </h2>
-            <p className="text-lg text-gray-600">
+            <p className="text-lg text-gray-800">
               Take advantage of government interest subsidy schemes
             </p>
           </div>
@@ -276,21 +331,21 @@ export default function IndiaStudyLoanPage() {
               <motion.div 
                 key={index} 
                 variants={staggerItem}
-                className="bg-white/70 backdrop-blur-xl rounded-card p-6 border border-white/20 shadow-[0_8px_32px_rgba(251,191,36,0.15)] hover:shadow-[0_12px_48px_rgba(251,191,36,0.25)] hover:scale-[1.02] transition-all duration-500"
+                className="bg-white rounded-xl p-6 border border-gray-100 shadow-sm"
               >
                 <div className="flex items-start space-x-3 mb-4">
-                  <Users className="h-6 w-6 text-yellow-600 mt-1 flex-shrink-0" />
+                  <Users className="h-6 w-6 text-teal-600 mt-1 flex-shrink-0" />
                   <h3 className="font-serif text-lg text-black">{scheme.name}</h3>
                 </div>
-                <p className="text-gray-600 text-sm mb-3">{scheme.description}</p>
+                <p className="text-gray-800 text-sm mb-3">{scheme.description}</p>
                 <div className="space-y-2">
                   <div className="flex items-center space-x-2">
                     <Target className="h-4 w-4 text-green-500" />
                     <span className="text-green-400 text-xs">{scheme.benefit}</span>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <CheckCircle className="h-4 w-4 text-yellow-600" />
-                    <span className="text-gray-600 text-xs">{scheme.eligibility}</span>
+                    <CheckCircle className="h-4 w-4 text-teal-600" />
+                    <span className="text-gray-800 text-xs">{scheme.eligibility}</span>
                   </div>
                 </div>
               </motion.div>
@@ -306,7 +361,7 @@ export default function IndiaStudyLoanPage() {
             <h2 className="font-serif text-display-md text-black mb-4">
               Simple 4-Step Process
             </h2>
-            <p className="text-lg text-gray-600">
+            <p className="text-lg text-gray-800">
               From application to disbursement in just 7-10 days
             </p>
             
@@ -337,11 +392,11 @@ export default function IndiaStudyLoanPage() {
           >
             {processSteps.map((item, index) => (
               <motion.div key={index} variants={staggerItem} className="text-center">
-                <div className="w-16 h-16 bg-yellow-400 text-black rounded-full flex items-center justify-center font-serif text-2xl mx-auto mb-4">
+                <div className="w-16 h-16 bg-teal-500 text-black rounded-full flex items-center justify-center font-serif text-2xl mx-auto mb-4">
                   {item.step}
                 </div>
                 <h3 className="font-serif text-xl text-black mb-2">{item.title}</h3>
-                <p className="text-gray-600 text-sm">{item.description}</p>
+                <p className="text-gray-800 text-sm">{item.description}</p>
               </motion.div>
             ))}
           </motion.div>
@@ -349,7 +404,7 @@ export default function IndiaStudyLoanPage() {
       </section>
 
       {/* Eligibility & Documents */}
-      <section className="py-20 bg-gradient-to-tr from-yellow-100 via-white to-yellow-50">
+      <section className="py-20 bg-gradient-to-tr from-teal-100 via-white to-teal-50">
         <div className="max-w-screen-xl mx-auto px-6 md:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             {/* Eligibility */}
@@ -358,7 +413,7 @@ export default function IndiaStudyLoanPage() {
               whileInView="visible"
               viewport={{ once: true }}
               variants={fadeInUp}
-              className="bg-white/70 backdrop-blur-xl rounded-card p-8 border border-white/20 shadow-[0_8px_32px_rgba(251,191,36,0.15)] hover:shadow-[0_12px_48px_rgba(251,191,36,0.25)] hover:scale-[1.02] transition-all duration-500"
+              className="bg-white rounded-xl p-8 border border-gray-100 shadow-sm"
             >
               <h2 className="font-serif text-2xl text-black mb-6">
                 Eligibility Criteria
@@ -366,8 +421,8 @@ export default function IndiaStudyLoanPage() {
               <ul className="space-y-3">
                 {eligibilityIndia.map((item, index) => (
                   <li key={index} className="flex items-start space-x-3">
-                    <CheckCircle className="h-5 w-5 text-yellow-600 mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-600">{item}</span>
+                    <CheckCircle className="h-5 w-5 text-teal-600 mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-800">{item}</span>
                   </li>
                 ))}
               </ul>
@@ -379,7 +434,7 @@ export default function IndiaStudyLoanPage() {
               whileInView="visible"
               viewport={{ once: true }}
               variants={fadeInUp}
-              className="bg-white/70 backdrop-blur-xl rounded-card p-8 border border-white/20 shadow-[0_8px_32px_rgba(251,191,36,0.15)] hover:shadow-[0_12px_48px_rgba(251,191,36,0.25)] hover:scale-[1.02] transition-all duration-500"
+              className="bg-white rounded-xl p-8 border border-gray-100 shadow-sm"
             >
               <h2 className="font-serif text-2xl text-black mb-6">
                 Documents Required
@@ -387,8 +442,8 @@ export default function IndiaStudyLoanPage() {
               <ul className="space-y-3">
                 {documentsIndia.map((item, index) => (
                   <li key={index} className="flex items-start space-x-3">
-                    <FileText className="h-5 w-5 text-yellow-600 mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-600">{item}</span>
+                    <FileText className="h-5 w-5 text-teal-600 mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-800">{item}</span>
                   </li>
                 ))}
               </ul>
@@ -397,8 +452,48 @@ export default function IndiaStudyLoanPage() {
         </div>
       </section>
 
+      {/* FAQ Section */}
+      <FAQ
+        title="India Education Loan FAQs"
+        subtitle="Common questions about education loans for studying in India"
+        faqs={[
+          {
+            question: "What is the maximum loan amount for studying in India?",
+            answer: "For studying in India, you can get education loans up to ₹75 Lakhs for premier institutions like IITs, IIMs, and AIIMS. For other recognized institutions, loans up to ₹20-30 Lakhs are available. Collateral-free loans are available up to ₹7.5 Lakhs under government schemes."
+          },
+          {
+            question: "What is the interest rate for education loans in India?",
+            answer: "Interest rates for education loans in India typically range from 6.75% to 12% per annum. Government banks offer lower rates (6.75%-9.5%), while private banks and NBFCs may charge 9%-12%. Female students often get a 0.5% concession on interest rates."
+          },
+          {
+            question: "Is collateral required for education loans in India?",
+            answer: "Collateral is not required for loans up to ₹7.5 Lakhs under government schemes like Vidya Lakshmi. For loans between ₹7.5 Lakhs to ₹20 Lakhs, third-party guarantee may be required. Loans above ₹20 Lakhs typically require collateral security."
+          },
+          {
+            question: "What is the repayment period for education loans?",
+            answer: "Education loans in India typically have a repayment period of 5-15 years after the moratorium period ends. The moratorium includes your course duration plus 6-12 months. Some banks offer extended repayment up to 20 years for larger loan amounts."
+          },
+          {
+            question: "Can I get tax benefits on education loans?",
+            answer: "Yes, under Section 80E of the Income Tax Act, you can claim deduction on the entire interest paid on education loans. This benefit is available for 8 years from the year you start repaying the loan. There is no upper limit on the deduction amount."
+          },
+          {
+            question: "What courses are eligible for education loans?",
+            answer: "Education loans cover a wide range of courses including engineering, medical, management, law, arts, science, and professional courses like CA, CS. The course should be from a recognized institution in India. Both undergraduate and postgraduate courses are eligible."
+          },
+          {
+            question: "How long does it take to get an education loan approved?",
+            answer: "For collateral-free loans up to ₹7.5 Lakhs, approval typically takes 7-10 working days. For larger loans with collateral, the process may take 15-20 days. At FundMyCampus, we help expedite the process with our partner banks."
+          },
+          {
+            question: "What documents are required for an India education loan?",
+            answer: "Required documents include: Admission letter, fee structure, academic marksheets, income proof of parent/guardian, bank statements (6 months), KYC documents, and property documents (if collateral). Students from weaker sections may need caste/income certificates."
+          }
+        ]}
+      />
+
       {/* CTA Section */}
-      <section className="py-20 bg-yellow-400">
+      <section className="py-20 bg-teal-500">
         <div className="max-w-screen-xl mx-auto px-6 md:px-8">
           <motion.div
             initial="hidden"

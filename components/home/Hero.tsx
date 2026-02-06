@@ -1,6 +1,6 @@
 /**
  * Premium Hero Section - Fundmycampus
- * Clean white/yellow/black theme with premium contrast
+ * Clean white/teal/black theme with premium contrast
  * Modern typography, striking visuals, confident tone
  */
 
@@ -28,264 +28,27 @@ export const Hero: React.FC = () => {
 
   return (
     <section className="relative overflow-hidden bg-white">
-      {/* Diagonal Yellow Section - 30% */}
+      {/* Diagonal Teal Section - 30% */}
       <div className="absolute inset-0">
         <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
-          <path 
-            d="M0,0 L35,0 L25,100 L0,100 Z" 
-            fill="#FCD34D"
+          <path
+            d="M0,0 L35,0 L25,100 L0,100 Z"
+            fill="#14B8A6"
           />
         </svg>
       </div>
 
       {/* Background Pattern - Subtle */}
       <div className="absolute inset-0 opacity-[0.08]">
-        <div 
-          className="absolute inset-0" 
+        <div
+          className="absolute inset-0"
           style={{
-            backgroundImage: `radial-gradient(circle at 1px 1px, #FFD700 1px, transparent 1px)`,
+            backgroundImage: `radial-gradient(circle at 1px 1px, #0D9488 1px, transparent 1px)`,
             backgroundSize: '40px 40px'
-          }} 
+          }}
         />
       </div>
 
-      {/* Premium Animated Background Elements */}
-      <div className="absolute inset-0 pointer-events-none">
-        {/* Floating animated circles - top right */}
-        <motion.div 
-          className="absolute top-16 right-16 w-32 h-32 bg-gray-800/10 rounded-full"
-          animate={{
-            y: [-10, 10, -10],
-            scale: [1, 1.1, 1],
-            opacity: [0.15, 0.25, 0.15]
-          }}
-          transition={{
-            duration: 8,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
-        />
-        <motion.div 
-          className="absolute top-20 right-20 w-24 h-24 bg-gray-800/8 rounded-full"
-          animate={{
-            y: [10, -10, 10],
-            scale: [1, 0.9, 1],
-            opacity: [0.1, 0.2, 0.1]
-          }}
-          transition={{
-            duration: 6,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 1
-          }}
-        />
-        <motion.div 
-          className="absolute top-24 right-24 w-16 h-16 bg-gray-800/6 rounded-full"
-          animate={{
-            y: [-5, 15, -5],
-            scale: [1, 1.2, 1]
-          }}
-          transition={{
-            duration: 10,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 2
-          }}
-        />
-        
-        {/* Floating elements - left side with premium motion */}
-        <motion.div 
-          className="absolute top-1/3 left-12 w-20 h-20 bg-gray-800/8 rounded-full"
-          animate={{
-            x: [-5, 15, -5],
-            y: [5, -10, 5],
-            rotate: [0, 180, 360]
-          }}
-          transition={{
-            duration: 12,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
-        />
-        <motion.div 
-          className="absolute top-1/2 left-32 w-16 h-16 bg-gray-800/8 rounded-full"
-          animate={{
-            x: [10, -5, 10],
-            y: [-8, 12, -8],
-            scale: [1, 1.3, 1]
-          }}
-          transition={{
-            duration: 9,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 1.5
-          }}
-        />
-        <motion.div 
-          className="absolute top-2/3 left-16 w-12 h-12 bg-gray-800/6 rounded-full"
-          animate={{
-            y: [0, -20, 0],
-            opacity: [0.08, 0.18, 0.08]
-          }}
-          transition={{
-            duration: 7,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 0.5
-          }}
-        />
-        
-        {/* Premium floating elements - bottom */}
-        <motion.div 
-          className="absolute bottom-32 right-1/4 w-24 h-24 bg-gray-800/10 rounded-full"
-          animate={{
-            scale: [1, 1.2, 1],
-            opacity: [0.14, 0.24, 0.14],
-            rotate: [0, 120, 240, 360]
-          }}
-          transition={{
-            duration: 15,
-            repeat: Infinity,
-            ease: "linear"
-          }}
-        />
-        <motion.div 
-          className="absolute bottom-48 right-1/3 w-18 h-18 bg-gray-800/8 rounded-full"
-          animate={{
-            y: [0, -15, 0],
-            x: [-5, 5, -5]
-          }}
-          transition={{
-            duration: 8,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 2
-          }}
-        />
-        <motion.div 
-          className="absolute bottom-24 left-1/3 w-20 h-20 bg-gray-800/8 rounded-full"
-          animate={{
-            scale: [1, 0.8, 1.1, 1],
-            opacity: [0.11, 0.21, 0.16, 0.11]
-          }}
-          transition={{
-            duration: 11,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 1
-          }}
-        />
-        
-        {/* Premium gradient spots with motion */}
-        <motion.div 
-          className="absolute top-1/4 right-1/2 w-40 h-40 bg-gradient-to-br from-gray-800/10 to-transparent rounded-full blur-sm"
-          animate={{
-            scale: [1, 1.3, 0.9, 1],
-            opacity: [0.15, 0.25, 0.1, 0.15],
-            rotate: [0, 90, 180, 270, 360]
-          }}
-          transition={{
-            duration: 20,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
-        />
-        <motion.div 
-          className="absolute bottom-1/3 left-1/4 w-36 h-36 bg-gradient-to-tr from-gray-800/8 to-transparent rounded-full blur-sm"
-          animate={{
-            scale: [1, 0.8, 1.2, 1],
-            opacity: [0.12, 0.22, 0.08, 0.12],
-            x: [-10, 10, -10],
-            y: [10, -10, 10]
-          }}
-          transition={{
-            duration: 16,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 3
-          }}
-        />
-        
-        {/* Animated accent dots with premium motion */}
-        <motion.div 
-          className="absolute top-40 left-1/2 w-8 h-8 bg-gray-800/15 rounded-full"
-          animate={{
-            scale: [1, 1.5, 1],
-            opacity: [0.2, 0.4, 0.2]
-          }}
-          transition={{
-            duration: 4,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
-        />
-        <motion.div 
-          className="absolute top-60 left-2/3 w-6 h-6 bg-gray-800/12 rounded-full"
-          animate={{
-            y: [-3, 8, -3],
-            scale: [1, 1.3, 1]
-          }}
-          transition={{
-            duration: 5,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 1
-          }}
-        />
-        <motion.div 
-          className="absolute bottom-40 right-2/3 w-10 h-10 bg-gray-800/10 rounded-full"
-          animate={{
-            rotate: [0, 360],
-            scale: [1, 1.2, 1]
-          }}
-          transition={{
-            duration: 12,
-            repeat: Infinity,
-            ease: "linear"
-          }}
-        />
-        <motion.div 
-          className="absolute bottom-60 left-3/4 w-12 h-12 bg-gray-800/10 rounded-full"
-          animate={{
-            x: [-5, 5, -5],
-            y: [5, -5, 5],
-            opacity: [0.14, 0.24, 0.14]
-          }}
-          transition={{
-            duration: 6,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 2
-          }}
-        />
-        
-        {/* Premium corner elements with motion */}
-        <motion.div 
-          className="absolute top-0 left-0 w-24 h-24 bg-gray-800/6 rounded-br-full"
-          animate={{
-            scale: [1, 1.1, 1],
-            opacity: [0.08, 0.16, 0.08]
-          }}
-          transition={{
-            duration: 8,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
-        />
-        <motion.div 
-          className="absolute bottom-0 right-0 w-28 h-28 bg-gray-800/8 rounded-tl-full"
-          animate={{
-            scale: [1, 0.9, 1.1, 1],
-            opacity: [0.1, 0.2, 0.15, 0.1]
-          }}
-          transition={{
-            duration: 10,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 1.5
-          }}
-        />
-      </div>
 
       {/* Main Content */}
       <div className="relative z-10 w-full">
@@ -299,9 +62,9 @@ export const Hero: React.FC = () => {
             {/* Left Content */}
             <div className="lg:col-span-6 order-2 lg:order-1">
               {/* Main Headline - Left aligned like inspiration */}
-              <motion.h1 
+              <motion.h1
                 variants={textReveal}
-                className="font-serif text-6xl md:text-7xl lg:text-8xl text-black mb-8 leading-none"
+                className="font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl text-black mb-6 md:mb-8 leading-none"
               >
                 Funding Your
                 <span className="block text-black">Education</span>
@@ -311,7 +74,7 @@ export const Hero: React.FC = () => {
               {/* Subheadline - Simple and clean */}
               <motion.p 
                 variants={staggerItem}
-                className="text-xl text-gray-600 mb-12 leading-relaxed max-w-lg"
+                className="text-xl text-gray-800 mb-12 leading-relaxed max-w-lg"
               >
                 We help fuel educational dreams by removing the barriers to financial access through private student loans.
               </motion.p>
@@ -326,120 +89,169 @@ export const Hero: React.FC = () => {
               </motion.div>
             </div>
 
-            {/* Right Content - Education Success Image */}
+            {/* Right Content - 3D Style Education Illustration */}
             <motion.div
-              initial={{ opacity: 0, x: 50, scale: 0.9 }}
-              animate={{ opacity: 1, x: 0, scale: 1 }}
-              transition={{ 
-                duration: 1.2, 
-                delay: 0.3,
-                type: "spring",
-                stiffness: 100,
-                damping: 20
-              }}
-              className="lg:col-span-6 order-1 lg:order-2 flex justify-center items-end"
+              initial={{ opacity: 0, x: 30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="lg:col-span-6 order-1 lg:order-2 flex justify-center items-center"
             >
-              <motion.div 
-                className="relative group cursor-pointer"
-                whileHover={{ 
-                  scale: 1.02,
-                  rotateY: 5,
-                  rotateX: 2
-                }}
-                transition={{ 
-                  duration: 0.6,
-                  type: "spring",
-                  stiffness: 300,
-                  damping: 25
-                }}
-              >
-                <motion.img
-                  src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=1200&auto=format&fit=crop&q=95"
-                  alt="Students celebrating graduation with education funding"
-                  className="w-full h-[400px] lg:h-[600px] object-cover rounded-2xl shadow-2xl group-hover:shadow-3xl transition-shadow duration-500"
-                  initial={{ scale: 1.1 }}
-                  animate={{ scale: 1 }}
-                  transition={{ duration: 1.5, ease: "easeOut" }}
-                  whileHover={{
-                    filter: "brightness(1.1) contrast(1.05)"
-                  }}
-                />
-                
-                {/* Premium decorative elements with enhanced animations */}
-                <motion.div 
-                  className="absolute -top-4 -right-4 w-16 h-16 bg-yellow/30 rounded-full blur-xl"
-                  animate={{
-                    scale: [1, 1.3, 1],
-                    opacity: [0.2, 0.4, 0.2],
-                    rotate: [0, 180, 360]
-                  }}
-                  transition={{
-                    duration: 8,
-                    repeat: Infinity,
-                    ease: "easeInOut"
-                  }}
-                />
-                <motion.div 
-                  className="absolute -bottom-4 -left-4 w-24 h-24 bg-yellow/15 rounded-full blur-2xl"
-                  animate={{
-                    scale: [1, 0.8, 1.1, 1],
-                    opacity: [0.1, 0.3, 0.15, 0.1],
-                    x: [-2, 4, -2],
-                    y: [2, -4, 2]
-                  }}
-                  transition={{
-                    duration: 12,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                    delay: 1
-                  }}
-                />
-                
-                {/* Premium floating accent elements */}
-                <motion.div 
-                  className="absolute -top-8 -left-8 w-12 h-12 bg-gray-200/40 rounded-full backdrop-blur-sm"
-                  animate={{
-                    y: [-5, 10, -5],
-                    opacity: [0.15, 0.3, 0.15],
-                    scale: [1, 1.2, 1]
-                  }}
-                  transition={{
-                    duration: 6,
-                    repeat: Infinity,
-                    ease: "easeInOut"
-                  }}
-                />
-                <motion.div 
-                  className="absolute -bottom-8 -right-8 w-14 h-14 bg-yellow/35 rounded-full backdrop-blur-sm"
-                  animate={{
-                    rotate: [0, 360],
-                    scale: [1, 1.1, 0.9, 1],
-                    opacity: [0.25, 0.4, 0.2, 0.25]
-                  }}
-                  transition={{
-                    duration: 10,
-                    repeat: Infinity,
-                    ease: "linear"
-                  }}
-                />
-                
-                {/* Hover reveal overlay */}
-                <motion.div
-                  className="absolute inset-0 bg-gradient-to-t from-gray-900/15 via-transparent to-gray-100/10 rounded-2xl opacity-0 group-hover:opacity-100"
-                  transition={{ duration: 0.4 }}
-                />
-                
-                {/* Success indicator badge */}
-                <motion.div
-                  className="absolute top-6 right-6 bg-white/95 backdrop-blur-sm rounded-full px-4 py-2 shadow-lg border border-gray-200"
-                  initial={{ opacity: 0, scale: 0 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 1, duration: 0.5, type: "spring" }}
-                  whileHover={{ scale: 1.05 }}
+              <div className="relative w-full max-w-lg xl:max-w-xl">
+                {/* 3D Style Illustration with Website Colors */}
+                <svg
+                  viewBox="0 0 500 500"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="w-full h-auto drop-shadow-2xl"
                 >
-                  <span className="text-sm font-semibold text-gray-900">🎓 Success</span>
+                  {/* Definitions for 3D effects */}
+                  <defs>
+                    <linearGradient id="tealGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor="#2DD4BF" />
+                      <stop offset="100%" stopColor="#0D9488" />
+                    </linearGradient>
+                    <linearGradient id="blackGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor="#374151" />
+                      <stop offset="100%" stopColor="#111827" />
+                    </linearGradient>
+                    <linearGradient id="whiteGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor="#FFFFFF" />
+                      <stop offset="100%" stopColor="#F3F4F6" />
+                    </linearGradient>
+                    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+                      <feDropShadow dx="4" dy="8" stdDeviation="8" floodOpacity="0.15" />
+                    </filter>
+                    <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+                      <feDropShadow dx="2" dy="4" stdDeviation="4" floodOpacity="0.1" />
+                    </filter>
+                  </defs>
+
+                  {/* Background Elements */}
+                  <circle cx="250" cy="250" r="180" fill="#CCFBF1" opacity="0.5" />
+
+                  {/* Main 3D Laptop */}
+                  <g filter="url(#shadow)" transform="translate(100, 180)">
+                    {/* Laptop Base */}
+                    <path d="M20 140 L280 140 L300 160 L0 160 Z" fill="url(#blackGrad)" />
+                    {/* Laptop Screen Back */}
+                    <rect x="30" y="20" width="240" height="120" rx="8" fill="url(#blackGrad)" />
+                    {/* Laptop Screen */}
+                    <rect x="40" y="28" width="220" height="104" rx="4" fill="url(#whiteGrad)" />
+                    {/* Screen Content - Graph */}
+                    <path d="M60 110 L100 90 L140 100 L180 60 L220 70 L240 50" stroke="#14B8A6" strokeWidth="4" strokeLinecap="round" fill="none" />
+                    <circle cx="180" cy="60" r="6" fill="#14B8A6" />
+                    <circle cx="240" cy="50" r="6" fill="#0F766E" />
+                    {/* Dollar icon on screen */}
+                    <circle cx="80" cy="60" r="16" fill="#14B8A6" />
+                    <text x="80" y="66" textAnchor="middle" fill="#111827" fontSize="16" fontWeight="bold">$</text>
+                  </g>
+
+                  {/* 3D Graduation Cap */}
+                  <g filter="url(#shadow)" transform="translate(280, 60)">
+                    {/* Cap top */}
+                    <path d="M60 30 L0 55 L60 80 L120 55 Z" fill="url(#blackGrad)" />
+                    {/* Cap bottom */}
+                    <ellipse cx="60" cy="55" rx="60" ry="15" fill="#1F2937" />
+                    {/* Tassel */}
+                    <line x1="60" y1="30" x2="60" y2="10" stroke="#374151" strokeWidth="3" />
+                    <circle cx="60" cy="8" r="6" fill="url(#tealGrad)" />
+                    <path d="M60 14 Q80 40 75 70" stroke="url(#tealGrad)" strokeWidth="3" fill="none" />
+                    <circle cx="75" cy="72" r="5" fill="url(#tealGrad)" />
+                  </g>
+
+                  {/* 3D Coin Stack */}
+                  <g filter="url(#softShadow)" transform="translate(50, 100)">
+                    <ellipse cx="40" cy="80" rx="35" ry="10" fill="#0D9488" />
+                    <ellipse cx="40" cy="70" rx="35" ry="10" fill="url(#tealGrad)" />
+                    <ellipse cx="40" cy="60" rx="35" ry="10" fill="#0D9488" />
+                    <ellipse cx="40" cy="50" rx="35" ry="10" fill="url(#tealGrad)" />
+                    <ellipse cx="40" cy="40" rx="35" ry="10" fill="#0D9488" />
+                    <ellipse cx="40" cy="30" rx="35" ry="10" fill="url(#tealGrad)" />
+                    <text x="40" y="36" textAnchor="middle" fill="#111827" fontSize="14" fontWeight="bold">₹</text>
+                  </g>
+
+                  {/* 3D Globe */}
+                  <g filter="url(#softShadow)" transform="translate(350, 280)">
+                    <circle cx="50" cy="50" r="45" fill="url(#blackGrad)" />
+                    <circle cx="50" cy="50" r="40" fill="#374151" />
+                    {/* Globe lines */}
+                    <ellipse cx="50" cy="50" rx="18" ry="40" fill="none" stroke="url(#tealGrad)" strokeWidth="2" />
+                    <ellipse cx="50" cy="50" rx="40" ry="18" fill="none" stroke="url(#tealGrad)" strokeWidth="2" />
+                    <line x1="10" y1="50" x2="90" y2="50" stroke="url(#tealGrad)" strokeWidth="2" />
+                    <line x1="50" y1="10" x2="50" y2="90" stroke="url(#tealGrad)" strokeWidth="2" />
+                    {/* Airplane */}
+                    <path d="M70 25 L85 20 L80 30 Z" fill="url(#tealGrad)" />
+                  </g>
+
+                  {/* 3D Book Stack */}
+                  <g filter="url(#softShadow)" transform="translate(60, 340)">
+                    <rect x="0" y="30" width="70" height="15" rx="2" fill="#1F2937" transform="rotate(-5)" />
+                    <rect x="5" y="15" width="70" height="15" rx="2" fill="url(#tealGrad)" transform="rotate(-3)" />
+                    <rect x="2" y="0" width="70" height="15" rx="2" fill="#374151" transform="rotate(-1)" />
+                  </g>
+
+                  {/* 3D Certificate */}
+                  <g filter="url(#softShadow)" transform="translate(320, 180)">
+                    <rect x="0" y="0" width="80" height="60" rx="4" fill="url(#whiteGrad)" />
+                    <rect x="10" y="10" width="60" height="4" rx="2" fill="url(#tealGrad)" />
+                    <rect x="10" y="20" width="50" height="3" rx="1" fill="#E5E7EB" />
+                    <rect x="10" y="28" width="40" height="3" rx="1" fill="#E5E7EB" />
+                    <circle cx="60" cy="45" r="10" fill="url(#tealGrad)" />
+                    <path d="M55 45 L58 48 L65 41" stroke="#111827" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+                  </g>
+
+                  {/* Floating Elements */}
+                  {/* Plus signs */}
+                  <g fill="url(#tealGrad)">
+                    <path d="M420 140 L426 140 L426 134 L432 134 L432 140 L438 140 L438 146 L432 146 L432 152 L426 152 L426 146 L420 146 Z" />
+                    <path d="M140 280 L144 280 L144 276 L148 276 L148 280 L152 280 L152 284 L148 284 L148 288 L144 288 L144 284 L140 284 Z" />
+                  </g>
+
+                  {/* Dots */}
+                  <circle cx="180" cy="120" r="5" fill="url(#tealGrad)" />
+                  <circle cx="420" cy="320" r="4" fill="url(#tealGrad)" />
+                  <circle cx="100" cy="250" r="3" fill="#14B8A6" />
+                </svg>
+
+                {/* Floating Stats Card */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.6 }}
+                  className="absolute bottom-8 -left-4 bg-white rounded-2xl shadow-xl p-4 border border-gray-100"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 bg-teal-500 rounded-xl flex items-center justify-center shadow-md">
+                      <Globe className="w-6 h-6 text-black" />
+                    </div>
+                    <div>
+                      <p className="text-base font-bold text-black">50+ Countries</p>
+                      <p className="text-xs text-gray-600">Global Education</p>
+                    </div>
+                  </div>
                 </motion.div>
-              </motion.div>
+
+                {/* Floating Amount Card */}
+                <motion.div
+                  initial={{ opacity: 0, y: -20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.8 }}
+                  className="absolute top-8 -right-4 bg-black rounded-2xl shadow-xl p-4"
+                >
+                  <p className="text-xs text-gray-400">Loans Disbursed</p>
+                  <p className="text-2xl font-bold text-teal-400">₹500Cr+</p>
+                </motion.div>
+
+                {/* Additional floating badge */}
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.5, delay: 1 }}
+                  className="absolute top-1/2 -left-8 bg-teal-500 rounded-full p-3 shadow-lg"
+                >
+                  <Shield className="w-5 h-5 text-black" />
+                </motion.div>
+              </div>
             </motion.div>
           </motion.div>
         </div>

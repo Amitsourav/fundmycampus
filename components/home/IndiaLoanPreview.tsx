@@ -15,7 +15,7 @@ import { fadeInUp } from "@/lib/animations";
 export const IndiaLoanPreview: React.FC = () => {
   const highlights = [
     { metric: "₹40L", description: "Maximum loan amount" },
-    { metric: "8.5%", description: "Starting interest rate" },
+    { metric: "6.75%", description: "Starting interest rate" },
     { metric: "500+", description: "Partner institutions" },
     { metric: "15 Years", description: "Repayment tenure" },
   ];

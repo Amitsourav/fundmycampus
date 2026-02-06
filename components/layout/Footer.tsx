@@ -33,8 +33,8 @@ export const Footer: React.FC = () => {
   return (
     <footer className="bg-black text-gray-200">
       {/* Main Footer */}
-      <div className="container mx-auto px-8 py-20">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+      <div className="container mx-auto px-4 sm:px-6 md:px-8 py-12 md:py-20">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12">
           {/* Brand */}
           <motion.div 
             initial="hidden"
@@ -115,12 +115,12 @@ export const Footer: React.FC = () => {
       </div>
 
       {/* Divider */}
-      <div className="container mx-auto px-8">
+      <div className="container mx-auto px-4 sm:px-6 md:px-8">
         <div className="h-px bg-gray-600" />
       </div>
 
       {/* Bottom Footer */}
-      <div className="container mx-auto px-8 py-8">
+      <div className="container mx-auto px-4 sm:px-6 md:px-8 py-6 md:py-8">
         <div className="flex flex-col md:flex-row items-center justify-between">
           <p className="text-xs text-gray-400 uppercase tracking-wide-md">
             © {currentYear} FundMyCampus. All rights reserved.

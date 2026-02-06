@@ -29,7 +29,7 @@ export const AbroadFocus: React.FC = () => {
       description: "Maximum loan amount for comprehensive coverage",
     },
     {
-      title: "8.5% Interest Rate",
+      title: "6.75% Interest Rate",
       description: "Starting rates with competitive terms",
     },
     {

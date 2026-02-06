@@ -73,7 +73,7 @@ export const Header: React.FC = () => {
               className="flex items-center"
             >
               <span className="font-serif text-2xl tracking-tight text-black">
-                Fundmy<span className="text-yellow">campus</span>
+                Fundmy<span className="text-teal-500">campus</span>
               </span>
             </motion.div>
           </Link>
@@ -88,14 +88,14 @@ export const Header: React.FC = () => {
                     onMouseEnter={() => setIsProductDropdownOpen(true)}
                     onMouseLeave={() => setIsProductDropdownOpen(false)}
                   >
-                    <button className="flex items-center space-x-1 text-base font-medium text-black hover:text-yellow transition-colors duration-300 group">
+                    <button className="flex items-center space-x-1 text-base font-medium text-black hover:text-teal-500 transition-colors duration-300 group">
                       <span>{link.label}</span>
                       <ChevronDown 
                         className={`w-4 h-4 transition-transform duration-300 ${
                           isProductDropdownOpen ? 'rotate-180' : ''
                         }`} 
                       />
-                      <span className="absolute -bottom-1 left-0 w-full h-0.5 bg-yellow origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300" />
+                      <span className="absolute -bottom-1 left-0 w-full h-0.5 bg-teal-500 origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300" />
                     </button>
                     
                     {/* Dropdown Menu */}
@@ -112,7 +112,7 @@ export const Header: React.FC = () => {
                             <div key={optionIndex} className="relative group/submenu">
                               {option.hasSubmenu ? (
                                 <div className="relative">
-                                  <button className="flex items-center justify-between w-full px-4 py-3 text-black hover:bg-yellow/10 hover:text-yellow transition-all duration-200 border-b border-gray-200 text-left group-hover/submenu:bg-yellow/10 group-hover/submenu:text-yellow">
+                                  <button className="flex items-center justify-between w-full px-4 py-3 text-black hover:bg-teal-500/10 hover:text-teal-500 transition-all duration-200 border-b border-gray-200 text-left group-hover/submenu:bg-teal-500/10 group-hover/submenu:text-teal-500">
                                     <span>{option.label}</span>
                                     <ChevronDown className="w-4 h-4 rotate-[-90deg]" />
                                   </button>
@@ -123,7 +123,7 @@ export const Header: React.FC = () => {
                                       <Link
                                         key={subIndex}
                                         href={subOption.href}
-                                        className="block px-4 py-2.5 text-black hover:bg-yellow/10 hover:text-yellow transition-all duration-200 border-b border-gray-200 last:border-0 text-sm"
+                                        className="block px-4 py-2.5 text-black hover:bg-teal-500/10 hover:text-teal-500 transition-all duration-200 border-b border-gray-200 last:border-0 text-sm"
                                       >
                                         {subOption.label}
                                       </Link>
@@ -133,7 +133,7 @@ export const Header: React.FC = () => {
                               ) : (
                                 <Link
                                   href={option.href}
-                                  className="block px-4 py-3 text-black hover:bg-yellow/10 hover:text-yellow transition-all duration-200 border-b border-gray-200 last:border-0"
+                                  className="block px-4 py-3 text-black hover:bg-teal-500/10 hover:text-teal-500 transition-all duration-200 border-b border-gray-200 last:border-0"
                                 >
                                   <motion.span
                                     initial={{ x: -10, opacity: 0 }}
@@ -153,10 +153,10 @@ export const Header: React.FC = () => {
                 ) : (
                   <Link
                     href={link.href}
-                    className="relative text-base font-medium text-black hover:text-yellow transition-colors duration-300 group"
+                    className="relative text-base font-medium text-black hover:text-teal-500 transition-colors duration-300 group"
                   >
                     {link.label}
-                    <span className="absolute -bottom-1 left-0 w-full h-0.5 bg-yellow origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300" />
+                    <span className="absolute -bottom-1 left-0 w-full h-0.5 bg-teal-500 origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300" />
                   </Link>
                 )}
               </div>
@@ -204,7 +204,7 @@ export const Header: React.FC = () => {
                     <div>
                       <button
                         onClick={() => setIsProductDropdownOpen(!isProductDropdownOpen)}
-                        className="flex items-center justify-between w-full py-3 text-black hover:text-yellow transition-colors duration-300 font-medium"
+                        className="flex items-center justify-between w-full py-3 text-black hover:text-teal-500 transition-colors duration-300 font-medium"
                       >
                         <span>{link.label}</span>
                         <ChevronDown 
@@ -228,7 +228,7 @@ export const Header: React.FC = () => {
                                   <div>
                                     <button
                                       onClick={() => setIsCoursesDropdownOpen(!isCoursesDropdownOpen)}
-                                      className="flex items-center justify-between w-full py-2 text-gray-600 hover:text-yellow transition-colors duration-300 text-sm"
+                                      className="flex items-center justify-between w-full py-2 text-gray-800 hover:text-teal-500 transition-colors duration-300 text-sm"
                                     >
                                       <span>{option.label}</span>
                                       <ChevronDown 
@@ -250,7 +250,7 @@ export const Header: React.FC = () => {
                                             <Link
                                               key={subIndex}
                                               href={subOption.href}
-                                              className="block py-1.5 text-gray-500 hover:text-yellow transition-colors duration-300 text-xs"
+                                              className="block py-1.5 text-gray-700 hover:text-teal-500 transition-colors duration-300 text-xs"
                                               onClick={() => setIsMobileMenuOpen(false)}
                                             >
                                               {subOption.label}
@@ -263,7 +263,7 @@ export const Header: React.FC = () => {
                                 ) : (
                                   <Link
                                     href={option.href}
-                                    className="block py-2 text-gray-600 hover:text-yellow transition-colors duration-300 text-sm"
+                                    className="block py-2 text-gray-800 hover:text-teal-500 transition-colors duration-300 text-sm"
                                     onClick={() => setIsMobileMenuOpen(false)}
                                   >
                                     {option.label}
@@ -278,7 +278,7 @@ export const Header: React.FC = () => {
                   ) : (
                     <Link
                       href={link.href}
-                      className="block py-3 text-black hover:text-yellow transition-colors duration-300 font-medium"
+                      className="block py-3 text-black hover:text-teal-500 transition-colors duration-300 font-medium"
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
                       {link.label}
