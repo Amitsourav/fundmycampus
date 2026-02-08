@@ -668,44 +668,44 @@ export default function ToolsPage() {
       </section>
 
       {/* Tools Navigation - Sticky */}
-      <section className={`sticky top-20 z-40 py-6 bg-white/95 backdrop-blur-md border-b border-gray-200 shadow-sm transition-all duration-300 ${showToolsNav ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-full pointer-events-none'}`}>
-        <div className="max-w-screen-xl mx-auto px-6 md:px-8">
-          <p className="text-center text-sm text-gray-700 mb-4">Jump to a tool</p>
-          <div className="flex flex-wrap justify-center gap-3">
-            <a href="#emi-calculator" className="group px-5 py-3 bg-teal-500 hover:bg-teal-500 rounded-xl border-2 border-teal-500 shadow-md hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
-              <span className="flex items-center gap-2">
-                <Calculator className="w-5 h-5 text-black" />
-                <span className="font-semibold text-black">EMI Calculator</span>
+      <section className={`sticky top-20 z-40 py-2 md:py-6 bg-white/95 backdrop-blur-md border-b border-gray-200 shadow-sm transition-all duration-300 ${showToolsNav ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-full pointer-events-none'}`}>
+        <div className="max-w-screen-xl mx-auto px-3 md:px-8">
+          <p className="text-center text-xs md:text-sm text-gray-700 mb-2 md:mb-4">Jump to a tool</p>
+          <div className="flex md:flex-wrap md:justify-center gap-2 md:gap-3 overflow-x-auto pb-1 md:pb-0 scrollbar-hide">
+            <a href="#emi-calculator" className="group shrink-0 px-3 py-1.5 md:px-5 md:py-3 bg-teal-500 hover:bg-teal-500 rounded-lg md:rounded-xl border-2 border-teal-500 shadow-md hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+              <span className="flex items-center gap-1.5 md:gap-2">
+                <Calculator className="w-4 h-4 md:w-5 md:h-5 text-black" />
+                <span className="font-semibold text-xs md:text-base text-black whitespace-nowrap">EMI Calculator</span>
               </span>
             </a>
-            <a href="#cost-calculator" className="group px-5 py-3 bg-white hover:bg-teal-500 rounded-xl border-2 border-gray-200 hover:border-teal-500 shadow-md hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
-              <span className="flex items-center gap-2">
-                <DollarSign className="w-5 h-5 text-teal-600 group-hover:text-black" />
-                <span className="font-semibold text-gray-800 group-hover:text-black">Cost Calculator</span>
+            <a href="#cost-calculator" className="group shrink-0 px-3 py-1.5 md:px-5 md:py-3 bg-white hover:bg-teal-500 rounded-lg md:rounded-xl border-2 border-gray-200 hover:border-teal-500 shadow-md hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+              <span className="flex items-center gap-1.5 md:gap-2">
+                <DollarSign className="w-4 h-4 md:w-5 md:h-5 text-teal-600 group-hover:text-black" />
+                <span className="font-semibold text-xs md:text-base text-gray-800 group-hover:text-black whitespace-nowrap">Cost Calculator</span>
               </span>
             </a>
-            <a href="#eligibility-calculator" className="group px-5 py-3 bg-white hover:bg-teal-500 rounded-xl border-2 border-gray-200 hover:border-teal-500 shadow-md hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
-              <span className="flex items-center gap-2">
-                <Award className="w-5 h-5 text-teal-600 group-hover:text-black" />
-                <span className="font-semibold text-gray-800 group-hover:text-black">Loan Eligibility</span>
+            <a href="#eligibility-calculator" className="group shrink-0 px-3 py-1.5 md:px-5 md:py-3 bg-white hover:bg-teal-500 rounded-lg md:rounded-xl border-2 border-gray-200 hover:border-teal-500 shadow-md hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+              <span className="flex items-center gap-1.5 md:gap-2">
+                <Award className="w-4 h-4 md:w-5 md:h-5 text-teal-600 group-hover:text-black" />
+                <span className="font-semibold text-xs md:text-base text-gray-800 group-hover:text-black whitespace-nowrap">Loan Eligibility</span>
               </span>
             </a>
-            <a href="#comparison-tool" className="group px-5 py-3 bg-white hover:bg-teal-500 rounded-xl border-2 border-gray-200 hover:border-teal-500 shadow-md hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
-              <span className="flex items-center gap-2">
-                <Scale className="w-5 h-5 text-teal-600 group-hover:text-black" />
-                <span className="font-semibold text-gray-800 group-hover:text-black">Loan Comparison</span>
+            <a href="#comparison-tool" className="group shrink-0 px-3 py-1.5 md:px-5 md:py-3 bg-white hover:bg-teal-500 rounded-lg md:rounded-xl border-2 border-gray-200 hover:border-teal-500 shadow-md hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+              <span className="flex items-center gap-1.5 md:gap-2">
+                <Scale className="w-4 h-4 md:w-5 md:h-5 text-teal-600 group-hover:text-black" />
+                <span className="font-semibold text-xs md:text-base text-gray-800 group-hover:text-black whitespace-nowrap">Loan Comparison</span>
               </span>
             </a>
-            <a href="#tax-calculator" className="group px-5 py-3 bg-white hover:bg-teal-500 rounded-xl border-2 border-gray-200 hover:border-teal-500 shadow-md hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
-              <span className="flex items-center gap-2">
-                <Receipt className="w-5 h-5 text-teal-600 group-hover:text-black" />
-                <span className="font-semibold text-gray-800 group-hover:text-black">Tax Benefits</span>
+            <a href="#tax-calculator" className="group shrink-0 px-3 py-1.5 md:px-5 md:py-3 bg-white hover:bg-teal-500 rounded-lg md:rounded-xl border-2 border-gray-200 hover:border-teal-500 shadow-md hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+              <span className="flex items-center gap-1.5 md:gap-2">
+                <Receipt className="w-4 h-4 md:w-5 md:h-5 text-teal-600 group-hover:text-black" />
+                <span className="font-semibold text-xs md:text-base text-gray-800 group-hover:text-black whitespace-nowrap">Tax Benefits</span>
               </span>
             </a>
-            <a href="#sop-review" className="group px-5 py-3 bg-white hover:bg-teal-500 rounded-xl border-2 border-gray-200 hover:border-teal-500 shadow-md hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
-              <span className="flex items-center gap-2">
-                <FileEdit className="w-5 h-5 text-teal-600 group-hover:text-black" />
-                <span className="font-semibold text-gray-800 group-hover:text-black">SOP Review</span>
+            <a href="#sop-review" className="group shrink-0 px-3 py-1.5 md:px-5 md:py-3 bg-white hover:bg-teal-500 rounded-lg md:rounded-xl border-2 border-gray-200 hover:border-teal-500 shadow-md hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+              <span className="flex items-center gap-1.5 md:gap-2">
+                <FileEdit className="w-4 h-4 md:w-5 md:h-5 text-teal-600 group-hover:text-black" />
+                <span className="font-semibold text-xs md:text-base text-gray-800 group-hover:text-black whitespace-nowrap">SOP Review</span>
               </span>
             </a>
           </div>
