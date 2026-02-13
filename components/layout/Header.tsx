@@ -72,9 +72,11 @@ export const Header: React.FC = () => {
               transition={{ duration: 0.3 }}
               className="flex items-center"
             >
-              <span className="font-serif text-2xl tracking-tight text-black">
-                Fundmy<span className="text-teal-500">campus</span>
-              </span>
+              <img
+                src="/images/logo.png"
+                alt="FundMyCampus"
+                className="h-40 w-80 -my-16 object-contain"
+              />
             </motion.div>
           </Link>
 

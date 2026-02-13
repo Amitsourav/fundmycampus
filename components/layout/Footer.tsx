@@ -42,7 +42,11 @@ export const Footer: React.FC = () => {
             variants={fadeInUp}
             className="lg:col-span-4"
           >
-            <h3 className="font-serif text-3xl text-white mb-4">FundMyCampus</h3>
+            <img
+              src="/images/logo.png"
+              alt="FundMyCampus"
+              className="h-32 w-auto mb-4 brightness-0 invert"
+            />
             <p className="text-gray-300 leading-relaxed mb-6 max-w-sm">
               Premium education financing for ambitious students pursuing excellence at the world's finest institutions.
             </p>
