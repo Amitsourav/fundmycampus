@@ -39,10 +39,10 @@ export const CTA: React.FC = () => {
               </Button>
             </Link>
             <a 
-              href="tel:+919876543210"
+              href="tel:+917827225354"
               className="text-ivory/80 hover:text-ivory transition-colors duration-500 text-sm uppercase tracking-wide-md"
             >
-              Call +91 98765 43210
+              Call +91 78272 25354
             </a>
           </div>
 

@@ -34,12 +34,12 @@ export default function ContactPage() {
     {
       icon: Phone,
       title: "Phone",
-      details: ["+91 98765 43210", "+91 98765 43211"],
+      details: ["+91 78272 25354"],
     },
     {
       icon: Mail,
       title: "Email",
-      details: ["info@fundmycampus.com", "support@fundmycampus.com"],
+      details: ["contact@fundmycampus.com"],
     },
     {
       icon: MapPin,

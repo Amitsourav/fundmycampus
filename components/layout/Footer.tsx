@@ -49,9 +49,9 @@ export const Footer: React.FC = () => {
             </p>
             <div className="flex space-x-1 text-xs text-gray-400 uppercase tracking-wide-md">
               <span>Est.</span>
-              <span>2024</span>
+              <span>2026</span>
               <span>•</span>
-              <span>Mumbai</span>
+              <span>Delhi</span>
             </div>
           </motion.div>
 
@@ -98,16 +98,16 @@ export const Footer: React.FC = () => {
             </h4>
             <div className="space-y-3">
               <a 
-                href="mailto:hello@fundmycampus.com" 
+                href="mailto:contact@fundmycampus.com"
                 className="block text-sm text-gray-300 hover:text-white transition-colors duration-500"
               >
-                hello@fundmycampus.com
+                contact@fundmycampus.com
               </a>
-              <a 
-                href="tel:+919876543210" 
+              <a
+                href="tel:+917827225354"
                 className="block text-sm text-gray-300 hover:text-white transition-colors duration-500"
               >
-                +91 98765 43210
+                +91 78272 25354
               </a>
             </div>
           </motion.div>
@@ -126,7 +126,7 @@ export const Footer: React.FC = () => {
             © {currentYear} FundMyCampus. All rights reserved.
           </p>
           <p className="text-xs text-gray-400 uppercase tracking-wide-md mt-4 md:mt-0">
-            Crafted with excellence in Mumbai
+            Crafted with excellence in Delhi
           </p>
         </div>
       </div>
