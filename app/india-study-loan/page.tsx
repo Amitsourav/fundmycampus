@@ -3,6 +3,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { Building, CheckCircle, ArrowRight, GraduationCap, DollarSign, FileText, Clock, Shield, Award, MapPin, BookOpen, Users, Target } from "lucide-react";
+import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { FAQ } from "@/components/ui/FAQ";
 import { fadeInUp, staggerContainer, staggerItem } from "@/lib/animations";
@@ -208,13 +209,17 @@ export default function IndiaStudyLoanPage() {
                 variants={staggerItem}
                 className="flex flex-col sm:flex-row gap-4"
               >
-                <Button variant="primary" size="lg">
-                  Apply Now
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
-                <Button variant="secondary" size="lg">
-                  Check Eligibility
-                </Button>
+                <Link href="/#contact-form">
+                  <Button variant="primary" size="lg">
+                    Apply Now
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Button>
+                </Link>
+                <Link href="/#contact-form">
+                  <Button variant="secondary" size="lg">
+                    Check Eligibility
+                  </Button>
+                </Link>
               </motion.div>
             </motion.div>
           </div>
@@ -508,10 +513,12 @@ export default function IndiaStudyLoanPage() {
             <p className="text-xl text-black-800 mb-10">
               Apply now and get approval within 7-10 days
             </p>
-            <Button variant="secondary" size="lg">
-              Apply for India Study Loan
-              <ArrowRight className="ml-2 h-4 w-4" />
-            </Button>
+            <Link href="/#contact-form">
+              <Button variant="secondary" size="lg">
+                Apply for India Study Loan
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
+            </Link>
           </motion.div>
         </div>
       </section>

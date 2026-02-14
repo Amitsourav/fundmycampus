@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { motion } from "framer-motion";
+import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { fadeInUp, staggerContainer } from "@/lib/animations";
 import { CreditCard, RefreshCw, Clock, Settings } from "lucide-react";
@@ -129,9 +130,11 @@ export const DreamsFlight: React.FC = () => {
 
             {/* CTA Button */}
             <div>
-              <Button variant="primary" size="lg">
-                Apply Now
-              </Button>
+              <Link href={activeTab === "abroad" ? "/abroad-study-loan" : "/india-study-loan"}>
+                <Button variant="primary" size="lg">
+                  Apply Now
+                </Button>
+              </Link>
             </div>
           </motion.div>
         </div>

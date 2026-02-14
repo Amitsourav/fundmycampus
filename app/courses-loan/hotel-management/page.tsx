@@ -3,6 +3,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { Hotel, CheckCircle, ArrowRight, GraduationCap, DollarSign, FileText, Clock, Shield, Award, BookOpen, Users, Target, ChefHat, Globe, Utensils, MapPin } from "lucide-react";
+import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { FAQ } from "@/components/ui/FAQ";
 import { fadeInUp, staggerContainer, staggerItem, scrollReveal, cardHover } from "@/lib/animations";
@@ -224,13 +225,17 @@ export default function HotelManagementEducationLoanPage() {
                 variants={staggerItem}
                 className="flex flex-col sm:flex-row gap-4"
               >
-                <Button variant="primary" size="lg">
-                  Apply for Hotel Management Loan
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
-                <Button variant="secondary" size="lg">
-                  Check Eligibility
-                </Button>
+                <Link href="/#contact-form">
+                  <Button variant="primary" size="lg">
+                    Apply for Hotel Management Loan
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Button>
+                </Link>
+                <Link href="/#contact-form">
+                  <Button variant="secondary" size="lg">
+                    Check Eligibility
+                  </Button>
+                </Link>
               </motion.div>
             </motion.div>
 
@@ -591,10 +596,12 @@ export default function HotelManagementEducationLoanPage() {
             <p className="text-xl text-black-800 mb-10">
               Apply now for education loan and enter the dynamic world of hospitality
             </p>
-            <Button variant="secondary" size="lg">
-              Apply for Hotel Management Loan
-              <ArrowRight className="ml-2 h-4 w-4" />
-            </Button>
+            <Link href="/#contact-form">
+              <Button variant="secondary" size="lg">
+                Apply for Hotel Management Loan
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
+            </Link>
           </motion.div>
         </div>
       </section>

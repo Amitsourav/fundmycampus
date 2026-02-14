@@ -11,7 +11,7 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { fadeIn } from "@/lib/animations";
 import { Button } from "@/components/ui/Button";
-import { Menu, X, ChevronDown } from "lucide-react";
+import { Menu, X, ChevronDown, MessageCircle, Send, Phone } from "lucide-react";
 
 export const Header: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -53,16 +53,45 @@ export const Header: React.FC = () => {
   ];
 
   return (
-    <motion.header
-      initial="hidden"
-      animate="visible"
-      variants={fadeIn}
-      className={`fixed top-0 left-0 w-full z-50 transition-all duration-600 bg-white border-b border-gray-100 ${
-        isScrolled 
-          ? "shadow-soft-xl py-4" 
-          : "py-6"
-      }`}
-    >
+    <>
+      {/* Community Top Bar */}
+      <div className="fixed top-0 left-0 w-full z-50 bg-gradient-to-r from-teal-600 via-teal-500 to-teal-600 text-white">
+        <div className="w-full px-6 md:px-12 py-3 flex items-center justify-between">
+          <p className="hidden md:flex items-center gap-1 text-sm font-medium">
+            <span>✨</span>
+            Join our community for exclusive tips &amp; updates!
+            <span>🎓</span>
+          </p>
+          <div className="flex items-center gap-3 mx-auto md:mx-0">
+            <a href="/#contact-form" className="flex items-center gap-1.5 bg-white/20 hover:bg-white/30 backdrop-blur-sm px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-300">
+              <Phone className="h-3 w-3" />
+              Get Free Consultation
+            </a>
+            <a href="https://chat.whatsapp.com/fundmycampus" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 bg-white/20 hover:bg-white/30 backdrop-blur-sm px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-300">
+              <MessageCircle className="h-3 w-3" />
+              Join WhatsApp
+              <span className="bg-yellow-400 text-[10px] px-1.5 py-0.5 rounded-full font-bold text-black">Soon</span>
+            </a>
+            <a href="https://t.me/fundmycampus" target="_blank" rel="noopener noreferrer" className="hidden sm:flex items-center gap-1.5 bg-white/20 hover:bg-white/30 backdrop-blur-sm px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-300">
+              <Send className="h-3 w-3" />
+              Join Telegram
+              <span className="bg-yellow-400 text-[10px] px-1.5 py-0.5 rounded-full font-bold text-black">Soon</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      {/* Main Header */}
+      <motion.header
+        initial="hidden"
+        animate="visible"
+        variants={fadeIn}
+        className={`fixed top-[48px] left-0 w-full z-50 transition-all duration-600 bg-white border-b border-gray-100 ${
+          isScrolled
+            ? "shadow-soft-xl py-4"
+            : "py-6"
+        }`}
+      >
       <div className="max-w-screen-xl mx-auto px-6 md:px-8">
         <div className="flex items-center justify-between">
           {/* Logo */}
@@ -305,5 +334,6 @@ export const Header: React.FC = () => {
         )}
       </AnimatePresence>
     </motion.header>
+    </>
   );
 };
