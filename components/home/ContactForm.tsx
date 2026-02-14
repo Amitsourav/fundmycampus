@@ -18,7 +18,7 @@ const socialLinks = [
     icon: MessageCircle,
     label: "WhatsApp Community",
     description: "Join 5,000+ students",
-    href: "https://chat.whatsapp.com/fundmycampus",
+    href: "https://chat.whatsapp.com/Ex1huVZeeGR8NWbeHrVGYP",
     color: "bg-green-500",
   },
   {

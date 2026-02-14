@@ -67,10 +67,9 @@ export const Header: React.FC = () => {
               <Phone className="h-3 w-3" />
               Get Free Consultation
             </a>
-            <a href="https://chat.whatsapp.com/fundmycampus" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 bg-white/20 hover:bg-white/30 backdrop-blur-sm px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-300">
+            <a href="https://chat.whatsapp.com/Ex1huVZeeGR8NWbeHrVGYP" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 bg-white/20 hover:bg-white/30 backdrop-blur-sm px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-300">
               <MessageCircle className="h-3 w-3" />
               Join WhatsApp
-              <span className="bg-yellow-400 text-[10px] px-1.5 py-0.5 rounded-full font-bold text-black">Soon</span>
             </a>
             <a href="https://t.me/fundmycampus" target="_blank" rel="noopener noreferrer" className="hidden sm:flex items-center gap-1.5 bg-white/20 hover:bg-white/30 backdrop-blur-sm px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-300">
               <Send className="h-3 w-3" />
