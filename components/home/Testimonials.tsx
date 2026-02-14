@@ -3,7 +3,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { fadeInUp, staggerContainer } from "@/lib/animations";
-import { Shield, Clock, DollarSign, Globe, Users, Check } from "lucide-react";
+import { Shield, Clock, DollarSign, Users, Check } from "lucide-react";
 
 export const Testimonials: React.FC = () => {
   const features = [
@@ -23,9 +23,9 @@ export const Testimonials: React.FC = () => {
       icon: DollarSign,
     },
     {
-      title: "Global Coverage",
-      description: "Study in 50+ countries with partnerships across top universities worldwide.",
-      icon: Globe,
+      title: "No Collateral",
+      description: "Non-collateral education loans up to your entire education cost without any security deposit.",
+      icon: Shield,
     },
     {
       title: "Expert Counselors",
