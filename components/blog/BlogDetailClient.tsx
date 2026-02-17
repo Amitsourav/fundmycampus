@@ -3,7 +3,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { Calendar, Clock, ArrowLeft, Share2, Bookmark, ChevronRight } from "lucide-react";
+import { Calendar, Clock, ArrowLeft, ArrowRight, Share2, Bookmark, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import type { BlogPost } from "@/lib/notion";
 
@@ -100,6 +100,58 @@ export function BlogDetailClient({ post, relatedPosts }: BlogDetailClientProps) 
                     </p>
                   );
                 })}
+              </div>
+
+              {/* CTA Banner */}
+              <div className="my-10 w-full bg-gradient-to-r from-orange-500 via-pink-500 to-purple-600 rounded-2xl py-5 px-6 md:px-10 relative overflow-hidden flex flex-col md:flex-row items-center gap-4 md:gap-8">
+                {/* Illustration */}
+                <img
+                  src="/images/graduation-illustration.svg"
+                  alt="Education consultation"
+                  className="w-28 h-28 md:w-36 md:h-36 flex-shrink-0 object-contain"
+                />
+
+                {/* Text */}
+                <div className="flex-1 text-center md:text-left">
+                  <h3 className="text-lg md:text-xl font-bold text-white mb-1">
+                    Need Help With Your Education Loan?
+                  </h3>
+                  <p className="text-pink-100 text-sm font-semibold">
+                    Get expert guidance on loans, scholarships & financial planning — free.
+                  </p>
+                </div>
+
+                {/* Button */}
+                <Link href="/#contact-form" className="flex-shrink-0">
+                  <button className="inline-flex items-center gap-2 bg-white hover:bg-gray-100 text-purple-700 font-semibold px-6 py-2.5 rounded-xl transition-colors duration-300 text-sm whitespace-nowrap">
+                    Get Free Consultation
+                    <ArrowRight className="w-4 h-4" />
+                  </button>
+                </Link>
+              </div>
+
+              {/* WhatsApp Community Banner */}
+              <div className="my-6 w-full bg-gradient-to-r from-green-500 to-emerald-600 rounded-2xl py-5 px-6 md:px-10 flex flex-col md:flex-row items-center gap-4 md:gap-8">
+                <svg className="w-12 h-12 md:w-14 md:h-14 flex-shrink-0" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="24" cy="24" r="22" fill="white" fillOpacity="0.2" />
+                  <path d="M24 4C12.954 4 4 12.954 4 24c0 3.527.922 6.832 2.531 9.703L4 44l10.547-2.766A19.91 19.91 0 0 0 24 44c11.046 0 20-8.954 20-20S35.046 4 24 4zm0 36.4a16.35 16.35 0 0 1-8.34-2.28l-.598-.355-6.198 1.625 1.653-6.04-.39-.62A16.32 16.32 0 0 1 7.6 24c0-9.05 7.35-16.4 16.4-16.4S40.4 14.95 40.4 24 33.05 40.4 24 40.4zm8.99-12.27c-.493-.247-2.916-1.44-3.369-1.603-.452-.164-.781-.247-1.11.247-.329.493-1.274 1.603-1.562 1.932-.288.329-.575.37-1.068.123-.493-.247-2.081-.767-3.965-2.447-1.465-1.307-2.454-2.921-2.742-3.414-.288-.493-.031-.76.217-1.005.222-.22.493-.575.74-.863.247-.288.329-.493.493-.822.165-.329.082-.617-.041-.863-.123-.247-1.11-2.676-1.521-3.663-.4-.963-.808-.833-1.11-.848-.288-.014-.617-.017-.946-.017-.329 0-.863.123-1.315.617-.452.493-1.727 1.688-1.727 4.117 0 2.43 1.768 4.777 2.015 5.106.247.329 3.48 5.314 8.432 7.451 1.178.509 2.097.813 2.814 1.04 1.182.375 2.258.322 3.108.195.948-.141 2.916-1.192 3.328-2.344.411-1.152.411-2.14.288-2.344-.123-.206-.452-.329-.946-.575z" fill="white" />
+                </svg>
+
+                <div className="flex-1 text-center md:text-left">
+                  <h3 className="text-lg md:text-xl font-bold text-white mb-1">
+                    Join Our WhatsApp Community
+                  </h3>
+                  <p className="text-green-100 text-sm font-semibold">
+                    Get exclusive tips, updates & connect with other students.
+                  </p>
+                </div>
+
+                <a href="https://chat.whatsapp.com/Ex1huVZeeGR8NWbeHrVGYP" target="_blank" rel="noopener noreferrer" className="flex-shrink-0">
+                  <button className="inline-flex items-center gap-2 bg-white hover:bg-gray-100 text-green-700 font-semibold px-6 py-2.5 rounded-xl transition-colors duration-300 text-sm whitespace-nowrap">
+                    Join Now
+                    <ArrowRight className="w-4 h-4" />
+                  </button>
+                </a>
               </div>
 
               {/* Tags */}
