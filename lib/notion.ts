@@ -88,43 +88,65 @@ async function getAllBlockChildren(blockId: string): Promise<BlockObjectResponse
 }
 
 // Convert Notion blocks to the existing string[] content format
-function notionBlocksToContent(blocks: BlockObjectResponse[]): string[] {
-  return blocks
-    .map((block) => {
-      switch (block.type) {
-        case "paragraph": {
-          const text = extractRichText(block.paragraph.rich_text);
-          return text || null;
-        }
-        case "heading_1": {
-          return `## ${extractPlainText(block.heading_1.rich_text)}`;
-        }
-        case "heading_2": {
-          return `## ${extractPlainText(block.heading_2.rich_text)}`;
-        }
-        case "heading_3": {
-          return `## ${extractPlainText(block.heading_3.rich_text)}`;
-        }
-        case "bulleted_list_item": {
-          return `- ${extractRichText(block.bulleted_list_item.rich_text)}`;
-        }
-        case "numbered_list_item": {
-          return `- ${extractRichText(block.numbered_list_item.rich_text)}`;
-        }
-        case "quote": {
-          return `**${extractPlainText(block.quote.rich_text)}**`;
-        }
-        case "callout": {
-          return `**${extractPlainText(block.callout.rich_text)}**`;
-        }
-        case "divider":
-        case "image":
-          return null;
-        default:
-          return null;
+async function notionBlocksToContent(blocks: BlockObjectResponse[]): Promise<string[]> {
+  const content: string[] = [];
+
+  for (const block of blocks) {
+    switch (block.type) {
+      case "paragraph": {
+        const text = extractRichText(block.paragraph.rich_text);
+        if (text) content.push(text);
+        break;
       }
-    })
-    .filter((line): line is string => line !== null);
+      case "heading_1": {
+        content.push(`## ${extractPlainText(block.heading_1.rich_text)}`);
+        break;
+      }
+      case "heading_2": {
+        content.push(`## ${extractPlainText(block.heading_2.rich_text)}`);
+        break;
+      }
+      case "heading_3": {
+        content.push(`## ${extractPlainText(block.heading_3.rich_text)}`);
+        break;
+      }
+      case "bulleted_list_item": {
+        content.push(`- ${extractRichText(block.bulleted_list_item.rich_text)}`);
+        break;
+      }
+      case "numbered_list_item": {
+        content.push(`- ${extractRichText(block.numbered_list_item.rich_text)}`);
+        break;
+      }
+      case "quote": {
+        content.push(`**${extractPlainText(block.quote.rich_text)}**`);
+        break;
+      }
+      case "callout": {
+        content.push(`**${extractPlainText(block.callout.rich_text)}**`);
+        break;
+      }
+      case "table": {
+        const rows = await getAllBlockChildren(block.id);
+        const tableData: string[][] = rows
+          .filter((row): row is BlockObjectResponse => row.type === "table_row")
+          .map((row) =>
+            row.table_row.cells.map((cell) => extractPlainText(cell))
+          );
+        if (tableData.length > 0) {
+          content.push(`[TABLE]${JSON.stringify(tableData)}`);
+        }
+        break;
+      }
+      case "divider":
+      case "image":
+        break;
+      default:
+        break;
+    }
+  }
+
+  return content;
 }
 
 // Extract properties from a Notion page
@@ -236,7 +258,7 @@ export async function getPostBySlug(slug: string): Promise<BlogPost | null> {
   const page = pages[0];
   const summary = pageToSummary(page);
   const blocks = await getAllBlockChildren(page.id);
-  const content = notionBlocksToContent(blocks);
+  const content = await notionBlocksToContent(blocks);
 
   // Extract tags
   const tagsProp = page.properties["Tags"];

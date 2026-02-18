@@ -80,6 +80,37 @@ export function BlogDetailClient({ post, relatedPosts }: BlogDetailClientProps) 
                       </h2>
                     );
                   }
+                  if (paragraph.startsWith("[TABLE]")) {
+                    const tableData: string[][] = JSON.parse(paragraph.replace("[TABLE]", ""));
+                    const headerRow = tableData[0];
+                    const bodyRows = tableData.slice(1);
+                    return (
+                      <div key={index} className="my-6 overflow-x-auto rounded-xl border border-gray-200">
+                        <table className="w-full text-sm text-left">
+                          <thead className="bg-gray-900 text-white">
+                            <tr>
+                              {headerRow.map((cell, i) => (
+                                <th key={i} className="px-4 py-3 font-semibold whitespace-nowrap">
+                                  {cell}
+                                </th>
+                              ))}
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {bodyRows.map((row, rowIdx) => (
+                              <tr key={rowIdx} className={rowIdx % 2 === 0 ? "bg-white" : "bg-gray-50"}>
+                                {row.map((cell, cellIdx) => (
+                                  <td key={cellIdx} className="px-4 py-3 text-gray-700 border-t border-gray-100">
+                                    {cell}
+                                  </td>
+                                ))}
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    );
+                  }
                   if (paragraph.startsWith("**") && paragraph.endsWith("**")) {
                     return (
                       <p key={index} className="font-semibold text-black mb-2">
