@@ -128,11 +128,14 @@ async function notionBlocksToContent(blocks: BlockObjectResponse[]): Promise<str
       }
       case "table": {
         const rows = await getAllBlockChildren(block.id);
-        const tableData: string[][] = rows
-          .filter((row): row is BlockObjectResponse => row.type === "table_row")
-          .map((row) =>
-            row.table_row.cells.map((cell) => extractPlainText(cell))
-          );
+        const tableData: string[][] = [];
+        for (const row of rows) {
+          if (row.type === "table_row") {
+            tableData.push(
+              row.table_row.cells.map((cell) => extractPlainText(cell))
+            );
+          }
+        }
         if (tableData.length > 0) {
           content.push(`[TABLE]${JSON.stringify(tableData)}`);
         }
