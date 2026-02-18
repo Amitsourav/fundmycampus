@@ -133,6 +133,16 @@ export function BlogDetailClient({ post, relatedPosts }: BlogDetailClientProps) 
                 })}
               </div>
 
+              {/* About FundMyCampus */}
+              <div className="mt-12 mb-8 border-l-4 border-teal-500 pl-6 md:pl-8 py-4">
+                <h4 className="font-serif text-lg md:text-xl text-black mb-3 tracking-wide font-bold">
+                  About FundMyCampus
+                </h4>
+                <p className="text-gray-700 text-sm md:text-base leading-relaxed font-medium">
+                  <span className="font-bold text-black">FundMyCampus</span> is an IIM Bangalore alum–founded education loan platform that helps students get an education loan at the lowest interest rate by comparing offers from 15+ banks and NBFCs for courses in India and abroad. We provide end-to-end education loan assistance — eligibility check, document support, loan application, sanction, and disbursement — so you avoid delays, confusion, and hidden charges. Our process is transparent and student-first, focused on helping you save money, time, and stress. Whether you need a study abroad education loan or a loan for programs like MBA, MS, MBBS, FundMyCampus helps you choose the best education loan based on your profile and university.
+                </p>
+              </div>
+
               {/* CTA Banner */}
               <div className="my-10 w-full bg-gradient-to-r from-orange-500 via-pink-500 to-purple-600 rounded-2xl py-5 px-6 md:px-10 relative overflow-hidden flex flex-col md:flex-row items-center gap-4 md:gap-8">
                 {/* Illustration */}
