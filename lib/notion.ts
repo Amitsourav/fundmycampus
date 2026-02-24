@@ -167,7 +167,7 @@ function pageToSummary(page: PageObjectResponse): BlogPostSummary {
     const prop = props[name];
     if (prop?.type === "files" && prop.files.length > 0) {
       const file = prop.files[0];
-      if (file.type === "file") return file.file.url;
+      if (file.type === "file") return `/api/notion-image?id=${page.id}`;
       if (file.type === "external") return file.external.url;
     }
     if (prop?.type === "url") return prop.url ?? "";
@@ -324,7 +324,7 @@ export async function getRelatedPosts(
       let image = "";
       if (coverProp?.type === "files" && coverProp.files.length > 0) {
         const file = coverProp.files[0];
-        if (file.type === "file") image = file.file.url;
+        if (file.type === "file") image = `/api/notion-image?id=${page.id}`;
         else if (file.type === "external") image = file.external.url;
       } else if (coverProp?.type === "url") {
         image = coverProp.url ?? "";

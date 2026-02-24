@@ -18,6 +18,7 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://www.fundmycampus.com"),
   title: "FundMyCampus — Premium Education Financing for Global Aspirations",
   description: "Exclusive education loans for prestigious universities worldwide. Experience seamless financing with personalized service, competitive rates, and white-glove support.",
   keywords: "premium education loan, study abroad financing, international student loan, luxury education financing, elite university funding",
