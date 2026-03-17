@@ -220,14 +220,9 @@ export const Header: React.FC = () => {
                     </Button>
                   </Link>
                   <Link href="/signup">
-                    <Button variant="secondary" size="sm" className="!bg-white !text-black !border-gray-300">
+                    <Button variant="primary" size="sm">
                       <UserPlus className="w-4 h-4 mr-1.5" />
                       Sign Up
-                    </Button>
-                  </Link>
-                  <Link href="/apply">
-                    <Button variant="primary" size="sm">
-                      Apply for Loan
                     </Button>
                   </Link>
                 </>
@@ -359,14 +354,9 @@ export const Header: React.FC = () => {
                         </Button>
                       </Link>
                       <Link href="/signup" onClick={() => setIsMobileMenuOpen(false)}>
-                        <Button variant="secondary" size="md" fullWidth className="!bg-white !text-black !border-gray-300">
+                        <Button variant="primary" size="md" fullWidth>
                           <UserPlus className="w-4 h-4 mr-1.5" />
                           Sign Up
-                        </Button>
-                      </Link>
-                      <Link href="/apply" onClick={() => setIsMobileMenuOpen(false)}>
-                        <Button variant="primary" size="md" fullWidth>
-                          Apply for Loan
                         </Button>
                       </Link>
                     </>

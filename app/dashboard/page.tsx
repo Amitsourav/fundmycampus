@@ -22,7 +22,11 @@ interface Profile {
   linkedin_url?: string; twitter_url?: string; instagram_url?: string;
   email?: string; referral_code?: string; role?: string; profile_completion_pct?: number;
 }
-interface LoanApplication { id: string; application_id?: string; status: string; created_at: string; loan_amount?: number; }
+interface LoanApplication {
+  id: string; application_id?: string; status: string; created_at: string; loan_amount?: number;
+  college_name?: string; country?: string; bank_name?: string; course_name?: string;
+  rejection_reason?: string; remarks?: string;
+}
 interface Document { id: string; document_type: string; file_name?: string; file_size?: number; file_url?: string; status: string; rejection_reason?: string; created_at: string; }
 interface Notification { id: string; type: string; title: string; message: string; link?: string; is_read: boolean; created_at: string; }
 interface Referral { id: string; status: string; created_at: string; }
@@ -277,39 +281,138 @@ function OverviewTab({ profile, loans, user, onSection }: { profile: Profile | n
   );
 }
 
+// ─────────────────── Loan Process Tracker ───────────────────
+const LOAN_STEPS = [
+  { key: "form_filled",    label: "Form Filled",       sub: "Application submitted" },
+  { key: "under_review",   label: "Under Review",      sub: "Team reviewing your details" },
+  { key: "doc_verified",   label: "Docs Verified",     sub: "Documents checked & approved" },
+  { key: "sanctioned",     label: "Loan Sanctioned",   sub: "Loan approved by lender" },
+  { key: "disbursed",      label: "Disbursed",         sub: "Amount credited to account" },
+];
+
+function getStepIndex(status: string): number {
+  const map: Record<string, number> = {
+    draft: 0, submitted: 0, form_filled: 0,
+    under_review: 1, document_verification: 1, processing: 1,
+    doc_verified: 2, documents_verified: 2,
+    approved: 3, sanctioned: 3,
+    disbursed: 4,
+  };
+  return map[status] ?? 0;
+}
+
+function isCancelled(status: string) {
+  return ["rejected", "withdrawn", "cancelled"].includes(status);
+}
+
+function LoanProcessCard({ loan }: { loan: LoanApplication }) {
+  const cancelled = isCancelled(loan.status);
+  const activeStep = cancelled ? getStepIndex("under_review") : getStepIndex(loan.status);
+
+  return (
+    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+      {/* Header */}
+      <div className="flex flex-wrap items-start justify-between gap-3 mb-5">
+        <div>
+          <p className="font-semibold text-gray-900 text-base">
+            {loan.loan_amount ? `₹${loan.loan_amount.toLocaleString("en-IN")}` : "Loan Application"}
+          </p>
+          <p className="text-xs text-gray-500 mt-0.5">{loan.application_id ?? loan.id} · Applied {formatDate(loan.created_at)}</p>
+        </div>
+        <span className={`text-xs px-3 py-1 rounded-full font-medium capitalize shrink-0 ${
+          cancelled ? "bg-red-100 text-red-700" : loanStatusColor(loan.status)
+        }`}>
+          {loan.status.replace(/_/g, " ")}
+        </span>
+      </div>
+
+      {/* Details row */}
+      {(loan.college_name || loan.country || loan.bank_name || loan.course_name) && (
+        <div className="flex flex-wrap gap-4 mb-5 p-3 bg-gray-50 rounded-xl text-xs text-gray-600">
+          {loan.college_name && <span><span className="font-medium text-gray-800">College:</span> {loan.college_name}</span>}
+          {loan.course_name && <span><span className="font-medium text-gray-800">Course:</span> {loan.course_name}</span>}
+          {loan.country && <span><span className="font-medium text-gray-800">Country:</span> {loan.country}</span>}
+          {loan.bank_name && <span><span className="font-medium text-gray-800">Bank:</span> {loan.bank_name}</span>}
+        </div>
+      )}
+
+      {/* 5-step tracker */}
+      <div className="relative">
+        {/* Connecting line */}
+        <div className="absolute top-4 left-4 right-4 h-0.5 bg-gray-200 z-0" style={{ left: "16px", right: "16px" }} />
+        <div className="flex justify-between relative z-10">
+          {LOAN_STEPS.map((step, i) => {
+            const done = !cancelled && i < activeStep;
+            const current = !cancelled && i === activeStep;
+            const isCancelledStep = cancelled && i === activeStep;
+            return (
+              <div key={step.key} className="flex flex-col items-center gap-2" style={{ width: "20%" }}>
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center border-2 transition-all ${
+                  isCancelledStep ? "bg-red-100 border-red-400" :
+                  done ? "bg-teal-500 border-teal-500" :
+                  current ? "bg-teal-500 border-teal-500" :
+                  "bg-white border-gray-300"
+                }`}>
+                  {isCancelledStep
+                    ? <XCircle className="w-4 h-4 text-red-500" />
+                    : done || current
+                    ? <CheckCircle className="w-4 h-4 text-white" />
+                    : <div className="w-2 h-2 rounded-full bg-gray-300" />
+                  }
+                </div>
+                <div className="text-center">
+                  <p className={`text-xs font-medium leading-tight ${
+                    isCancelledStep ? "text-red-600" :
+                    done || current ? "text-teal-700" : "text-gray-400"
+                  }`}>{step.label}</p>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Cancellation reason */}
+      {cancelled && (
+        <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-xl">
+          <p className="text-sm font-medium text-red-700 flex items-center gap-1.5">
+            <XCircle className="w-4 h-4" /> Application {loan.status.replace(/_/g, " ")}
+          </p>
+          {(loan.rejection_reason || loan.remarks) && (
+            <p className="text-xs text-red-600 mt-1">{loan.rejection_reason ?? loan.remarks}</p>
+          )}
+        </div>
+      )}
+
+      {/* Remarks */}
+      {!cancelled && loan.remarks && (
+        <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-xl">
+          <p className="text-xs font-medium text-blue-700 mb-0.5">Remarks from our team</p>
+          <p className="text-sm text-blue-800">{loan.remarks}</p>
+        </div>
+      )}
+    </div>
+  );
+}
+
 // ─────────────────── Applications Tab ───────────────────
 function ApplicationsTab({ loans }: { loans: LoanApplication[] }) {
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
-      <div className="flex items-center justify-between mb-6">
+    <div className="space-y-4">
+      <div className="flex items-center justify-between">
         <h2 className="text-base font-semibold text-gray-900">My Loan Applications</h2>
         <Link href="/signup">
           <Button variant="primary" size="sm"><GraduationCap className="w-4 h-4 mr-1.5" />New Application</Button>
         </Link>
       </div>
       {loans.length === 0 ? (
-        <div className="text-center py-16">
+        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm text-center py-16">
           <GraduationCap className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-          <p className="text-gray-500 mb-2">No applications yet</p>
+          <p className="text-gray-500 mb-4">No applications yet</p>
           <Link href="/signup"><Button variant="primary" size="md">Apply for Loan</Button></Link>
         </div>
       ) : (
-        <div className="space-y-4">
-          {loans.map((loan) => (
-            <div key={loan.id} className="p-5 bg-gray-50 rounded-xl border border-gray-100">
-              <div className="flex items-start justify-between">
-                <div className="flex items-center gap-3">
-                  {loanStatusIcon(loan.status)}
-                  <div>
-                    <p className="font-semibold text-gray-900">{loan.loan_amount ? `₹${loan.loan_amount.toLocaleString("en-IN")}` : "Loan Application"}</p>
-                    <p className="text-xs text-gray-500 mt-0.5">{loan.application_id ?? loan.id} · Applied {formatDate(loan.created_at)}</p>
-                  </div>
-                </div>
-                <span className={`text-xs px-3 py-1 rounded-full font-medium capitalize ${loanStatusColor(loan.status)}`}>{loan.status}</span>
-              </div>
-            </div>
-          ))}
-        </div>
+        loans.map((loan) => <LoanProcessCard key={loan.id} loan={loan} />)
       )}
     </div>
   );
