@@ -24,7 +24,8 @@ interface Profile {
 }
 interface LoanApplication {
   id: string; application_id?: string; status: string; created_at: string; loan_amount?: number;
-  college_name?: string; country?: string; bank_name?: string; course_name?: string;
+  target_college?: string; target_country?: string; bank_name?: string; course_name?: string;
+  course_level?: string; course_degree?: string;
   rejection_reason?: string; remarks?: string;
 }
 interface Document { id: string; document_type: string; file_name?: string; file_size?: number; file_url?: string; status: string; rejection_reason?: string; created_at: string; }
@@ -327,11 +328,11 @@ function LoanProcessCard({ loan }: { loan: LoanApplication }) {
       </div>
 
       {/* Details row */}
-      {(loan.college_name || loan.country || loan.bank_name || loan.course_name) && (
+      {(loan.target_college || loan.target_country || loan.bank_name || loan.course_name || loan.course_degree) && (
         <div className="flex flex-wrap gap-4 mb-5 p-3 bg-gray-50 rounded-xl text-xs text-gray-600">
-          {loan.college_name && <span><span className="font-medium text-gray-800">College:</span> {loan.college_name}</span>}
-          {loan.course_name && <span><span className="font-medium text-gray-800">Course:</span> {loan.course_name}</span>}
-          {loan.country && <span><span className="font-medium text-gray-800">Country:</span> {loan.country}</span>}
+          {loan.target_college && <span><span className="font-medium text-gray-800">College:</span> {loan.target_college}</span>}
+          {(loan.course_name || loan.course_degree) && <span><span className="font-medium text-gray-800">Course:</span> {loan.course_name ?? loan.course_degree}</span>}
+          {loan.target_country && <span><span className="font-medium text-gray-800">Country:</span> {loan.target_country}</span>}
           {loan.bank_name && <span><span className="font-medium text-gray-800">Bank:</span> {loan.bank_name}</span>}
         </div>
       )}
