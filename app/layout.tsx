@@ -4,6 +4,7 @@ import Script from "next/script";
 import "./globals.css";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import { AuthProvider } from "@/lib/auth-context";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -47,10 +48,13 @@ export default function RootLayout({
       </head>
       <body
         className={`${inter.variable} ${playfair.variable} font-sans antialiased bg-ivory text-noir`}
+        suppressHydrationWarning
       >
-        <Header />
-        <main className="min-h-screen pt-12">{children}</main>
-        <Footer />
+        <AuthProvider>
+          <Header />
+          <main className="min-h-screen pt-12">{children}</main>
+          <Footer />
+        </AuthProvider>
       </body>
     </html>
   );
