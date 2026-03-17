@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState, useCallback } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useAuth } from "@/lib/auth-context";
 import { api } from "@/lib/api-client";
@@ -792,8 +792,7 @@ function ProfileTab({ profile, onSave }: { profile: Profile | null; onSave: (p: 
 export default function DashboardPage() {
   const { user, loading, signOut } = useAuth();
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const [activeSection, setActiveSection] = useState<Section>((searchParams.get("tab") as Section) ?? "overview");
+  const [activeSection, setActiveSection] = useState<Section>("overview");
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loans, setLoans] = useState<LoanApplication[]>([]);
   const [dataLoading, setDataLoading] = useState(true);
