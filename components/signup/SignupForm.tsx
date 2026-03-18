@@ -13,6 +13,7 @@ interface AccountData {
   email: string;
   password: string;
   confirmPassword: string;
+  contact_consent: boolean;
 }
 
 interface BasicData {
@@ -149,6 +150,17 @@ function AccountStep({
         />
         {fieldErrors.confirmPassword && <p className="mt-1 text-xs text-red-600">{fieldErrors.confirmPassword}</p>}
       </div>
+      <label className="flex items-start gap-3 cursor-pointer">
+        <input
+          type="checkbox"
+          checked={data.contact_consent}
+          onChange={(e) => onChange({ contact_consent: e.target.checked })}
+          className="mt-0.5 w-4 h-4 rounded border-gray-300 text-teal-500 focus:ring-teal-500 shrink-0"
+        />
+        <span className="text-sm text-gray-600">
+          I consent to be contacted via phone calls, SMS, and email regarding my loan application and related services.
+        </span>
+      </label>
       <Button type="submit" variant="primary" size="md" fullWidth disabled={loading}>
         {loading ? "Creating account..." : "Create Account"}
       </Button>
@@ -470,7 +482,7 @@ export function SignupForm() {
   const [accountLoading, setAccountLoading] = useState(false);
   const [loanLoading, setLoanLoading] = useState(false);
 
-  const [account, setAccount] = useState<AccountData>({ email: "", password: "", confirmPassword: "" });
+  const [account, setAccount] = useState<AccountData>({ email: "", password: "", confirmPassword: "", contact_consent: false });
   const [basic, setBasic] = useState<BasicData>({ full_name: "", phone: "", gender: "", whatsapp_same: true });
   const [education, setEducation] = useState<EducationData>({
     has_offer_letter: "", course_level: "", degree: "", country: "", college: "", start_year: "", start_month: "",
@@ -489,6 +501,9 @@ export function SignupForm() {
         name: account.email.split("@")[0],
       });
       await refreshSession();
+      if (account.contact_consent) {
+        await api.patch("/api/v1/profiles/me", { contact_consent: true }).catch(() => {});
+      }
       setStep(1);
     } catch (err) {
       setAccountError(err instanceof Error ? err.message : "Registration failed");

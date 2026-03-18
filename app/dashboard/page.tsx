@@ -20,7 +20,7 @@ interface Profile {
   address_line1?: string; address_line2?: string; city?: string; district?: string;
   state?: string; zip_code?: string; country?: string;
   linkedin_url?: string; twitter_url?: string; instagram_url?: string;
-  email?: string; referral_code?: string; role?: string; profile_completion_pct?: number;
+  email?: string; referral_code?: string; role?: string; profile_completion_pct?: number; contact_consent?: boolean;
 }
 interface LoanApplication {
   id: string; application_id?: string; status: string; created_at: string; loan_amount?: number;
@@ -43,12 +43,13 @@ const DOC_LABELS: Record<string, string> = {
 const DOC_TYPES = Object.keys(DOC_LABELS);
 
 function loanStatusColor(status: string) {
-  if (["approved", "disbursed"].includes(status)) return "bg-green-100 text-green-700";
+  if (["approved", "disbursed", "documentation"].includes(status)) return "bg-green-100 text-green-700";
   if (["rejected", "withdrawn"].includes(status)) return "bg-red-100 text-red-700";
+  if (["docs_verified"].includes(status)) return "bg-blue-100 text-blue-700";
   return "bg-yellow-100 text-yellow-700";
 }
 function loanStatusIcon(status: string) {
-  if (["approved", "disbursed"].includes(status)) return <CheckCircle className="w-4 h-4 text-green-500" />;
+  if (["approved", "disbursed", "documentation"].includes(status)) return <CheckCircle className="w-4 h-4 text-green-500" />;
   if (["rejected", "withdrawn"].includes(status)) return <XCircle className="w-4 h-4 text-red-500" />;
   return <Clock className="w-4 h-4 text-yellow-500" />;
 }
@@ -284,31 +285,38 @@ function OverviewTab({ profile, loans, user, onSection }: { profile: Profile | n
 
 // ─────────────────── Loan Process Tracker ───────────────────
 const LOAN_STEPS = [
-  { key: "form_filled",    label: "Form Filled",       sub: "Application submitted" },
-  { key: "under_review",   label: "Under Review",      sub: "Team reviewing your details" },
-  { key: "doc_verified",   label: "Docs Verified",     sub: "Documents checked & approved" },
-  { key: "sanctioned",     label: "Loan Sanctioned",   sub: "Loan approved by lender" },
-  { key: "disbursed",      label: "Disbursed",         sub: "Amount credited to account" },
+  { key: "applied",      label: "Applied",       sub: "Application submitted" },
+  { key: "documents",    label: "Documents",     sub: "Submit required documents" },
+  { key: "under_review", label: "Under Review",  sub: "Team reviewing your details" },
+  { key: "approved",     label: "Approved",      sub: "Loan approved by lender" },
+  { key: "disbursed",    label: "Disbursed",     sub: "Amount credited to account" },
 ];
 
 function getStepIndex(status: string): number {
   const map: Record<string, number> = {
-    draft: 0, submitted: 0, form_filled: 0,
-    under_review: 1, document_verification: 1, processing: 1,
-    doc_verified: 2, documents_verified: 2,
-    approved: 3, sanctioned: 3,
+    applied: 0,
+    docs_pending: 1, docs_verified: 1,
+    under_review: 2,
+    approved: 3, documentation: 3,
     disbursed: 4,
   };
   return map[status] ?? 0;
 }
 
 function isCancelled(status: string) {
-  return ["rejected", "withdrawn", "cancelled"].includes(status);
+  return ["rejected", "withdrawn"].includes(status);
+}
+
+// For cancelled loans, show which step it was cancelled at
+function getCancelledAtStep(status: string): number {
+  // Default to showing cancellation at "Under Review" step
+  return 2;
 }
 
 function LoanProcessCard({ loan }: { loan: LoanApplication }) {
   const cancelled = isCancelled(loan.status);
-  const activeStep = cancelled ? getStepIndex("under_review") : getStepIndex(loan.status);
+  const activeStep = cancelled ? getCancelledAtStep(loan.status) : getStepIndex(loan.status);
+  const progressPct = cancelled ? (activeStep / (LOAN_STEPS.length - 1)) * 100 : (activeStep / (LOAN_STEPS.length - 1)) * 100;
 
   return (
     <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
@@ -328,59 +336,70 @@ function LoanProcessCard({ loan }: { loan: LoanApplication }) {
       </div>
 
       {/* Details row */}
-      {(loan.target_college || loan.target_country || loan.bank_name || loan.course_name || loan.course_degree) && (
-        <div className="flex flex-wrap gap-4 mb-5 p-3 bg-gray-50 rounded-xl text-xs text-gray-600">
-          {loan.target_college && <span><span className="font-medium text-gray-800">College:</span> {loan.target_college}</span>}
-          {(loan.course_name || loan.course_degree) && <span><span className="font-medium text-gray-800">Course:</span> {loan.course_name ?? loan.course_degree}</span>}
-          {loan.target_country && <span><span className="font-medium text-gray-800">Country:</span> {loan.target_country}</span>}
-          {loan.bank_name && <span><span className="font-medium text-gray-800">Bank:</span> {loan.bank_name}</span>}
-        </div>
-      )}
+      <div className="flex flex-wrap gap-x-6 gap-y-2 mb-5 p-3 bg-gray-50 rounded-xl text-xs text-gray-600">
+        {loan.target_college
+          ? <span><span className="font-medium text-gray-800">College:</span> {loan.target_college}</span>
+          : <span className="text-gray-400">College: —</span>}
+        {loan.target_country
+          ? <span><span className="font-medium text-gray-800">Country:</span> {loan.target_country}</span>
+          : <span className="text-gray-400">Country: —</span>}
+        {loan.bank_name
+          ? <span><span className="font-medium text-gray-800">Bank:</span> {loan.bank_name}</span>
+          : <span className="text-gray-400">Bank: Not assigned yet</span>}
+        {(loan.course_name || loan.course_degree) && (
+          <span><span className="font-medium text-gray-800">Course:</span> {loan.course_name ?? loan.course_degree}</span>
+        )}
+      </div>
 
       {/* 5-step tracker */}
-      <div className="relative">
-        {/* Connecting line */}
-        <div className="absolute top-4 left-4 right-4 h-0.5 bg-gray-200 z-0" style={{ left: "16px", right: "16px" }} />
-        <div className="flex justify-between relative z-10">
+      <div className="relative px-4 mb-2">
+        {/* Background line */}
+        <div className="absolute top-4 left-8 right-8 h-0.5 bg-gray-200" />
+        {/* Progress line */}
+        <div
+          className={`absolute top-4 left-8 h-0.5 transition-all ${cancelled ? "bg-red-400" : "bg-teal-500"}`}
+          style={{ width: `calc(${progressPct}% * (100% - 64px) / 100)`, maxWidth: "calc(100% - 64px)" }}
+        />
+        <div className="flex justify-between relative">
           {LOAN_STEPS.map((step, i) => {
             const done = !cancelled && i < activeStep;
             const current = !cancelled && i === activeStep;
-            const isCancelledStep = cancelled && i === activeStep;
+            const isCancelledHere = cancelled && i === activeStep;
             return (
-              <div key={step.key} className="flex flex-col items-center gap-2" style={{ width: "20%" }}>
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center border-2 transition-all ${
-                  isCancelledStep ? "bg-red-100 border-red-400" :
-                  done ? "bg-teal-500 border-teal-500" :
-                  current ? "bg-teal-500 border-teal-500" :
-                  "bg-white border-gray-300"
+              <div key={step.key} className="flex flex-col items-center gap-2">
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center border-2 transition-all bg-white ${
+                  isCancelledHere ? "border-red-400 bg-red-50" :
+                  done ? "border-teal-500 bg-teal-500" :
+                  current ? "border-teal-500 bg-teal-500 ring-4 ring-teal-100" :
+                  "border-gray-300"
                 }`}>
-                  {isCancelledStep
+                  {isCancelledHere
                     ? <XCircle className="w-4 h-4 text-red-500" />
-                    : done || current
+                    : done
                     ? <CheckCircle className="w-4 h-4 text-white" />
+                    : current
+                    ? <div className="w-2.5 h-2.5 rounded-full bg-white" />
                     : <div className="w-2 h-2 rounded-full bg-gray-300" />
                   }
                 </div>
-                <div className="text-center">
-                  <p className={`text-xs font-medium leading-tight ${
-                    isCancelledStep ? "text-red-600" :
-                    done || current ? "text-teal-700" : "text-gray-400"
-                  }`}>{step.label}</p>
-                </div>
+                <p className={`text-xs font-medium text-center leading-tight max-w-[60px] ${
+                  isCancelledHere ? "text-red-600" :
+                  done || current ? "text-teal-700" : "text-gray-400"
+                }`}>{step.label}</p>
               </div>
             );
           })}
         </div>
       </div>
 
-      {/* Cancellation reason */}
+      {/* Cancelled banner */}
       {cancelled && (
         <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-xl">
           <p className="text-sm font-medium text-red-700 flex items-center gap-1.5">
-            <XCircle className="w-4 h-4" /> Application {loan.status.replace(/_/g, " ")}
+            <XCircle className="w-4 h-4" /> Application {loan.status === "rejected" ? "Rejected" : "Withdrawn"}
           </p>
-          {(loan.rejection_reason || loan.remarks) && (
-            <p className="text-xs text-red-600 mt-1">{loan.rejection_reason ?? loan.remarks}</p>
+          {(loan.rejection_reason || loan.notes) && (
+            <p className="text-xs text-red-600 mt-1">{loan.rejection_reason ?? loan.notes}</p>
           )}
         </div>
       )}
@@ -677,6 +696,7 @@ function ProfileTab({ profile, onSave }: { profile: Profile | null; onSave: (p: 
         address_line1: form.address_line1, address_line2: form.address_line2, city: form.city,
         district: form.district, state: form.state, zip_code: form.zip_code, country: form.country,
         linkedin_url: form.linkedin_url, twitter_url: form.twitter_url, instagram_url: form.instagram_url,
+        contact_consent: form.contact_consent,
       });
       setSuccess(true); onSave(form);
     } catch (err) { setError(err instanceof Error ? err.message : "Failed to save"); }
@@ -783,7 +803,18 @@ function ProfileTab({ profile, onSave }: { profile: Profile | null; onSave: (p: 
           </div>
         </div>
 
-        <div className="border-t border-gray-100 pt-4">
+        <div className="border-t border-gray-100 pt-5">
+          <label className="flex items-start gap-3 cursor-pointer mb-5">
+            <input
+              type="checkbox"
+              checked={form.contact_consent ?? false}
+              onChange={(e) => setForm((p) => ({ ...p, contact_consent: e.target.checked }))}
+              className="mt-0.5 w-4 h-4 rounded border-gray-300 text-teal-500 focus:ring-teal-500 shrink-0"
+            />
+            <span className="text-sm text-gray-600">
+              I consent to be contacted via phone calls, SMS, and email regarding my loan application and related services.
+            </span>
+          </label>
           <Button type="submit" variant="primary" size="md" disabled={saving}>{saving ? "Saving..." : "Save Changes"}</Button>
         </div>
       </form>
