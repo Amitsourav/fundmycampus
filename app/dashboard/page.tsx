@@ -26,7 +26,7 @@ interface LoanApplication {
   id: string; application_id?: string; status: string; created_at: string; loan_amount?: number;
   target_college?: string; target_country?: string; bank_name?: string; course_name?: string;
   course_level?: string; course_degree?: string;
-  rejection_reason?: string; remarks?: string;
+  rejection_reason?: string; remarks?: string; notes?: string;
 }
 interface Document { id: string; document_type: string; file_name?: string; file_size?: number; file_url?: string; status: string; rejection_reason?: string; created_at: string; }
 interface Notification { id: string; type: string; title: string; message: string; link?: string; is_read: boolean; created_at: string; }
@@ -386,10 +386,13 @@ function LoanProcessCard({ loan }: { loan: LoanApplication }) {
       )}
 
       {/* Remarks */}
-      {!cancelled && loan.remarks && (
+      {!cancelled && (
         <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-xl">
-          <p className="text-xs font-medium text-blue-700 mb-0.5">Remarks from our team</p>
-          <p className="text-sm text-blue-800">{loan.remarks}</p>
+          <p className="text-xs font-medium text-blue-700 mb-1">Remarks from our team</p>
+          {(loan.notes || loan.remarks)
+            ? <p className="text-sm text-blue-800">{loan.notes ?? loan.remarks}</p>
+            : <p className="text-sm text-blue-400 italic">No remarks yet. Our team will update you here.</p>
+          }
         </div>
       )}
     </div>
