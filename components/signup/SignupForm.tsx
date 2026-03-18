@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { api } from "@/lib/api-client";
@@ -14,6 +14,7 @@ interface AccountData {
   password: string;
   confirmPassword: string;
   contact_consent: boolean;
+  referral_code: string;
 }
 
 interface BasicData {
@@ -118,7 +119,7 @@ function AccountStep({
         <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">{error}</div>
       )}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1.5">Email</label>
+        <label className="block text-sm font-medium text-gray-700 mb-1.5">Email <span className="text-red-500">*</span></label>
         <input
           type="email"
           value={data.email}
@@ -129,7 +130,7 @@ function AccountStep({
         {fieldErrors.email && <p className="mt-1 text-xs text-red-600">{fieldErrors.email}</p>}
       </div>
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1.5">Password</label>
+        <label className="block text-sm font-medium text-gray-700 mb-1.5">Password <span className="text-red-500">*</span></label>
         <input
           type="password"
           value={data.password}
@@ -140,7 +141,7 @@ function AccountStep({
         {fieldErrors.password && <p className="mt-1 text-xs text-red-600">{fieldErrors.password}</p>}
       </div>
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1.5">Confirm Password</label>
+        <label className="block text-sm font-medium text-gray-700 mb-1.5">Confirm Password <span className="text-red-500">*</span></label>
         <input
           type="password"
           value={data.confirmPassword}
@@ -149,6 +150,16 @@ function AccountStep({
           className={`w-full px-4 py-2.5 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:border-transparent ${fieldErrors.confirmPassword ? "border-red-400 focus:ring-red-200" : "border-gray-300 focus:ring-teal-500"}`}
         />
         {fieldErrors.confirmPassword && <p className="mt-1 text-xs text-red-600">{fieldErrors.confirmPassword}</p>}
+      </div>
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1.5">Referral Code <span className="text-gray-400 font-normal">(optional)</span></label>
+        <input
+          type="text"
+          value={data.referral_code}
+          onChange={(e) => onChange({ referral_code: e.target.value.toUpperCase() })}
+          placeholder="e.g. FMC-A3X9K2"
+          className="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent font-mono"
+        />
       </div>
       <label className="flex items-start gap-3 cursor-pointer">
         <input
@@ -189,7 +200,7 @@ function BasicDetailsStep({
   return (
     <div className="space-y-4">
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1.5">Full Name</label>
+        <label className="block text-sm font-medium text-gray-700 mb-1.5">Full Name <span className="text-red-500">*</span></label>
         <input
           type="text"
           value={data.full_name}
@@ -199,7 +210,7 @@ function BasicDetailsStep({
         />
       </div>
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1.5">Phone Number</label>
+        <label className="block text-sm font-medium text-gray-700 mb-1.5">Phone Number <span className="text-red-500">*</span></label>
         <input
           type="tel"
           value={data.phone}
@@ -209,7 +220,7 @@ function BasicDetailsStep({
         />
       </div>
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1.5">Gender</label>
+        <label className="block text-sm font-medium text-gray-700 mb-1.5">Gender <span className="text-red-500">*</span></label>
         <select
           value={data.gender}
           onChange={(e) => onChange({ gender: e.target.value })}
@@ -258,7 +269,7 @@ function EducationStep({
   return (
     <div className="space-y-4">
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1.5">Do you have an offer letter?</label>
+        <label className="block text-sm font-medium text-gray-700 mb-1.5">Do you have an offer letter? <span className="text-red-500">*</span></label>
         <div className="flex gap-4">
           {[{ value: "yes", label: "Yes" }, { value: "no", label: "No" }, { value: "applying", label: "Still applying" }].map(({ value, label }) => (
             <label key={value} className="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
@@ -277,7 +288,7 @@ function EducationStep({
       </div>
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1.5">Course Level</label>
+          <label className="block text-sm font-medium text-gray-700 mb-1.5">Course Level <span className="text-red-500">*</span></label>
           <select
             value={data.course_level}
             onChange={(e) => onChange({ course_level: e.target.value })}
@@ -292,7 +303,7 @@ function EducationStep({
           </select>
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1.5">Degree</label>
+          <label className="block text-sm font-medium text-gray-700 mb-1.5">Degree <span className="text-red-500">*</span></label>
           <input
             type="text"
             value={data.degree}
@@ -303,7 +314,7 @@ function EducationStep({
         </div>
       </div>
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1.5">Country of Study</label>
+        <label className="block text-sm font-medium text-gray-700 mb-1.5">Country of Study <span className="text-red-500">*</span></label>
         <input
           type="text"
           value={data.country}
@@ -313,7 +324,7 @@ function EducationStep({
         />
       </div>
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1.5">College / University</label>
+        <label className="block text-sm font-medium text-gray-700 mb-1.5">College / University <span className="text-red-500">*</span></label>
         <input
           type="text"
           value={data.college}
@@ -324,7 +335,7 @@ function EducationStep({
       </div>
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1.5">Start Month</label>
+          <label className="block text-sm font-medium text-gray-700 mb-1.5">Start Month <span className="text-red-500">*</span></label>
           <select
             value={data.start_month}
             onChange={(e) => onChange({ start_month: e.target.value })}
@@ -337,7 +348,7 @@ function EducationStep({
           </select>
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1.5">Start Year</label>
+          <label className="block text-sm font-medium text-gray-700 mb-1.5">Start Year <span className="text-red-500">*</span></label>
           <input
             type="number"
             value={data.start_year}
@@ -383,7 +394,7 @@ function FinancialStep({
         <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">{error}</div>
       )}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1.5">Loan Amount Required (₹)</label>
+        <label className="block text-sm font-medium text-gray-700 mb-1.5">Loan Amount Required (₹) <span className="text-red-500">*</span></label>
         <input
           type="number"
           value={data.loan_amount}
@@ -393,7 +404,7 @@ function FinancialStep({
         />
       </div>
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1.5">Do you have collateral?</label>
+        <label className="block text-sm font-medium text-gray-700 mb-1.5">Do you have collateral? <span className="text-red-500">*</span></label>
         <div className="flex gap-4">
           {[{ value: "yes", label: "Yes" }, { value: "no", label: "No" }].map(({ value, label }) => (
             <label key={value} className="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
@@ -474,15 +485,29 @@ function SuccessScreen() {
 // ────────────────── Main Form ──────────────────
 export function SignupForm() {
   const router = useRouter();
-  const { refreshSession } = useAuth();
+  const { user, loading, refreshSession } = useAuth();
   const [step, setStep] = useState(0);
+
+  // If already logged in, skip Step 0 (account) and Step 1 (basic details) — go straight to Education
+  useEffect(() => {
+    if (!loading && user && step <= 1) setStep(2);
+  }, [loading, user, step]);
   const [submitted, setSubmitted] = useState(false);
   const [accountError, setAccountError] = useState("");
   const [loanError, setLoanError] = useState("");
   const [accountLoading, setAccountLoading] = useState(false);
   const [loanLoading, setLoanLoading] = useState(false);
+  const [profileData, setProfileData] = useState<{ full_name?: string; phone?: string; gender?: string } | null>(null);
 
-  const [account, setAccount] = useState<AccountData>({ email: "", password: "", confirmPassword: "", contact_consent: false });
+  useEffect(() => {
+    if (user) {
+      api.get<{ full_name?: string; phone?: string; gender?: string }>("/api/v1/profiles/me")
+        .then(setProfileData).catch(() => {});
+    }
+  }, [user]);
+
+  const searchParams = typeof window !== "undefined" ? new URLSearchParams(window.location.search) : null;
+  const [account, setAccount] = useState<AccountData>({ email: "", password: "", confirmPassword: "", contact_consent: false, referral_code: searchParams?.get("ref") ?? "" });
   const [basic, setBasic] = useState<BasicData>({ full_name: "", phone: "", gender: "", whatsapp_same: true });
   const [education, setEducation] = useState<EducationData>({
     has_offer_letter: "", course_level: "", degree: "", country: "", college: "", start_year: "", start_month: "",
@@ -499,6 +524,7 @@ export function SignupForm() {
         email: account.email,
         password: account.password,
         name: account.email.split("@")[0],
+        ...(account.referral_code ? { referral_code: account.referral_code } : {}),
       });
       await refreshSession();
       if (account.contact_consent) {
@@ -518,21 +544,21 @@ export function SignupForm() {
     try {
       // Build FLAT payload with proper type conversions per spec
       const payload = {
-        full_name: basic.full_name,
-        gender: basic.gender,
-        email: account.email,
-        phone: basic.phone,
+        full_name: basic.full_name || profileData?.full_name || user?.name || user?.email?.split("@")[0] || "User",
+        gender: basic.gender || profileData?.gender || "",
+        email: account.email || user?.email || "",
+        phone: basic.phone || profileData?.phone || "",
         is_whatsapp: basic.whatsapp_same,
         has_offer_letter: education.has_offer_letter === "yes",
         university_app_status: education.has_offer_letter !== "yes" ? education.has_offer_letter : undefined,
-        course_start_year: education.start_year ? parseInt(education.start_year) : undefined,
-        course_start_month: education.start_month || undefined,
-        course_level: education.course_level || undefined,
-        course_degree: education.degree || undefined,
-        course_name: education.degree || undefined,
-        target_country: education.country || undefined,
-        target_college: education.college || undefined,
-        loan_amount: financial.loan_amount ? parseFloat(financial.loan_amount) : undefined,
+        course_start_year: education.start_year ? parseInt(education.start_year) : new Date().getFullYear(),
+        course_start_month: education.start_month || "January",
+        course_level: education.course_level || "Masters",
+        course_degree: education.degree || "",
+        course_name: education.degree || "",
+        target_country: education.country || "",
+        target_college: education.college || "",
+        loan_amount: financial.loan_amount ? parseFloat(financial.loan_amount) : 0,
         has_collateral: financial.has_collateral === "yes",
         co_applicant_income: financial.co_applicant_income ? parseFloat(financial.co_applicant_income) : 0,
         existing_emis: financial.existing_emis ? parseFloat(financial.existing_emis) : 0,
@@ -549,7 +575,9 @@ export function SignupForm() {
   }
 
   const titles = ["Create Your Account", "Basic Details", "Education Details", "Financial Details"];
-  const subtitles = ["Step 1 of 4", "Step 2 of 4", "Step 3 of 4", "Step 4 of 4"];
+  const subtitles = user
+    ? ["", "", "Step 1 of 2", "Step 2 of 2"]
+    : ["Step 1 of 4", "Step 2 of 4", "Step 3 of 4", "Step 4 of 4"];
 
   if (submitted) {
     return (

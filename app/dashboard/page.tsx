@@ -742,9 +742,9 @@ function ProfileTab({ profile, onSave }: { profile: Profile | null; onSave: (p: 
         <div>
           <p className={sec}>Personal Information</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-            <div><label className="block text-sm font-medium text-gray-700 mb-1.5">Full Name</label><input type="text" value={form.full_name ?? ""} onChange={(e) => f("full_name", e.target.value)} className={inp} /></div>
+            <div><label className="block text-sm font-medium text-gray-700 mb-1.5">Full Name <span className="text-red-500">*</span></label><input type="text" value={form.full_name ?? ""} onChange={(e) => f("full_name", e.target.value)} className={inp} /></div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">Phone</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">Phone <span className="text-red-500">*</span></label>
               <div className="flex gap-2">
                 <input type="tel" value={form.phone ?? ""} onChange={(e) => f("phone", e.target.value)} className={`flex-1 px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-teal-500`} />
                 {!form.phone_verified && form.phone && <Link href="/otp-verify"><button type="button" className="px-3 py-2.5 text-xs font-medium text-teal-600 border border-teal-300 rounded-lg hover:bg-teal-50">Verify</button></Link>}
