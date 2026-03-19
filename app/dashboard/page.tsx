@@ -109,8 +109,6 @@ const NAV_ITEMS: { id: Section; label: string; icon: React.ReactNode }[] = [
   { id: "overview", label: "Overview", icon: <LayoutDashboard className="w-4 h-4" /> },
   { id: "applications", label: "My Applications", icon: <GraduationCap className="w-4 h-4" /> },
   { id: "documents", label: "Documents", icon: <FileText className="w-4 h-4" /> },
-  { id: "notifications", label: "Notifications", icon: <Bell className="w-4 h-4" /> },
-  { id: "referrals", label: "Referrals", icon: <Gift className="w-4 h-4" /> },
   { id: "profile", label: "Edit Profile", icon: <User className="w-4 h-4" /> },
 ];
 
@@ -389,29 +387,19 @@ function OverviewTab({ profile, loans, user, onSection }: { profile: Profile | n
         )}
       </div>
 
-      {/* Referral banner */}
-      {profile?.referral_code && (
-        <div className="bg-gradient-to-r from-teal-500 to-teal-600 rounded-2xl p-6 text-white">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-            <div>
-              <div className="flex items-center gap-2 mb-1">
-                <Gift className="w-5 h-5" />
-                <h2 className="font-semibold">Refer & Earn ₹1,000</h2>
-              </div>
-              <p className="text-sm text-teal-100">Share your code. Earn when your friend gets a loan disbursed.</p>
-            </div>
-            <div className="flex items-center gap-2 shrink-0">
-              <div className="px-4 py-2 bg-white/20 backdrop-blur-sm rounded-lg font-mono font-bold tracking-widest text-sm">
-                {profile.referral_code}
-              </div>
-              <button onClick={copyReferral} className="px-4 py-2 bg-white text-teal-600 rounded-lg text-sm font-semibold hover:bg-teal-50 transition-colors flex items-center gap-1.5">
-                {referralCopied ? <CheckCircle className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-                {referralCopied ? "Copied!" : "Copy"}
-              </button>
-            </div>
+      {/* Referral teaser */}
+      <div onClick={() => onSection("referrals")} className="cursor-pointer bg-gradient-to-r from-teal-500 to-teal-600 rounded-2xl p-5 text-white flex items-center justify-between gap-4 hover:from-teal-600 hover:to-teal-700 transition-all">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center shrink-0">
+            <Gift className="w-5 h-5" />
+          </div>
+          <div>
+            <p className="font-semibold text-sm">Refer friends & earn ₹2,000 per referral + ₹5,000 every 10th</p>
+            <p className="text-xs text-teal-100 mt-0.5">View your referral journey →</p>
           </div>
         </div>
-      )}
+        <ChevronRight className="w-5 h-5 text-teal-200 shrink-0" />
+      </div>
     </div>
   );
 }
@@ -523,11 +511,24 @@ function LoanProcessCard({ loan }: { loan: LoanApplication }) {
         </div>
         {/* Best bank status badge */}
         {bestBank ? (
-          <div className="flex items-center gap-2 shrink-0">
-            <span className="text-xs text-gray-500">Best: <span className="font-medium text-gray-700">{bestBank.bank_name}</span></span>
-            <span className={`text-xs px-3 py-1 rounded-full font-medium capitalize ${BANK_STATUS_COLOR[bestBank.status] ?? "bg-gray-100 text-gray-600"}`}>
-              {bestBank.status.replace(/_/g, " ")}
-            </span>
+          <div className="shrink-0 bg-teal-50 border border-teal-200 rounded-xl px-3 py-2 min-w-[160px]">
+            <div className="flex items-center justify-between mb-1.5">
+              <span className="text-[10px] text-teal-500 font-semibold uppercase tracking-wide">Best</span>
+              <span className="text-xs font-bold text-teal-700">{bestBank.bank_name}</span>
+            </div>
+            {/* Mini step progress bar */}
+            <div className="flex gap-0.5">
+              {LOAN_STEPS.map((step, i) => {
+                const stepIdx = getStepIndex(bestBank.status);
+                const done = i <= stepIdx && !isCancelled(bestBank.status);
+                return (
+                  <div key={step.key} className={`flex-1 h-1.5 rounded-full transition-all ${done ? "bg-teal-500" : "bg-teal-100"}`} />
+                );
+              })}
+            </div>
+            <p className="text-[10px] text-teal-600 font-medium mt-1 text-right capitalize">
+              {LOAN_STEPS[getStepIndex(bestBank.status)]?.label ?? bestBank.status.replace(/_/g, " ")}
+            </p>
           </div>
         ) : (
           <span className={`text-xs px-3 py-1 rounded-full font-medium capitalize shrink-0 ${cancelled ? "bg-red-100 text-red-700" : loanStatusColor(loan.status)}`}>
@@ -800,6 +801,25 @@ function NotificationsTab() {
 }
 
 // ─────────────────── Referrals Tab ───────────────────
+const REFERRAL_JOURNEY = [
+  { icon: "🔗", title: "Share Your Code", desc: "Send your unique code to friends applying for education loans", color: "bg-blue-50 border-blue-200", dot: "bg-blue-500" },
+  { icon: "✍️", title: "Friend Signs Up", desc: "Your friend registers on FundMyCampus using your code", color: "bg-purple-50 border-purple-200", dot: "bg-purple-500" },
+  { icon: "🏦", title: "Loan Sanctioned", desc: "You earn ₹1,000 when their loan gets sanctioned by the bank", color: "bg-yellow-50 border-yellow-200", dot: "bg-yellow-500" },
+  { icon: "💸", title: "Loan Disbursed", desc: "You earn another ₹1,000 + your friend earns ₹1,000 too!", color: "bg-green-50 border-green-200", dot: "bg-green-500" },
+];
+
+const EARNINGS_TABLE = [
+  { referrals: 1,  total: 2000,  bonus: 0 },
+  { referrals: 5,  total: 10000, bonus: 0 },
+  { referrals: 10, total: 20000, bonus: 5000 },
+  { referrals: 20, total: 40000, bonus: 10000 },
+  { referrals: 30, total: 60000, bonus: 15000 },
+];
+
+const REFERRAL_STATUS_STEPS: Record<string, number> = {
+  signed_up: 1, loan_applied: 2, loan_sanctioned: 3, loan_disbursed: 4,
+};
+
 function ReferralsTab({ profile }: { profile: Profile | null }) {
   const [referrals, setReferrals] = useState<Referral[]>([]);
   const [payouts, setPayouts] = useState<Payout[]>([]);
@@ -818,58 +838,165 @@ function ReferralsTab({ profile }: { profile: Profile | null }) {
 
   function copy(text: string) { navigator.clipboard.writeText(text); setCopied(true); setTimeout(() => setCopied(false), 2000); }
 
+  const totalEarned = payouts.filter(p => p.status === "completed").reduce((s, p) => s + p.amount, 0);
+  const pendingEarnings = payouts.filter(p => p.status === "processing" || p.status === "pending").reduce((s, p) => s + p.amount, 0);
+  const disbursed = referrals.filter(r => r.status === "loan_disbursed").length;
+
   return (
     <div className="space-y-6">
-      {/* Code */}
-      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
-        <h2 className="text-base font-semibold text-gray-900 mb-4">Your Referral Code</h2>
-        {profile?.referral_code ? (
-          <div className="space-y-3">
-            <div className="flex items-center gap-3">
-              <div className="flex-1 px-4 py-3 bg-gray-50 rounded-lg font-mono text-xl font-bold text-teal-600 border border-gray-200">{profile.referral_code}</div>
-              <button onClick={() => copy(profile.referral_code!)} className="flex items-center gap-2 px-4 py-3 bg-teal-500 text-white rounded-lg text-sm font-medium hover:bg-teal-600 transition-colors">
-                {copied ? <CheckCircle className="w-4 h-4" /> : <Copy className="w-4 h-4" />}{copied ? "Copied!" : "Copy"}
-              </button>
+
+      {/* Hero — code + stats */}
+      <div className="bg-gradient-to-br from-teal-500 to-teal-600 rounded-2xl p-6 text-white">
+        <div className="flex items-center gap-2 mb-1">
+          <Gift className="w-5 h-5" />
+          <p className="font-bold text-lg">Refer & Earn</p>
+        </div>
+        <p className="text-sm text-teal-100 mb-5">Earn up to ₹2,000 per friend + ₹5,000 bonus every 10th referral</p>
+
+        {/* Code box */}
+        {profile?.referral_code && (
+          <div className="flex items-center gap-3 mb-6">
+            <div className="flex-1 px-4 py-3 bg-white/15 backdrop-blur-sm rounded-xl font-mono text-2xl font-bold tracking-widest text-center">
+              {profile.referral_code}
             </div>
+            <button onClick={() => copy(profile.referral_code!)}
+              className="flex items-center gap-2 px-4 py-3 bg-white text-teal-600 rounded-xl text-sm font-semibold hover:bg-teal-50 transition-colors shrink-0">
+              {copied ? <CheckCircle className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+              {copied ? "Copied!" : "Copy"}
+            </button>
           </div>
-        ) : <p className="text-sm text-gray-500">Loading...</p>}
-        <div className="mt-4 p-4 bg-teal-50 rounded-xl">
-          <p className="text-xs font-semibold text-gray-700 mb-2">How it works</p>
-          <div className="space-y-1 text-xs text-gray-600">
-            <p>🎉 Friend signs up with your code → you&apos;re notified</p>
-            <p>📋 Loan sanctioned → You earn <strong>₹1,000</strong> (+₹5,000 every 5th referral)</p>
-            <p>💰 Loan disbursed → You earn <strong>₹1,000</strong> + friend gets <strong>₹1,000</strong></p>
+        )}
+
+        {/* Stats */}
+        <div className="grid grid-cols-3 gap-3">
+          {[
+            { label: "Total Referred", value: referrals.length },
+            { label: "Disbursed", value: disbursed },
+            { label: "Total Earned", value: `₹${totalEarned.toLocaleString("en-IN")}` },
+          ].map((s) => (
+            <div key={s.label} className="bg-white/15 rounded-xl p-3 text-center">
+              <p className="text-lg font-bold">{s.value}</p>
+              <p className="text-[11px] text-teal-100 mt-0.5">{s.label}</p>
+            </div>
+          ))}
+        </div>
+        {pendingEarnings > 0 && (
+          <p className="text-xs text-teal-100 mt-3 text-center">₹{pendingEarnings.toLocaleString("en-IN")} pending payout</p>
+        )}
+      </div>
+
+      {/* Journey */}
+      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+        <h2 className="text-sm font-semibold text-gray-900 mb-5">How the Referral Journey Works</h2>
+        <div className="relative">
+          {/* vertical line */}
+          <div className="absolute left-5 top-6 bottom-6 w-0.5 bg-gray-100" />
+          <div className="space-y-4">
+            {REFERRAL_JOURNEY.map((step, i) => (
+              <div key={i} className="flex gap-4 relative">
+                <div className={`w-10 h-10 rounded-xl border-2 flex items-center justify-center text-lg shrink-0 z-10 ${step.color}`}>
+                  {step.icon}
+                </div>
+                <div className="flex-1 pt-1.5">
+                  <p className="text-sm font-semibold text-gray-900">{step.title}</p>
+                  <p className="text-xs text-gray-500 mt-0.5">{step.desc}</p>
+                  {i === 2 && <span className="inline-block mt-1.5 text-[11px] font-bold text-yellow-700 bg-yellow-100 px-2 py-0.5 rounded-full">+₹1,000 to you</span>}
+                  {i === 3 && <span className="inline-block mt-1.5 text-[11px] font-bold text-green-700 bg-green-100 px-2 py-0.5 rounded-full">+₹1,000 to you &amp; ₹1,000 to friend</span>}
+                </div>
+              </div>
+            ))}
           </div>
+        </div>
+        <div className="mt-5 p-4 bg-teal-50 rounded-xl border border-teal-100">
+          <p className="text-xs font-semibold text-teal-700 flex items-center gap-1.5">🎁 Bonus Milestone</p>
+          <p className="text-xs text-teal-600 mt-1">Every 10th successful referral earns you an extra <strong>₹5,000</strong> bonus on top of the regular reward!</p>
         </div>
       </div>
 
-      {/* Referrals */}
+      {/* Earnings potential table */}
       <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
-        <h2 className="text-base font-semibold text-gray-900 mb-4">Referral History</h2>
-        {loading ? <p className="text-sm text-gray-500">Loading...</p> : referrals.length === 0 ? (
-          <div className="text-center py-8"><Gift className="w-8 h-8 text-gray-300 mx-auto mb-2" /><p className="text-sm text-gray-500">No referrals yet</p></div>
+        <h2 className="text-sm font-semibold text-gray-900 mb-4">Earnings Potential</h2>
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-gray-100">
+                <th className="text-left py-2 text-xs font-semibold text-gray-500">Referrals</th>
+                <th className="text-right py-2 text-xs font-semibold text-gray-500">Base Earnings</th>
+                <th className="text-right py-2 text-xs font-semibold text-gray-500">Bonus</th>
+                <th className="text-right py-2 text-xs font-semibold text-teal-600">Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              {EARNINGS_TABLE.map((row) => (
+                <tr key={row.referrals} className={`border-b border-gray-50 ${referrals.length >= row.referrals ? "bg-teal-50/40" : ""}`}>
+                  <td className="py-3 text-gray-900 font-medium flex items-center gap-2">
+                    {referrals.length >= row.referrals && <CheckCircle className="w-3.5 h-3.5 text-teal-500" />}
+                    {row.referrals} {row.referrals === 1 ? "friend" : "friends"}
+                  </td>
+                  <td className="py-3 text-right text-gray-700">₹{row.total.toLocaleString("en-IN")}</td>
+                  <td className="py-3 text-right text-yellow-600 font-medium">{row.bonus > 0 ? `+₹${row.bonus.toLocaleString("en-IN")}` : "—"}</td>
+                  <td className="py-3 text-right font-bold text-teal-700">₹{(row.total + row.bonus).toLocaleString("en-IN")}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* Referral history */}
+      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+        <h2 className="text-sm font-semibold text-gray-900 mb-4">Referral History</h2>
+        {loading ? <p className="text-sm text-gray-500 py-4 text-center">Loading...</p> : referrals.length === 0 ? (
+          <div className="text-center py-10">
+            <div className="w-16 h-16 bg-teal-50 rounded-full flex items-center justify-center mx-auto mb-3 text-3xl">🤝</div>
+            <p className="text-sm font-medium text-gray-700">No referrals yet</p>
+            <p className="text-xs text-gray-500 mt-1">Share your code and start earning!</p>
+          </div>
         ) : (
           <div className="space-y-3">
-            {referrals.map((r) => (
-              <div key={r.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
-                <div className="flex items-center gap-3"><Clock className="w-4 h-4 text-yellow-500" /><div><p className="text-sm font-medium text-gray-900">Referral</p><p className="text-xs text-gray-500">{formatDate(r.created_at)}</p></div></div>
-                <span className="text-xs px-2.5 py-1 rounded-full bg-teal-100 text-teal-700 font-medium capitalize">{r.status.replace("_", " ")}</span>
-              </div>
-            ))}
+            {referrals.map((r, idx) => {
+              const step = REFERRAL_STATUS_STEPS[r.status] ?? 1;
+              return (
+                <div key={r.id} className="p-4 bg-gray-50 rounded-xl">
+                  <div className="flex items-center justify-between mb-3">
+                    <p className="text-sm font-medium text-gray-900">Referral #{idx + 1}</p>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs px-2.5 py-1 rounded-full bg-teal-100 text-teal-700 font-medium capitalize">{r.status.replace(/_/g, " ")}</span>
+                      <span className="text-xs text-gray-400">{formatDate(r.created_at)}</span>
+                    </div>
+                  </div>
+                  {/* Mini journey progress */}
+                  <div className="flex gap-0.5">
+                    {["Signed Up","Applied","Sanctioned","Disbursed"].map((label, i) => (
+                      <div key={label} className="flex-1 flex flex-col items-center gap-1">
+                        <div className={`w-full h-1.5 rounded-full ${i < step ? "bg-teal-500" : "bg-gray-200"}`} />
+                        <p className={`text-[9px] font-medium ${i < step ? "text-teal-600" : "text-gray-400"}`}>{label}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              );
+            })}
           </div>
         )}
       </div>
 
       {/* Payouts */}
       <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
-        <h2 className="text-base font-semibold text-gray-900 mb-4">Payout History</h2>
-        {loading ? <p className="text-sm text-gray-500">Loading...</p> : payouts.length === 0 ? (
-          <p className="text-sm text-gray-500 text-center py-4">No payouts yet</p>
+        <h2 className="text-sm font-semibold text-gray-900 mb-4">Payout History</h2>
+        {loading ? <p className="text-sm text-gray-500 text-center py-4">Loading...</p> : payouts.length === 0 ? (
+          <div className="text-center py-6 text-sm text-gray-500">No payouts yet</div>
         ) : (
           <div className="space-y-3">
             {payouts.map((p) => (
               <div key={p.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
-                <div><p className="text-sm font-medium text-gray-900">₹{p.amount.toLocaleString()}</p><p className="text-xs text-gray-500 capitalize">{p.payout_type.replace("_", " ")} · {formatDate(p.created_at)}</p></div>
+                <div className="flex items-center gap-3">
+                  <div className="w-9 h-9 bg-green-100 rounded-xl flex items-center justify-center text-base">💰</div>
+                  <div>
+                    <p className="text-sm font-bold text-gray-900">₹{p.amount.toLocaleString("en-IN")}</p>
+                    <p className="text-xs text-gray-500 capitalize">{p.payout_type.replace(/_/g, " ")} · {formatDate(p.created_at)}</p>
+                  </div>
+                </div>
                 <span className={`text-xs px-2.5 py-1 rounded-full font-medium capitalize ${payoutStatusColor(p.status)}`}>{p.status}</span>
               </div>
             ))}
@@ -1045,11 +1172,13 @@ function ProfileTab({ profile, onSave }: { profile: Profile | null; onSave: (p: 
 export default function DashboardPage() {
   const { user, loading, signOut } = useAuth();
   const router = useRouter();
+  const [topTab, setTopTab] = useState<"dashboard" | "referrals">("dashboard");
   const [activeSection, setActiveSection] = useState<Section>("overview");
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loans, setLoans] = useState<LoanApplication[]>([]);
   const [dataLoading, setDataLoading] = useState(true);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [unreadNotifCount, setUnreadNotifCount] = useState(0);
 
   useEffect(() => { if (!loading && !user) router.push("/login"); }, [loading, user, router]);
 
@@ -1058,13 +1187,21 @@ export default function DashboardPage() {
     Promise.allSettled([
       api.get<Profile>("/api/v1/profiles/me"),
       api.get<LoanApplication[]>("/api/v1/loans/my"),
-    ]).then(([p, l]) => {
+      api.get<Notification[]>("/api/v1/notifications/my"),
+    ]).then(([p, l, n]) => {
       if (p.status === "fulfilled") setProfile(p.value);
       if (l.status === "fulfilled") setLoans(l.value);
+      if (n.status === "fulfilled" && Array.isArray(n.value))
+        setUnreadNotifCount(n.value.filter((x) => !x.is_read).length);
     }).finally(() => setDataLoading(false));
   }, [user]);
 
-  const handleSection = useCallback((s: Section) => { setActiveSection(s); setSidebarOpen(false); }, []);
+  const handleSection = useCallback((s: Section) => {
+    if (s === "referrals") { setTopTab("referrals"); setSidebarOpen(false); return; }
+    setTopTab("dashboard");
+    setActiveSection(s);
+    setSidebarOpen(false);
+  }, []);
 
   if (loading || (!user && !loading)) return null;
 
@@ -1084,76 +1221,105 @@ export default function DashboardPage() {
               <p className="text-xs text-gray-500">{user?.email}</p>
             </div>
           </div>
-          <Button variant="ghost" size="sm" onClick={signOut} className="!text-gray-500 hover:!text-red-500">
-            <LogOut className="w-4 h-4 mr-1.5" />Sign Out
-          </Button>
-        </div>
-
-        {/* Profile Completion Bar */}
-        {profile && (profile.profile_completion_pct ?? 0) < 100 && (
-          <div className="mb-6 bg-gradient-to-r from-teal-500 to-teal-600 rounded-2xl p-4 text-white">
-            <div className="flex items-center justify-between mb-2">
-              <div className="flex items-center gap-2">
-                <User className="w-4 h-4" />
-                <span className="text-sm font-semibold">Complete your profile</span>
-              </div>
-              <span className="text-lg font-bold">{profile.profile_completion_pct ?? 0}%</span>
-            </div>
-            <div className="w-full bg-white/30 rounded-full h-2.5 mb-2">
-              <div className="bg-white h-2.5 rounded-full transition-all" style={{ width: `${profile.profile_completion_pct ?? 0}%` }} />
-            </div>
-            <p className="text-xs text-teal-100">A complete profile helps us match you with the best loan offers faster.</p>
+          <div className="flex items-center gap-2">
+            <button onClick={() => handleSection("notifications")} className="relative p-2 rounded-xl text-gray-500 hover:bg-gray-100 transition-colors">
+              <Bell className="w-5 h-5" />
+              {unreadNotifCount > 0 && (
+                <span className="absolute top-1 right-1 w-4 h-4 bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center">
+                  {unreadNotifCount > 9 ? "9+" : unreadNotifCount}
+                </span>
+              )}
+            </button>
+            <Button variant="ghost" size="sm" onClick={signOut} className="!text-gray-500 hover:!text-red-500">
+              <LogOut className="w-4 h-4 mr-1.5" />Sign Out
+            </Button>
           </div>
-        )}
-
-        <div className="flex gap-6">
-          {/* Sidebar — desktop */}
-          <aside className="hidden lg:block w-56 shrink-0">
-            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-3 sticky top-24">
-              {NAV_ITEMS.map((item) => (
-                <button key={item.id} onClick={() => handleSection(item.id)}
-                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-colors mb-1 ${activeSection === item.id ? "bg-teal-500 text-white" : "text-gray-600 hover:bg-gray-100"}`}>
-                  {item.icon}{item.label}
-                </button>
-              ))}
-            </div>
-          </aside>
-
-          {/* Mobile sidebar overlay */}
-          {sidebarOpen && (
-            <div className="fixed inset-0 z-50 lg:hidden">
-              <div className="absolute inset-0 bg-black/40" onClick={() => setSidebarOpen(false)} />
-              <div className="absolute left-0 top-0 h-full w-64 bg-white shadow-xl p-4">
-                <div className="flex items-center justify-between mb-4">
-                  <p className="font-semibold text-gray-900">Dashboard</p>
-                  <button onClick={() => setSidebarOpen(false)}><X className="w-5 h-5 text-gray-500" /></button>
-                </div>
-                {NAV_ITEMS.map((item) => (
-                  <button key={item.id} onClick={() => handleSection(item.id)}
-                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-colors mb-1 ${activeSection === item.id ? "bg-teal-500 text-white" : "text-gray-600 hover:bg-gray-100"}`}>
-                    {item.icon}{item.label}
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Main content */}
-          <main className="flex-1 min-w-0">
-            {dataLoading ? (
-              <div className="text-center py-20 text-sm text-gray-500">Loading dashboard...</div>
-            ) : (
-              <>
-                {activeSection === "overview" && <OverviewTab profile={profile} loans={loans} user={user} onSection={handleSection} />}
-                {activeSection === "applications" && <ApplicationsTab loans={loans} />}
-                {activeSection === "documents" && <DocumentsTab loans={loans} />}
-                {activeSection === "notifications" && <NotificationsTab />}
-                {activeSection === "referrals" && <ReferralsTab profile={profile} />}
-                {activeSection === "profile" && <ProfileTab profile={profile} onSave={setProfile} />}
-              </>
-            )}
-          </main>
         </div>
+
+        {/* Top-level tabs */}
+        <div className="flex gap-1 bg-white border border-gray-100 shadow-sm rounded-2xl p-1.5 mb-4">
+          <button
+            onClick={() => setTopTab("dashboard")}
+            className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-semibold transition-all ${topTab === "dashboard" ? "bg-teal-500 text-white shadow-sm" : "text-gray-500 hover:text-gray-700 hover:bg-gray-50"}`}>
+            <LayoutDashboard className="w-4 h-4" /> Dashboard
+          </button>
+          <button
+            onClick={() => setTopTab("referrals")}
+            className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-semibold transition-all ${topTab === "referrals" ? "bg-teal-500 text-white shadow-sm" : "text-gray-500 hover:text-gray-700 hover:bg-gray-50"}`}>
+            <Gift className="w-4 h-4" /> Referrals
+          </button>
+        </div>
+
+        {topTab === "referrals" ? (
+          <ReferralsTab profile={profile} />
+        ) : (
+          <>
+            {/* Profile Completion Bar */}
+            {profile && (profile.profile_completion_pct ?? 0) < 100 && (
+              <div className="mb-6 bg-gradient-to-r from-teal-500 to-teal-600 rounded-2xl p-4 text-white">
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center gap-2">
+                    <User className="w-4 h-4" />
+                    <span className="text-sm font-semibold">Complete your profile</span>
+                  </div>
+                  <span className="text-lg font-bold">{profile.profile_completion_pct ?? 0}%</span>
+                </div>
+                <div className="w-full bg-white/30 rounded-full h-2.5 mb-2">
+                  <div className="bg-white h-2.5 rounded-full transition-all" style={{ width: `${profile.profile_completion_pct ?? 0}%` }} />
+                </div>
+                <p className="text-xs text-teal-100">A complete profile helps us match you with the best loan offers faster.</p>
+              </div>
+            )}
+
+            <div className="flex gap-6">
+              {/* Sidebar — desktop */}
+              <aside className="hidden lg:block w-56 shrink-0">
+                <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-3 sticky top-24">
+                  {NAV_ITEMS.map((item) => (
+                    <button key={item.id} onClick={() => handleSection(item.id)}
+                      className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-colors mb-1 ${activeSection === item.id ? "bg-teal-500 text-white" : "text-gray-600 hover:bg-gray-100"}`}>
+                      {item.icon}{item.label}
+                    </button>
+                  ))}
+                </div>
+              </aside>
+
+              {/* Mobile sidebar overlay */}
+              {sidebarOpen && (
+                <div className="fixed inset-0 z-50 lg:hidden">
+                  <div className="absolute inset-0 bg-black/40" onClick={() => setSidebarOpen(false)} />
+                  <div className="absolute left-0 top-0 h-full w-64 bg-white shadow-xl p-4">
+                    <div className="flex items-center justify-between mb-4">
+                      <p className="font-semibold text-gray-900">Dashboard</p>
+                      <button onClick={() => setSidebarOpen(false)}><X className="w-5 h-5 text-gray-500" /></button>
+                    </div>
+                    {NAV_ITEMS.map((item) => (
+                      <button key={item.id} onClick={() => handleSection(item.id)}
+                        className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-colors mb-1 ${activeSection === item.id ? "bg-teal-500 text-white" : "text-gray-600 hover:bg-gray-100"}`}>
+                        {item.icon}{item.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Main content */}
+              <main className="flex-1 min-w-0">
+                {dataLoading ? (
+                  <div className="text-center py-20 text-sm text-gray-500">Loading dashboard...</div>
+                ) : (
+                  <>
+                    {activeSection === "overview" && <OverviewTab profile={profile} loans={loans} user={user} onSection={handleSection} />}
+                    {activeSection === "applications" && <ApplicationsTab loans={loans} />}
+                    {activeSection === "documents" && <DocumentsTab loans={loans} />}
+                    {activeSection === "notifications" && <NotificationsTab />}
+                    {activeSection === "profile" && <ProfileTab profile={profile} onSave={setProfile} />}
+                  </>
+                )}
+              </main>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
