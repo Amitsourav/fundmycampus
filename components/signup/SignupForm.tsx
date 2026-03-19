@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { api } from "@/lib/api-client";
 import { useAuth } from "@/lib/auth-context";
 import { Button } from "@/components/ui/Button";
-import { CheckCircle, UserPlus } from "lucide-react";
+import { CheckCircle, UserPlus, Eye, EyeOff } from "lucide-react";
 
 // ────────────────── Types ──────────────────
 interface AccountData {
@@ -22,6 +22,7 @@ interface BasicData {
   phone: string;
   gender: string;
   whatsapp_same: boolean;
+  whatsapp_number: string;
 }
 
 interface EducationData {
@@ -91,6 +92,8 @@ function AccountStep({
   loading: boolean;
 }) {
   const [fieldErrors, setFieldErrors] = useState<Partial<AccountData>>({});
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
 
   function validate() {
     const errors: Partial<AccountData> = {};
@@ -131,24 +134,34 @@ function AccountStep({
       </div>
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1.5">Password <span className="text-red-500">*</span></label>
-        <input
-          type="password"
-          value={data.password}
-          onChange={(e) => onChange({ password: e.target.value })}
-          placeholder="Min. 8 characters"
-          className={`w-full px-4 py-2.5 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:border-transparent ${fieldErrors.password ? "border-red-400 focus:ring-red-200" : "border-gray-300 focus:ring-teal-500"}`}
-        />
+        <div className="relative">
+          <input
+            type={showPassword ? "text" : "password"}
+            value={data.password}
+            onChange={(e) => onChange({ password: e.target.value })}
+            placeholder="Min. 8 characters"
+            className={`w-full px-4 py-2.5 pr-10 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:border-transparent ${fieldErrors.password ? "border-red-400 focus:ring-red-200" : "border-gray-300 focus:ring-teal-500"}`}
+          />
+          <button type="button" onClick={() => setShowPassword((v) => !v)} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
+            {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+          </button>
+        </div>
         {fieldErrors.password && <p className="mt-1 text-xs text-red-600">{fieldErrors.password}</p>}
       </div>
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1.5">Confirm Password <span className="text-red-500">*</span></label>
-        <input
-          type="password"
-          value={data.confirmPassword}
-          onChange={(e) => onChange({ confirmPassword: e.target.value })}
-          placeholder="Repeat password"
-          className={`w-full px-4 py-2.5 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:border-transparent ${fieldErrors.confirmPassword ? "border-red-400 focus:ring-red-200" : "border-gray-300 focus:ring-teal-500"}`}
-        />
+        <div className="relative">
+          <input
+            type={showConfirm ? "text" : "password"}
+            value={data.confirmPassword}
+            onChange={(e) => onChange({ confirmPassword: e.target.value })}
+            placeholder="Repeat password"
+            className={`w-full px-4 py-2.5 pr-10 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:border-transparent ${fieldErrors.confirmPassword ? "border-red-400 focus:ring-red-200" : "border-gray-300 focus:ring-teal-500"}`}
+          />
+          <button type="button" onClick={() => setShowConfirm((v) => !v)} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
+            {showConfirm ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+          </button>
+        </div>
         {fieldErrors.confirmPassword && <p className="mt-1 text-xs text-red-600">{fieldErrors.confirmPassword}</p>}
       </div>
       <div>
@@ -168,8 +181,8 @@ function AccountStep({
           onChange={(e) => onChange({ contact_consent: e.target.checked })}
           className="mt-0.5 w-4 h-4 rounded border-gray-300 text-teal-500 focus:ring-teal-500 shrink-0"
         />
-        <span className="text-sm text-gray-600">
-          I consent to be contacted via phone calls, SMS, and email regarding my loan application and related services.
+        <span className="text-xs text-gray-500">
+          I consent to be contacted via calls and messages by education lenders and FundMyCampus regarding my loan application and related services.
         </span>
       </label>
       <Button type="submit" variant="primary" size="md" fullWidth disabled={loading}>
@@ -190,64 +203,70 @@ function BasicDetailsStep({
   data,
   onChange,
   onNext,
-  onSkip,
 }: {
   data: BasicData;
   onChange: (d: Partial<BasicData>) => void;
   onNext: () => void;
-  onSkip: () => void;
 }) {
+  const [errors, setErrors] = useState<Partial<Record<keyof BasicData, string>>>({});
+
+  function handleNext() {
+    const e: Partial<Record<keyof BasicData, string>> = {};
+    if (!data.full_name.trim()) e.full_name = "Full name is required";
+    if (!data.phone.trim()) e.phone = "Phone number is required";
+    if (!data.gender) e.gender = "Please select your gender";
+    if (!data.whatsapp_same && !data.whatsapp_number.trim()) e.whatsapp_number = "Enter your WhatsApp number";
+    setErrors(e);
+    if (Object.keys(e).length === 0) onNext();
+  }
+
+  const inp = "w-full px-4 py-2.5 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:border-transparent";
+
   return (
     <div className="space-y-4">
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1.5">Full Name <span className="text-red-500">*</span></label>
-        <input
-          type="text"
-          value={data.full_name}
-          onChange={(e) => onChange({ full_name: e.target.value })}
+        <input type="text" value={data.full_name} onChange={(e) => onChange({ full_name: e.target.value })}
           placeholder="Your full name"
-          className="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
-        />
+          className={`${inp} ${errors.full_name ? "border-red-400 focus:ring-red-200" : "border-gray-300 focus:ring-teal-500"}`} />
+        {errors.full_name && <p className="mt-1 text-xs text-red-600">{errors.full_name}</p>}
       </div>
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1.5">Phone Number <span className="text-red-500">*</span></label>
-        <input
-          type="tel"
-          value={data.phone}
-          onChange={(e) => onChange({ phone: e.target.value })}
+        <input type="tel" value={data.phone} onChange={(e) => onChange({ phone: e.target.value })}
           placeholder="+91 XXXXX XXXXX"
-          className="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
-        />
+          className={`${inp} ${errors.phone ? "border-red-400 focus:ring-red-200" : "border-gray-300 focus:ring-teal-500"}`} />
+        {errors.phone && <p className="mt-1 text-xs text-red-600">{errors.phone}</p>}
       </div>
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1.5">Gender <span className="text-red-500">*</span></label>
-        <select
-          value={data.gender}
-          onChange={(e) => onChange({ gender: e.target.value })}
-          className="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent bg-white"
-        >
+        <select value={data.gender} onChange={(e) => onChange({ gender: e.target.value })}
+          className={`${inp} bg-white ${errors.gender ? "border-red-400 focus:ring-red-200" : "border-gray-300 focus:ring-teal-500"}`}>
           <option value="">Select gender</option>
           <option value="Male">Male</option>
           <option value="Female">Female</option>
           <option value="Other">Other</option>
           <option value="Prefer not to say">Prefer not to say</option>
         </select>
+        {errors.gender && <p className="mt-1 text-xs text-red-600">{errors.gender}</p>}
       </div>
       <label className="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
-        <input
-          type="checkbox"
-          checked={data.whatsapp_same}
-          onChange={(e) => onChange({ whatsapp_same: e.target.checked })}
-          className="w-4 h-4 accent-teal-500"
-        />
+        <input type="checkbox" checked={data.whatsapp_same} onChange={(e) => onChange({ whatsapp_same: e.target.checked })}
+          className="w-4 h-4 accent-teal-500" />
         WhatsApp number same as phone
       </label>
-      <div className="flex gap-3 pt-2">
-        <Button type="button" variant="primary" size="md" fullWidth onClick={onNext}>
+      {!data.whatsapp_same && (
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1.5">WhatsApp Number <span className="text-red-500">*</span></label>
+          <input type="tel" value={data.whatsapp_number} onChange={(e) => onChange({ whatsapp_number: e.target.value })}
+            placeholder="+91 XXXXX XXXXX"
+            className={`${inp} ${errors.whatsapp_number ? "border-red-400 focus:ring-red-200" : "border-gray-300 focus:ring-teal-500"}`} />
+          {errors.whatsapp_number && <p className="mt-1 text-xs text-red-600">{errors.whatsapp_number}</p>}
+        </div>
+      )}
+      <div className="pt-2">
+        <Button type="button" variant="primary" size="md" fullWidth onClick={handleNext}>
           Continue
-        </Button>
-        <Button type="button" variant="ghost" size="md" fullWidth onClick={onSkip} className="!text-gray-500 hover:!text-gray-700">
-          Skip for now
         </Button>
       </div>
     </div>
@@ -508,7 +527,7 @@ export function SignupForm() {
 
   const searchParams = typeof window !== "undefined" ? new URLSearchParams(window.location.search) : null;
   const [account, setAccount] = useState<AccountData>({ email: "", password: "", confirmPassword: "", contact_consent: false, referral_code: searchParams?.get("ref") ?? "" });
-  const [basic, setBasic] = useState<BasicData>({ full_name: "", phone: "", gender: "", whatsapp_same: true });
+  const [basic, setBasic] = useState<BasicData>({ full_name: "", phone: "", gender: "", whatsapp_same: true, whatsapp_number: "" });
   const [education, setEducation] = useState<EducationData>({
     has_offer_letter: "", course_level: "", degree: "", country: "", college: "", start_year: "", start_month: "",
   });
@@ -616,7 +635,6 @@ export function SignupForm() {
           data={basic}
           onChange={(d) => setBasic((p) => ({ ...p, ...d }))}
           onNext={() => setStep(2)}
-          onSkip={() => router.push("/dashboard")}
         />
       )}
       {step === 2 && (

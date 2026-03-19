@@ -28,6 +28,8 @@ interface LoanApplication {
   course_level?: string; course_degree?: string;
   rejection_reason?: string; remarks?: string; notes?: string;
 }
+interface BankApplication { id: string; bank_name: string; status: string; remarks?: string; }
+interface DocChecklist { document_type: string; label: string; required: boolean; status: "uploaded" | "pending" | "rejected" | "not_uploaded"; }
 interface Document { id: string; document_type: string; file_name?: string; file_size?: number; file_url?: string; status: string; rejection_reason?: string; created_at: string; }
 interface Notification { id: string; type: string; title: string; message: string; link?: string; is_read: boolean; created_at: string; }
 interface Referral { id: string; status: string; created_at: string; }
@@ -43,13 +45,14 @@ const DOC_LABELS: Record<string, string> = {
 const DOC_TYPES = Object.keys(DOC_LABELS);
 
 function loanStatusColor(status: string) {
-  if (["approved", "disbursed", "documentation"].includes(status)) return "bg-green-100 text-green-700";
+  if (["disbursed"].includes(status)) return "bg-green-100 text-green-700";
+  if (["sanction", "processing_fee"].includes(status)) return "bg-blue-100 text-blue-700";
   if (["rejected", "withdrawn"].includes(status)) return "bg-red-100 text-red-700";
-  if (["docs_verified"].includes(status)) return "bg-blue-100 text-blue-700";
+  if (["loan_login"].includes(status)) return "bg-purple-100 text-purple-700";
   return "bg-yellow-100 text-yellow-700";
 }
 function loanStatusIcon(status: string) {
-  if (["approved", "disbursed", "documentation"].includes(status)) return <CheckCircle className="w-4 h-4 text-green-500" />;
+  if (["disbursed", "sanction"].includes(status)) return <CheckCircle className="w-4 h-4 text-green-500" />;
   if (["rejected", "withdrawn"].includes(status)) return <XCircle className="w-4 h-4 text-red-500" />;
   return <Clock className="w-4 h-4 text-yellow-500" />;
 }
@@ -158,7 +161,6 @@ function OverviewTab({ profile, loans, user, onSection }: { profile: Profile | n
             <div className="flex-1 min-w-0">
               <p className="font-semibold text-gray-900">{displayName}</p>
               <p className="text-xs text-gray-500 truncate">{user?.email}</p>
-              {profile?.role && <span className="inline-block mt-1 text-xs px-2 py-0.5 bg-teal-100 text-teal-700 rounded-full capitalize">{profile.role}</span>}
             </div>
           </div>
           <div className="mb-2 flex justify-between text-xs text-gray-600">
@@ -285,20 +287,24 @@ function OverviewTab({ profile, loans, user, onSection }: { profile: Profile | n
 
 // ─────────────────── Loan Process Tracker ───────────────────
 const LOAN_STEPS = [
-  { key: "applied",      label: "Applied",       sub: "Application submitted" },
-  { key: "documents",    label: "Documents",     sub: "Submit required documents" },
-  { key: "under_review", label: "Under Review",  sub: "Team reviewing your details" },
-  { key: "approved",     label: "Approved",      sub: "Loan approved by lender" },
-  { key: "disbursed",    label: "Disbursed",     sub: "Amount credited to account" },
+  { key: "applied",        label: "Applied",        sub: "Application submitted" },
+  { key: "docs_received",  label: "Docs Received",  sub: "Documents received" },
+  { key: "under_review",   label: "Under Review",   sub: "Team reviewing details" },
+  { key: "loan_login",     label: "Loan Login",     sub: "Submitted to bank" },
+  { key: "sanction",       label: "Sanctioned",     sub: "Loan approved by bank" },
+  { key: "processing_fee", label: "Processing Fee", sub: "Fee payment required" },
+  { key: "disbursed",      label: "Disbursed",      sub: "Amount credited" },
 ];
 
 function getStepIndex(status: string): number {
   const map: Record<string, number> = {
     applied: 0,
-    docs_pending: 1, docs_verified: 1,
+    docs_received: 1,
     under_review: 2,
-    approved: 3, documentation: 3,
-    disbursed: 4,
+    loan_login: 3,
+    sanction: 4,
+    processing_fee: 5,
+    disbursed: 6,
   };
   return map[status] ?? 0;
 }
@@ -307,16 +313,22 @@ function isCancelled(status: string) {
   return ["rejected", "withdrawn"].includes(status);
 }
 
-// For cancelled loans, show which step it was cancelled at
-function getCancelledAtStep(status: string): number {
-  // Default to showing cancellation at "Under Review" step
-  return 2;
-}
-
 function LoanProcessCard({ loan }: { loan: LoanApplication }) {
   const cancelled = isCancelled(loan.status);
-  const activeStep = cancelled ? getCancelledAtStep(loan.status) : getStepIndex(loan.status);
-  const progressPct = cancelled ? (activeStep / (LOAN_STEPS.length - 1)) * 100 : (activeStep / (LOAN_STEPS.length - 1)) * 100;
+  const activeStep = getStepIndex(loan.status);
+  const progressPct = (activeStep / (LOAN_STEPS.length - 1)) * 100;
+  const [banks, setBanks] = useState<BankApplication[]>([]);
+
+  useEffect(() => {
+    api.get<BankApplication[]>(`/api/v1/loans/${loan.id}/banks`).then(setBanks).catch(() => {});
+  }, [loan.id]);
+
+  const BANK_STATUS_COLOR: Record<string, string> = {
+    disbursed: "bg-green-100 text-green-700", sanction: "bg-green-100 text-green-700",
+    processing_fee: "bg-blue-100 text-blue-700", loan_login: "bg-purple-100 text-purple-700",
+    under_review: "bg-yellow-100 text-yellow-700", docs_received: "bg-yellow-100 text-yellow-700",
+    applied: "bg-gray-100 text-gray-600", rejected: "bg-red-100 text-red-700",
+  };
 
   return (
     <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
@@ -343,54 +355,68 @@ function LoanProcessCard({ loan }: { loan: LoanApplication }) {
         {loan.target_country
           ? <span><span className="font-medium text-gray-800">Country:</span> {loan.target_country}</span>
           : <span className="text-gray-400">Country: —</span>}
-        {loan.bank_name
-          ? <span><span className="font-medium text-gray-800">Bank:</span> {loan.bank_name}</span>
-          : <span className="text-gray-400">Bank: Not assigned yet</span>}
         {(loan.course_name || loan.course_degree) && (
           <span><span className="font-medium text-gray-800">Course:</span> {loan.course_name ?? loan.course_degree}</span>
         )}
       </div>
 
-      {/* 5-step tracker */}
-      <div className="relative px-4 mb-2">
-        {/* Background line */}
-        <div className="absolute top-4 left-8 right-8 h-0.5 bg-gray-200" />
-        {/* Progress line */}
-        <div
-          className={`absolute top-4 left-8 h-0.5 transition-all ${cancelled ? "bg-red-400" : "bg-teal-500"}`}
-          style={{ width: `calc(${progressPct}% * (100% - 64px) / 100)`, maxWidth: "calc(100% - 64px)" }}
-        />
-        <div className="flex justify-between relative">
-          {LOAN_STEPS.map((step, i) => {
-            const done = !cancelled && i < activeStep;
-            const current = !cancelled && i === activeStep;
-            const isCancelledHere = cancelled && i === activeStep;
-            return (
-              <div key={step.key} className="flex flex-col items-center gap-2">
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center border-2 transition-all bg-white ${
-                  isCancelledHere ? "border-red-400 bg-red-50" :
-                  done ? "border-teal-500 bg-teal-500" :
-                  current ? "border-teal-500 bg-teal-500 ring-4 ring-teal-100" :
-                  "border-gray-300"
-                }`}>
-                  {isCancelledHere
-                    ? <XCircle className="w-4 h-4 text-red-500" />
-                    : done
-                    ? <CheckCircle className="w-4 h-4 text-white" />
-                    : current
-                    ? <div className="w-2.5 h-2.5 rounded-full bg-white" />
-                    : <div className="w-2 h-2 rounded-full bg-gray-300" />
-                  }
-                </div>
-                <p className={`text-xs font-medium text-center leading-tight max-w-[60px] ${
-                  isCancelledHere ? "text-red-600" :
-                  done || current ? "text-teal-700" : "text-gray-400"
-                }`}>{step.label}</p>
-              </div>
-            );
-          })}
+      {/* 7-step tracker */}
+      <div className="relative px-2 mb-2 overflow-x-auto">
+        <div className="min-w-[500px]">
+          <div className="relative">
+            <div className="absolute top-4 left-4 right-4 h-0.5 bg-gray-200" />
+            <div
+              className={`absolute top-4 left-4 h-0.5 transition-all ${cancelled ? "bg-red-400" : "bg-teal-500"}`}
+              style={{ width: `calc((100% - 32px) * ${activeStep} / ${LOAN_STEPS.length - 1})` }}
+            />
+            <div className="flex justify-between relative">
+              {LOAN_STEPS.map((step, i) => {
+                const done = !cancelled && i < activeStep;
+                const current = !cancelled && i === activeStep;
+                const isCancelledHere = cancelled && i === activeStep;
+                return (
+                  <div key={step.key} className="flex flex-col items-center gap-1.5">
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center border-2 transition-all bg-white ${
+                      isCancelledHere ? "border-red-400 bg-red-50" :
+                      done ? "border-teal-500 bg-teal-500" :
+                      current ? "border-teal-500 bg-teal-500 ring-4 ring-teal-100" :
+                      "border-gray-300"
+                    }`}>
+                      {isCancelledHere ? <XCircle className="w-4 h-4 text-red-500" />
+                        : done ? <CheckCircle className="w-4 h-4 text-white" />
+                        : current ? <div className="w-2.5 h-2.5 rounded-full bg-white" />
+                        : <div className="w-2 h-2 rounded-full bg-gray-300" />}
+                    </div>
+                    <p className={`text-[10px] font-medium text-center leading-tight w-14 ${
+                      isCancelledHere ? "text-red-600" : done || current ? "text-teal-700" : "text-gray-400"
+                    }`}>{step.label}</p>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
         </div>
       </div>
+
+      {/* Banks section */}
+      {banks.length > 0 && (
+        <div className="mt-4 border-t border-gray-100 pt-4">
+          <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Banks Processing Your Application</p>
+          <div className="space-y-2">
+            {banks.map((b) => (
+              <div key={b.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-xl">
+                <div>
+                  <p className="text-sm font-medium text-gray-900">{b.bank_name}</p>
+                  {b.remarks && <p className="text-xs text-gray-500 mt-0.5">{b.remarks}</p>}
+                </div>
+                <span className={`text-xs px-2.5 py-1 rounded-full font-medium capitalize ${BANK_STATUS_COLOR[b.status] ?? "bg-gray-100 text-gray-600"}`}>
+                  {b.status.replace(/_/g, " ")}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Cancelled banner */}
       {cancelled && (
@@ -410,8 +436,7 @@ function LoanProcessCard({ loan }: { loan: LoanApplication }) {
           <p className="text-xs font-medium text-blue-700 mb-1">Remarks from our team</p>
           {(loan.notes || loan.remarks)
             ? <p className="text-sm text-blue-800">{loan.notes ?? loan.remarks}</p>
-            : <p className="text-sm text-blue-400 italic">No remarks yet. Our team will update you here.</p>
-          }
+            : <p className="text-sm text-blue-400 italic">No remarks yet. Our team will update you here.</p>}
         </div>
       )}
     </div>
@@ -443,54 +468,140 @@ function ApplicationsTab({ loans }: { loans: LoanApplication[] }) {
 
 // ─────────────────── Documents Tab ───────────────────
 function DocumentsTab({ loans }: { loans: LoanApplication[] }) {
+  const [checklist, setChecklist] = useState<DocChecklist[]>([]);
   const [documents, setDocuments] = useState<Document[]>([]);
   const [loading, setLoading] = useState(true);
-  const [uploading, setUploading] = useState(false);
-  const [docType, setDocType] = useState("");
-  const [loanId, setLoanId] = useState("");
+  const [uploading, setUploading] = useState<string | null>(null); // stores doc_type being uploaded
+  const [uploadingGeneral, setUploadingGeneral] = useState(false);
+  const [selectedLoan, setSelectedLoan] = useState(loans[0]?.id ?? "");
+  const [generalDocType, setGeneralDocType] = useState("");
+  const [generalLoanId, setGeneralLoanId] = useState("");
   const [file, setFile] = useState<File | null>(null);
+  const [uploadFile, setUploadFile] = useState<Record<string, File | null>>({});
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
   useEffect(() => {
-    api.get<Document[]>("/api/v1/documents/my").then(setDocuments).catch(() => {}).finally(() => setLoading(false));
-  }, []);
+    const loanId = selectedLoan || loans[0]?.id;
+    Promise.allSettled([
+      api.get<DocChecklist[]>("/api/v1/documents/required", loanId ? { loan_application_id: loanId } : undefined),
+      api.get<Document[]>("/api/v1/documents/my"),
+    ]).then(([cl, docs]) => {
+      if (cl.status === "fulfilled") setChecklist(cl.value);
+      if (docs.status === "fulfilled") setDocuments(docs.value);
+    }).finally(() => setLoading(false));
+  }, [selectedLoan, loans]);
 
-  async function handleUpload(e: React.FormEvent) {
-    e.preventDefault();
-    if (!file || !docType) { setError("Select document type and file"); return; }
-    if (file.size > 10 * 1024 * 1024) { setError("File must be under 10MB"); return; }
-    setError(""); setSuccess(""); setUploading(true);
+  async function uploadForType(docType: string, loanId: string, f: File) {
+    setUploading(docType); setError(""); setSuccess("");
     try {
       const fd = new FormData();
-      fd.append("file", file); fd.append("document_type", docType);
+      fd.append("file", f); fd.append("document_type", docType);
       if (loanId) fd.append("loan_application_id", loanId);
       const doc = await api.upload<Document>("/api/v1/documents", fd);
       setDocuments((d) => [doc, ...d]);
-      setSuccess("Document uploaded!"); setFile(null); setDocType(""); setLoanId("");
+      setChecklist((cl) => cl.map((c) => c.document_type === docType ? { ...c, status: "pending" } : c));
+      setSuccess(`${DOC_LABELS[docType] ?? docType} uploaded!`);
+      setUploadFile((p) => ({ ...p, [docType]: null }));
     } catch (err) { setError(err instanceof Error ? err.message : "Upload failed"); }
-    finally { setUploading(false); }
+    finally { setUploading(null); }
   }
+
+  async function handleGeneralUpload(e: React.FormEvent) {
+    e.preventDefault();
+    if (!file || !generalDocType) { setError("Select document type and file"); return; }
+    if (file.size > 10 * 1024 * 1024) { setError("File must be under 10MB"); return; }
+    setError(""); setSuccess(""); setUploadingGeneral(true);
+    try {
+      const fd = new FormData();
+      fd.append("file", file); fd.append("document_type", generalDocType);
+      if (generalLoanId) fd.append("loan_application_id", generalLoanId);
+      const doc = await api.upload<Document>("/api/v1/documents", fd);
+      setDocuments((d) => [doc, ...d]);
+      setSuccess("Document uploaded!"); setFile(null); setGeneralDocType(""); setGeneralLoanId("");
+    } catch (err) { setError(err instanceof Error ? err.message : "Upload failed"); }
+    finally { setUploadingGeneral(false); }
+  }
+
+  const DOC_STATUS_STYLE: Record<string, { badge: string; label: string }> = {
+    uploaded:     { badge: "bg-green-100 text-green-700",  label: "Uploaded" },
+    pending:      { badge: "bg-yellow-100 text-yellow-700", label: "Pending Review" },
+    rejected:     { badge: "bg-red-100 text-red-700",      label: "Rejected" },
+    not_uploaded: { badge: "bg-gray-100 text-gray-500",    label: "Not Uploaded" },
+  };
 
   return (
     <div className="space-y-6">
-      {/* Upload */}
+      {error && <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">{error}</div>}
+      {success && <div className="p-3 bg-teal-50 border border-teal-200 rounded-lg text-sm text-teal-700">{success}</div>}
+
+      {/* Required Documents Checklist */}
+      {loans.length > 0 && (
+        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+          <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
+            <h2 className="text-base font-semibold text-gray-900 flex items-center gap-2"><FileText className="w-4 h-4 text-teal-600" />Required Documents</h2>
+            {loans.length > 1 && (
+              <select value={selectedLoan} onChange={(e) => setSelectedLoan(e.target.value)} className="text-xs border border-gray-200 rounded-lg px-3 py-1.5 bg-white focus:outline-none focus:ring-2 focus:ring-teal-500">
+                {loans.map((l) => <option key={l.id} value={l.id}>{l.application_id ?? l.id}</option>)}
+              </select>
+            )}
+          </div>
+          {loading ? <p className="text-sm text-gray-500 text-center py-6">Loading...</p> : checklist.length === 0 ? (
+            <p className="text-sm text-gray-500 text-center py-4">No required documents found for this application.</p>
+          ) : (
+            <div className="space-y-3">
+              {checklist.map((item) => {
+                const style = DOC_STATUS_STYLE[item.status] ?? DOC_STATUS_STYLE.not_uploaded;
+                const isUploading = uploading === item.document_type;
+                const needsUpload = item.status === "not_uploaded" || item.status === "rejected";
+                return (
+                  <div key={item.document_type} className="flex flex-wrap items-center justify-between gap-3 p-4 bg-gray-50 rounded-xl">
+                    <div className="flex items-center gap-3">
+                      {item.status === "uploaded" || item.status === "pending"
+                        ? <CheckCircle className="w-4 h-4 text-green-500 shrink-0" />
+                        : item.status === "rejected"
+                        ? <XCircle className="w-4 h-4 text-red-500 shrink-0" />
+                        : <div className="w-4 h-4 rounded-full border-2 border-gray-300 shrink-0" />}
+                      <div>
+                        <p className="text-sm font-medium text-gray-900">{item.label}</p>
+                        {item.required && <p className="text-xs text-gray-400">Required</p>}
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <span className={`text-xs px-2.5 py-1 rounded-full font-medium ${style.badge}`}>{style.label}</span>
+                      {needsUpload && (
+                        <label className="cursor-pointer">
+                          <input type="file" accept=".pdf,.jpg,.jpeg,.png,.webp" className="hidden"
+                            onChange={(e) => { const f = e.target.files?.[0]; if (f) uploadForType(item.document_type, selectedLoan, f); }} />
+                          <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${isUploading ? "bg-gray-100 text-gray-400" : "bg-teal-500 text-white hover:bg-teal-600"}`}>
+                            <Upload className="w-3 h-3" />{isUploading ? "Uploading..." : "Upload"}
+                          </span>
+                        </label>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* General Upload */}
       <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
-        <h2 className="text-base font-semibold text-gray-900 mb-4 flex items-center gap-2"><Upload className="w-4 h-4 text-teal-600" />Upload Document</h2>
-        {error && <div className="mb-3 p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">{error}</div>}
-        {success && <div className="mb-3 p-3 bg-teal-50 border border-teal-200 rounded-lg text-sm text-teal-700">{success}</div>}
-        <form onSubmit={handleUpload} className="space-y-4">
+        <h2 className="text-base font-semibold text-gray-900 mb-4 flex items-center gap-2"><Upload className="w-4 h-4 text-teal-600" />Upload Additional Document</h2>
+        <form onSubmit={handleGeneralUpload} className="space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1.5">Document Type</label>
-              <select value={docType} onChange={(e) => setDocType(e.target.value)} required className="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white">
+              <select value={generalDocType} onChange={(e) => setGeneralDocType(e.target.value)} required className="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white">
                 <option value="">Select type</option>
                 {DOC_TYPES.map((t) => <option key={t} value={t}>{DOC_LABELS[t]}</option>)}
               </select>
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1.5">Link to Application (optional)</label>
-              <select value={loanId} onChange={(e) => setLoanId(e.target.value)} className="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white">
+              <select value={generalLoanId} onChange={(e) => setGeneralLoanId(e.target.value)} className="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white">
                 <option value="">None</option>
                 {loans.map((l) => <option key={l.id} value={l.id}>{l.application_id ?? l.id}</option>)}
               </select>
@@ -501,16 +612,14 @@ function DocumentsTab({ loans }: { loans: LoanApplication[] }) {
             <input type="file" accept=".pdf,.jpg,.jpeg,.png,.webp" onChange={(e) => setFile(e.target.files?.[0] ?? null)}
               className="w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-teal-50 file:text-teal-700 hover:file:bg-teal-100" />
           </div>
-          <Button type="submit" variant="primary" size="md" disabled={uploading}>{uploading ? "Uploading..." : "Upload"}</Button>
+          <Button type="submit" variant="primary" size="md" disabled={uploadingGeneral}>{uploadingGeneral ? "Uploading..." : "Upload"}</Button>
         </form>
       </div>
 
-      {/* List */}
-      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
-        <h2 className="text-base font-semibold text-gray-900 mb-4">Uploaded Documents</h2>
-        {loading ? <p className="text-sm text-gray-500 text-center py-6">Loading...</p> : documents.length === 0 ? (
-          <div className="text-center py-12"><FileText className="w-10 h-10 text-gray-300 mx-auto mb-3" /><p className="text-sm text-gray-500">No documents yet</p></div>
-        ) : (
+      {/* All uploaded docs */}
+      {documents.length > 0 && (
+        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+          <h2 className="text-base font-semibold text-gray-900 mb-4">All Uploaded Documents</h2>
           <div className="space-y-3">
             {documents.map((doc) => (
               <div key={doc.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
@@ -529,8 +638,8 @@ function DocumentsTab({ loans }: { loans: LoanApplication[] }) {
               </div>
             ))}
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -688,17 +797,30 @@ function ProfileTab({ profile, onSave }: { profile: Profile | null; onSave: (p: 
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault(); setError(""); setSuccess(false); setSaving(true);
-    const clean = (v: string | null | undefined) => (v && v.trim() !== "" ? v : null);
+    const val = (v: string | null | undefined) => (v && v.trim() !== "" ? v : undefined);
+    const payload: Record<string, unknown> = {};
+    if (val(form.full_name)) payload.full_name = val(form.full_name);
+    if (val(form.phone)) payload.phone = val(form.phone);
+    if (val(form.gender)) payload.gender = val(form.gender);
+    if (val(form.date_of_birth)) payload.date_of_birth = val(form.date_of_birth);
+    if (val(form.marital_status)) payload.marital_status = val(form.marital_status);
+    if (val(form.about)) payload.about = val(form.about);
+    if (val(form.passport_number)) payload.passport_number = val(form.passport_number);
+    if (val(form.pan_number)) payload.pan_number = val(form.pan_number);
+    if (val(form.mother_maiden_name)) payload.mother_maiden_name = val(form.mother_maiden_name);
+    if (val(form.address_line1)) payload.address_line1 = val(form.address_line1);
+    if (val(form.address_line2)) payload.address_line2 = val(form.address_line2);
+    if (val(form.city)) payload.city = val(form.city);
+    if (val(form.district)) payload.district = val(form.district);
+    if (val(form.state)) payload.state = val(form.state);
+    if (val(form.zip_code)) payload.zip_code = val(form.zip_code);
+    if (val(form.country)) payload.country = val(form.country);
+    if (val(form.linkedin_url)) payload.linkedin_url = val(form.linkedin_url);
+    if (val(form.twitter_url)) payload.twitter_url = val(form.twitter_url);
+    if (val(form.instagram_url)) payload.instagram_url = val(form.instagram_url);
+    payload.contact_consent = form.contact_consent ?? false;
     try {
-      await api.patch("/api/v1/profiles/me", {
-        full_name: clean(form.full_name), phone: clean(form.phone), gender: clean(form.gender),
-        date_of_birth: clean(form.date_of_birth), marital_status: clean(form.marital_status), about: clean(form.about),
-        passport_number: clean(form.passport_number), pan_number: clean(form.pan_number), mother_maiden_name: clean(form.mother_maiden_name),
-        address_line1: clean(form.address_line1), address_line2: clean(form.address_line2), city: clean(form.city),
-        district: clean(form.district), state: clean(form.state), zip_code: clean(form.zip_code), country: clean(form.country),
-        linkedin_url: clean(form.linkedin_url), twitter_url: clean(form.twitter_url), instagram_url: clean(form.instagram_url),
-        contact_consent: form.contact_consent,
-      });
+      await api.patch("/api/v1/profiles/me", payload);
       setSuccess(true); onSave(form);
     } catch (err) { setError(err instanceof Error ? err.message : "Failed to save"); }
     finally { setSaving(false); }
@@ -714,7 +836,6 @@ function ProfileTab({ profile, onSave }: { profile: Profile | null; onSave: (p: 
         <p className={sec}>Account Info</p>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div><p className="text-xs text-gray-500 mb-1">Email</p><p className="text-sm font-medium text-gray-800">{form.email}</p></div>
-          <div><p className="text-xs text-gray-500 mb-1">Role</p><span className="text-xs px-2.5 py-1 rounded-full bg-teal-100 text-teal-700 font-medium capitalize">{form.role ?? "user"}</span></div>
           <div>
             <p className="text-xs text-gray-500 mb-1">Profile Completion</p>
             <div className="flex items-center gap-2">
@@ -856,7 +977,7 @@ export default function DashboardPage() {
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 pt-28 pb-6">
         {/* Top bar */}
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-3">
             <button onClick={() => setSidebarOpen(true)} className="lg:hidden p-2 rounded-lg hover:bg-gray-200 transition-colors">
               <Menu className="w-5 h-5 text-gray-600" />
@@ -870,6 +991,23 @@ export default function DashboardPage() {
             <LogOut className="w-4 h-4 mr-1.5" />Sign Out
           </Button>
         </div>
+
+        {/* Profile Completion Bar */}
+        {profile && (profile.profile_completion_pct ?? 0) < 100 && (
+          <div className="mb-6 bg-gradient-to-r from-teal-500 to-teal-600 rounded-2xl p-4 text-white">
+            <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center gap-2">
+                <User className="w-4 h-4" />
+                <span className="text-sm font-semibold">Complete your profile</span>
+              </div>
+              <span className="text-lg font-bold">{profile.profile_completion_pct ?? 0}%</span>
+            </div>
+            <div className="w-full bg-white/30 rounded-full h-2.5 mb-2">
+              <div className="bg-white h-2.5 rounded-full transition-all" style={{ width: `${profile.profile_completion_pct ?? 0}%` }} />
+            </div>
+            <p className="text-xs text-teal-100">A complete profile helps us match you with the best loan offers faster.</p>
+          </div>
+        )}
 
         <div className="flex gap-6">
           {/* Sidebar — desktop */}
