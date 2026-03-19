@@ -8,7 +8,8 @@ async function handleResponse<T>(response: Response): Promise<T> {
 
   if (!response.ok) {
     const error = await response.json().catch(() => ({ error: "Request failed" }));
-    throw new Error(error.error || error.detail || `HTTP ${response.status}`);
+    const msg = error.error || error.detail || error.message || JSON.stringify(error);
+    throw new Error(msg || `HTTP ${response.status}`);
   }
 
   return response.json();
