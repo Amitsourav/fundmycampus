@@ -10,10 +10,13 @@ import { ArrowLeft, FileText, Upload, Eye, CheckCircle, Clock, XCircle, AlertCir
 
 const DOCUMENT_TYPE_LABELS: Record<string, string> = {
   passport: "Passport", pan_card: "PAN Card", aadhar: "Aadhaar",
-  offer_letter: "Offer Letter", transcript: "Transcript", sop: "Statement of Purpose",
-  lor: "Letter of Recommendation", resume: "Resume / CV", bank_statement: "Bank Statement",
-  itr: "Income Tax Return", salary_slip: "Salary Slip", property_docs: "Property Documents",
-  co_applicant_docs: "Co-applicant Documents", photo: "Photo", other: "Other",
+  offer_letter: "Offer Letter", transcript: "Transcript",
+  marksheet_10th: "10th Marksheet", marksheet_12th: "12th Marksheet",
+  graduation_certificate: "Graduation Certificate", pg_certificate: "PG Certificate",
+  diploma_certificate: "Diploma", mba_certificate: "MBA",
+  ca_cma_certificate: "CA / CMA", btech_be_certificate: "B.Tech / BE",
+  bank_statement: "Bank Statement", itr: "Income Tax Return",
+  salary_slip: "Salary Slip", property_docs: "Property Documents",
 };
 
 const DOCUMENT_TYPES = Object.keys(DOCUMENT_TYPE_LABELS);

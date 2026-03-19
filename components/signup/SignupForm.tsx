@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { api } from "@/lib/api-client";
@@ -91,7 +91,7 @@ function AccountStep({
   error: string;
   loading: boolean;
 }) {
-  const [fieldErrors, setFieldErrors] = useState<Partial<AccountData>>({});
+  const [fieldErrors, setFieldErrors] = useState<Partial<Record<keyof AccountData, string | boolean>>>({});
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
 
@@ -105,6 +105,9 @@ function AccountStep({
     }
     if (data.password !== data.confirmPassword) {
       errors.confirmPassword = "Passwords do not match";
+    }
+    if (!data.contact_consent) {
+      errors.contact_consent = true;
     }
     return errors;
   }
@@ -174,17 +177,20 @@ function AccountStep({
           className="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent font-mono"
         />
       </div>
-      <label className="flex items-start gap-3 cursor-pointer">
-        <input
-          type="checkbox"
-          checked={data.contact_consent}
-          onChange={(e) => onChange({ contact_consent: e.target.checked })}
-          className="mt-0.5 w-4 h-4 rounded border-gray-300 text-teal-500 focus:ring-teal-500 shrink-0"
-        />
-        <span className="text-xs text-gray-500">
-          I consent to be contacted via calls and messages by education lenders and FundMyCampus regarding my loan application and related services.
-        </span>
-      </label>
+      <div>
+        <label className="flex items-start gap-3 cursor-pointer">
+          <input
+            type="checkbox"
+            checked={data.contact_consent}
+            onChange={(e) => onChange({ contact_consent: e.target.checked })}
+            className={`mt-0.5 w-4 h-4 rounded focus:ring-teal-500 shrink-0 ${fieldErrors.contact_consent ? "border-red-400" : "border-gray-300"} text-teal-500`}
+          />
+          <span className="text-xs text-gray-500">
+            I consent to be contacted via calls and messages by education lenders and FundMyCampus regarding my loan application and related services.
+          </span>
+        </label>
+        {fieldErrors.contact_consent && <p className="mt-1 text-xs text-red-600 ml-7">Please accept to continue</p>}
+      </div>
       <Button type="submit" variant="primary" size="md" fullWidth disabled={loading}>
         {loading ? "Creating account..." : "Create Account"}
       </Button>
@@ -506,10 +512,14 @@ export function SignupForm() {
   const router = useRouter();
   const { user, loading, refreshSession } = useAuth();
   const [step, setStep] = useState(0);
+  const wasAlreadyLoggedIn = useRef<boolean | null>(null);
 
-  // If already logged in, skip Step 0 (account) and Step 1 (basic details) — go straight to Education
+  // Only skip to Education if user was ALREADY logged in when they arrived (not just registered)
   useEffect(() => {
-    if (!loading && user && step <= 1) setStep(2);
+    if (!loading && wasAlreadyLoggedIn.current === null) {
+      wasAlreadyLoggedIn.current = !!user;
+    }
+    if (!loading && user && wasAlreadyLoggedIn.current && step <= 1) setStep(2);
   }, [loading, user, step]);
   const [submitted, setSubmitted] = useState(false);
   const [accountError, setAccountError] = useState("");

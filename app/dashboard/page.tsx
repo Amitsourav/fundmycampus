@@ -37,12 +37,33 @@ interface Payout { id: string; amount: number; payout_type: string; status: stri
 
 // ─────────────────── Helpers ───────────────────
 const DOC_LABELS: Record<string, string> = {
-  passport: "Passport", pan_card: "PAN Card", aadhar: "Aadhaar", offer_letter: "Offer Letter",
-  transcript: "Transcript", sop: "SOP", lor: "LOR", resume: "Resume",
+  // Personal
+  passport: "Passport", pan_card: "PAN Card", aadhar: "Aadhaar",
+  // Co-applicant
   bank_statement: "Bank Statement", itr: "ITR", salary_slip: "Salary Slip",
-  property_docs: "Property Docs", co_applicant_docs: "Co-applicant Docs", photo: "Photo", other: "Other",
+  // Collateral
+  property_docs: "Property Documents",
+  // Education
+  offer_letter: "Offer Letter", transcript: "Transcript",
+  marksheet_10th: "10th Marksheet", marksheet_12th: "12th Marksheet",
+  graduation_certificate: "Graduation Certificate", pg_certificate: "PG Certificate",
+  diploma_certificate: "Diploma", mba_certificate: "MBA",
+  ca_cma_certificate: "CA / CMA", btech_be_certificate: "B.Tech / BE",
 };
 const DOC_TYPES = Object.keys(DOC_LABELS);
+
+const DOC_SECTIONS: { label: string; types: string[] }[] = [
+  { label: "Personal", types: ["passport", "pan_card", "aadhar"] },
+  { label: "Co-applicant", types: ["bank_statement", "itr", "salary_slip"] },
+  { label: "Collateral", types: ["property_docs"] },
+  { label: "Education", types: ["marksheet_10th", "marksheet_12th", "offer_letter"] },
+];
+
+const EXTRA_EDU_TYPES: Record<string, string> = {
+  transcript: "Transcript", graduation_certificate: "Graduation Certificate",
+  pg_certificate: "PG Certificate", diploma_certificate: "Diploma",
+  mba_certificate: "MBA", ca_cma_certificate: "CA / CMA", btech_be_certificate: "B.Tech / BE",
+};
 
 function loanStatusColor(status: string) {
   if (["disbursed"].includes(status)) return "bg-green-100 text-green-700";
@@ -98,18 +119,47 @@ function OverviewTab({ profile, loans, user, onSection }: { profile: Profile | n
   const displayName = profile?.full_name || user?.name || user?.email?.split("@")[0] || "User";
   const pct = profile?.profile_completion_pct ?? 0;
   const [notifications, setNotifications] = useState<Notification[]>([]);
-  const [docCount, setDocCount] = useState<number | null>(null);
+  const [documents, setDocuments] = useState<Document[]>([]);
+  const [checklist, setChecklist] = useState<DocChecklist[]>([]);
+  const [uploadingDoc, setUploadingDoc] = useState<string | null>(null);
+  const [uploadSuccess, setUploadSuccess] = useState("");
+  const [uploadError, setUploadError] = useState("");
   const [referralCopied, setReferralCopied] = useState(false);
+  const [showAllDocs, setShowAllDocs] = useState(false);
+  const selectedLoanId = loans[0]?.id ?? "";
 
   useEffect(() => {
     Promise.allSettled([
       api.get<Notification[]>("/api/v1/notifications/my"),
       api.get<Document[]>("/api/v1/documents/my"),
-    ]).then(([n, d]) => {
-      if (n.status === "fulfilled") setNotifications(n.value);
-      if (d.status === "fulfilled") setDocCount(d.value.length);
+      api.get<DocChecklist[]>("/api/v1/documents/required", selectedLoanId ? { loan_application_id: selectedLoanId } : undefined),
+    ]).then(([n, d, cl]) => {
+      if (n.status === "fulfilled" && Array.isArray(n.value)) setNotifications(n.value);
+      if (d.status === "fulfilled" && Array.isArray(d.value)) setDocuments(d.value);
+      if (cl.status === "fulfilled" && Array.isArray(cl.value)) setChecklist(cl.value);
     });
-  }, []);
+  }, [selectedLoanId]);
+
+  async function handleDocUpload(docType: string, file: File) {
+    setUploadingDoc(docType); setUploadError(""); setUploadSuccess("");
+    try {
+      const fd = new FormData();
+      fd.append("file", file); fd.append("document_type", docType);
+      if (selectedLoanId) fd.append("loan_application_id", selectedLoanId);
+      const doc = await api.upload<Document>("/api/v1/documents", fd);
+      setDocuments((d) => [doc, ...d]);
+      setChecklist((cl) => cl.map((c) => c.document_type === docType ? { ...c, status: "pending" } : c));
+      setUploadSuccess(`${DOC_LABELS[docType] ?? docType} uploaded!`);
+    } catch (err) { setUploadError(err instanceof Error ? err.message : "Upload failed"); }
+    finally { setUploadingDoc(null); }
+  }
+
+  const DOC_STATUS_STYLE: Record<string, { badge: string; label: string }> = {
+    uploaded:     { badge: "bg-green-100 text-green-700",  label: "Uploaded" },
+    pending:      { badge: "bg-yellow-100 text-yellow-700", label: "Pending Review" },
+    rejected:     { badge: "bg-red-100 text-red-700",      label: "Rejected" },
+    not_uploaded: { badge: "bg-gray-100 text-gray-500",    label: "Not Uploaded" },
+  };
 
   const unreadCount = notifications.filter(n => !n.is_read).length;
   const activeLoans = loans.filter(l => !["rejected","withdrawn","disbursed"].includes(l.status));
@@ -121,7 +171,7 @@ function OverviewTab({ profile, loans, user, onSection }: { profile: Profile | n
     { done: !!profile?.phone, label: "Add phone number", section: "profile" as Section },
     { done: !!profile?.date_of_birth, label: "Add date of birth", section: "profile" as Section },
     { done: loans.length > 0, label: "Submit loan application", section: "applications" as Section },
-    { done: (docCount ?? 0) > 0, label: "Upload a document", section: "documents" as Section },
+    { done: documents.length > 0, label: "Upload a document", section: "documents" as Section },
   ];
   const pendingSteps = steps.filter(s => !s.done);
 
@@ -141,7 +191,7 @@ function OverviewTab({ profile, loans, user, onSection }: { profile: Profile | n
           { label: "Applications", value: loans.length, color: "text-teal-600", bg: "bg-teal-50" },
           { label: "Active", value: activeLoans.length, color: "text-yellow-600", bg: "bg-yellow-50" },
           { label: "Approved", value: approvedLoans.length, color: "text-green-600", bg: "bg-green-50" },
-          { label: "Documents", value: docCount ?? "—", color: "text-blue-600", bg: "bg-blue-50" },
+          { label: "Documents", value: documents.length, color: "text-blue-600", bg: "bg-blue-50" },
         ].map((s) => (
           <div key={s.label} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
             <p className={`text-2xl font-bold ${s.color}`}>{s.value}</p>
@@ -258,6 +308,87 @@ function OverviewTab({ profile, loans, user, onSection }: { profile: Profile | n
         </div>
       </div>
 
+      {/* Documents Section */}
+      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-sm font-semibold text-gray-900 flex items-center gap-2"><FileText className="w-4 h-4 text-teal-600" />My Documents</h2>
+          <button onClick={() => onSection("documents")} className="text-xs text-teal-600 hover:text-teal-700 flex items-center gap-1">View all <ChevronRight className="w-3 h-3" /></button>
+        </div>
+        {uploadError && <div className="mb-3 p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">{uploadError}</div>}
+        {uploadSuccess && <div className="mb-3 p-3 bg-teal-50 border border-teal-200 rounded-lg text-sm text-teal-700">{uploadSuccess}</div>}
+        {checklist.length > 0 ? (() => {
+          const visible = showAllDocs ? checklist : checklist.slice(0, 4);
+          return (
+            <>
+              <div className="space-y-2">
+                {visible.map((item) => {
+                  const style = DOC_STATUS_STYLE[item.status] ?? DOC_STATUS_STYLE.not_uploaded;
+                  const needsUpload = item.status === "not_uploaded" || item.status === "rejected";
+                  const isUploading = uploadingDoc === item.document_type;
+                  return (
+                    <div key={item.document_type} className="flex flex-wrap items-center justify-between gap-3 p-3 bg-gray-50 rounded-xl">
+                      <div className="flex items-center gap-3">
+                        {item.status === "uploaded" || item.status === "pending"
+                          ? <CheckCircle className="w-4 h-4 text-green-500 shrink-0" />
+                          : item.status === "rejected"
+                          ? <XCircle className="w-4 h-4 text-red-500 shrink-0" />
+                          : <div className="w-4 h-4 rounded-full border-2 border-gray-300 shrink-0" />}
+                        <p className="text-sm font-medium text-gray-800">{item.label}</p>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className={`text-xs px-2.5 py-1 rounded-full font-medium ${style.badge}`}>{style.label}</span>
+                        {needsUpload && (
+                          <label className="cursor-pointer">
+                            <input type="file" accept=".pdf,.jpg,.jpeg,.png,.webp" className="hidden"
+                              onChange={(e) => { const f = e.target.files?.[0]; if (f) handleDocUpload(item.document_type, f); }} />
+                            <span className={`inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${isUploading ? "bg-gray-100 text-gray-400" : "bg-teal-500 text-white hover:bg-teal-600"}`}>
+                              <Upload className="w-3 h-3" />{isUploading ? "Uploading..." : "Upload"}
+                            </span>
+                          </label>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+              {checklist.length > 4 && (
+                <button onClick={() => setShowAllDocs(v => !v)} className="mt-3 w-full text-xs text-teal-600 font-medium border border-teal-100 rounded-lg py-2 hover:bg-teal-50 transition-colors">
+                  {showAllDocs ? "Show less" : `Show ${checklist.length - 4} more`}
+                </button>
+              )}
+            </>
+          );
+        })() : documents.length > 0 ? (() => {
+          const visible = showAllDocs ? documents : documents.slice(0, 4);
+          return (
+            <>
+              <div className="space-y-2">
+                {visible.map((doc) => (
+                  <div key={doc.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-xl">
+                    <div className="flex items-center gap-3">
+                      {docStatusIcon(doc.status)}
+                      <p className="text-sm font-medium text-gray-800">{DOC_LABELS[doc.document_type] ?? doc.document_type}</p>
+                    </div>
+                    <span className={`text-xs px-2.5 py-1 rounded-full font-medium ${docStatusColor(doc.status ?? "")}`}>{(doc.status ?? "pending").replace("_", " ")}</span>
+                  </div>
+                ))}
+              </div>
+              {documents.length > 4 && (
+                <button onClick={() => setShowAllDocs(v => !v)} className="mt-3 w-full text-xs text-teal-600 font-medium border border-teal-100 rounded-lg py-2 hover:bg-teal-50 transition-colors">
+                  {showAllDocs ? "Show less" : `Show ${documents.length - 4} more`}
+                </button>
+              )}
+            </>
+          );
+        })() : (
+          <div className="text-center py-6">
+            <FileText className="w-8 h-8 text-gray-300 mx-auto mb-2" />
+            <p className="text-sm text-gray-500 mb-3">No documents uploaded yet</p>
+            <button onClick={() => onSection("documents")} className="text-sm text-teal-600 font-medium hover:text-teal-700">Upload documents →</button>
+          </div>
+        )}
+      </div>
+
       {/* Referral banner */}
       {profile?.referral_code && (
         <div className="bg-gradient-to-r from-teal-500 to-teal-600 rounded-2xl p-6 text-white">
@@ -313,130 +444,133 @@ function isCancelled(status: string) {
   return ["rejected", "withdrawn"].includes(status);
 }
 
+const BANK_STATUS_COLOR: Record<string, string> = {
+  disbursed: "bg-green-100 text-green-700", sanction: "bg-green-100 text-green-700",
+  processing_fee: "bg-blue-100 text-blue-700", loan_login: "bg-purple-100 text-purple-700",
+  under_review: "bg-yellow-100 text-yellow-700", docs_received: "bg-yellow-100 text-yellow-700",
+  applied: "bg-gray-100 text-gray-600", rejected: "bg-red-100 text-red-700",
+};
+
+function BankTracker({ bank }: { bank: BankApplication }) {
+  const cancelled = bank.status === "rejected";
+  const activeStep = getStepIndex(bank.status);
+  return (
+    <div className="bg-gray-50 rounded-xl p-4">
+      <div className="flex items-center justify-between mb-3">
+        <p className="text-sm font-semibold text-gray-900">{bank.bank_name}</p>
+        <span className={`text-xs px-2.5 py-1 rounded-full font-medium capitalize ${BANK_STATUS_COLOR[bank.status] ?? "bg-gray-100 text-gray-600"}`}>
+          {bank.status.replace(/_/g, " ")}
+        </span>
+      </div>
+      <div className="overflow-x-auto">
+        <div className="min-w-[480px] relative">
+          <div className="absolute top-4 left-4 right-4 h-0.5 bg-gray-200" />
+          <div className={`absolute top-4 left-4 h-0.5 transition-all ${cancelled ? "bg-red-400" : "bg-teal-500"}`}
+            style={{ width: `calc((100% - 32px) * ${activeStep} / ${LOAN_STEPS.length - 1})` }} />
+          <div className="flex justify-between relative">
+            {LOAN_STEPS.map((step, i) => {
+              const done = !cancelled && i < activeStep;
+              const current = !cancelled && i === activeStep;
+              const isCancelledHere = cancelled && i === activeStep;
+              return (
+                <div key={step.key} className="flex flex-col items-center gap-1.5">
+                  <div className={`w-7 h-7 rounded-full flex items-center justify-center border-2 transition-all bg-white ${
+                    isCancelledHere ? "border-red-400 bg-red-50" :
+                    done ? "border-teal-500 bg-teal-500" :
+                    current ? "border-teal-500 bg-teal-500 ring-4 ring-teal-100" : "border-gray-300"
+                  }`}>
+                    {isCancelledHere ? <XCircle className="w-3.5 h-3.5 text-red-500" />
+                      : done ? <CheckCircle className="w-3.5 h-3.5 text-white" />
+                      : current ? <div className="w-2 h-2 rounded-full bg-white" />
+                      : <div className="w-1.5 h-1.5 rounded-full bg-gray-300" />}
+                  </div>
+                  <p className={`text-[10px] font-medium text-center leading-tight w-12 ${
+                    isCancelledHere ? "text-red-600" : done || current ? "text-teal-700" : "text-gray-400"
+                  }`}>{step.label}</p>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+      {bank.remarks && <p className="text-xs text-gray-500 mt-3 pt-3 border-t border-gray-200">{bank.remarks}</p>}
+    </div>
+  );
+}
+
 function LoanProcessCard({ loan }: { loan: LoanApplication }) {
   const cancelled = isCancelled(loan.status);
-  const activeStep = getStepIndex(loan.status);
-  const progressPct = (activeStep / (LOAN_STEPS.length - 1)) * 100;
   const [banks, setBanks] = useState<BankApplication[]>([]);
 
   useEffect(() => {
     api.get<BankApplication[]>(`/api/v1/loans/${loan.id}/banks`).then(setBanks).catch(() => {});
   }, [loan.id]);
 
-  const BANK_STATUS_COLOR: Record<string, string> = {
-    disbursed: "bg-green-100 text-green-700", sanction: "bg-green-100 text-green-700",
-    processing_fee: "bg-blue-100 text-blue-700", loan_login: "bg-purple-100 text-purple-700",
-    under_review: "bg-yellow-100 text-yellow-700", docs_received: "bg-yellow-100 text-yellow-700",
-    applied: "bg-gray-100 text-gray-600", rejected: "bg-red-100 text-red-700",
-  };
+  // Best bank = highest step index among all banks
+  const bestBank = banks.length > 0 ? banks.reduce((best, b) =>
+    getStepIndex(b.status) > getStepIndex(best.status) ? b : best
+  , banks[0]) : null;
 
   return (
     <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
       {/* Header */}
-      <div className="flex flex-wrap items-start justify-between gap-3 mb-5">
+      <div className="flex flex-wrap items-start justify-between gap-3 mb-4">
         <div>
           <p className="font-semibold text-gray-900 text-base">
             {loan.loan_amount ? `₹${loan.loan_amount.toLocaleString("en-IN")}` : "Loan Application"}
           </p>
           <p className="text-xs text-gray-500 mt-0.5">{loan.application_id ?? loan.id} · Applied {formatDate(loan.created_at)}</p>
         </div>
-        <span className={`text-xs px-3 py-1 rounded-full font-medium capitalize shrink-0 ${
-          cancelled ? "bg-red-100 text-red-700" : loanStatusColor(loan.status)
-        }`}>
-          {loan.status.replace(/_/g, " ")}
-        </span>
-      </div>
-
-      {/* Details row */}
-      <div className="flex flex-wrap gap-x-6 gap-y-2 mb-5 p-3 bg-gray-50 rounded-xl text-xs text-gray-600">
-        {loan.target_college
-          ? <span><span className="font-medium text-gray-800">College:</span> {loan.target_college}</span>
-          : <span className="text-gray-400">College: —</span>}
-        {loan.target_country
-          ? <span><span className="font-medium text-gray-800">Country:</span> {loan.target_country}</span>
-          : <span className="text-gray-400">Country: —</span>}
-        {(loan.course_name || loan.course_degree) && (
-          <span><span className="font-medium text-gray-800">Course:</span> {loan.course_name ?? loan.course_degree}</span>
+        {/* Best bank status badge */}
+        {bestBank ? (
+          <div className="flex items-center gap-2 shrink-0">
+            <span className="text-xs text-gray-500">Best: <span className="font-medium text-gray-700">{bestBank.bank_name}</span></span>
+            <span className={`text-xs px-3 py-1 rounded-full font-medium capitalize ${BANK_STATUS_COLOR[bestBank.status] ?? "bg-gray-100 text-gray-600"}`}>
+              {bestBank.status.replace(/_/g, " ")}
+            </span>
+          </div>
+        ) : (
+          <span className={`text-xs px-3 py-1 rounded-full font-medium capitalize shrink-0 ${cancelled ? "bg-red-100 text-red-700" : loanStatusColor(loan.status)}`}>
+            {loan.status.replace(/_/g, " ")}
+          </span>
         )}
       </div>
 
-      {/* 7-step tracker */}
-      <div className="relative px-2 mb-2 overflow-x-auto">
-        <div className="min-w-[500px]">
-          <div className="relative">
-            <div className="absolute top-4 left-4 right-4 h-0.5 bg-gray-200" />
-            <div
-              className={`absolute top-4 left-4 h-0.5 transition-all ${cancelled ? "bg-red-400" : "bg-teal-500"}`}
-              style={{ width: `calc((100% - 32px) * ${activeStep} / ${LOAN_STEPS.length - 1})` }}
-            />
-            <div className="flex justify-between relative">
-              {LOAN_STEPS.map((step, i) => {
-                const done = !cancelled && i < activeStep;
-                const current = !cancelled && i === activeStep;
-                const isCancelledHere = cancelled && i === activeStep;
-                return (
-                  <div key={step.key} className="flex flex-col items-center gap-1.5">
-                    <div className={`w-8 h-8 rounded-full flex items-center justify-center border-2 transition-all bg-white ${
-                      isCancelledHere ? "border-red-400 bg-red-50" :
-                      done ? "border-teal-500 bg-teal-500" :
-                      current ? "border-teal-500 bg-teal-500 ring-4 ring-teal-100" :
-                      "border-gray-300"
-                    }`}>
-                      {isCancelledHere ? <XCircle className="w-4 h-4 text-red-500" />
-                        : done ? <CheckCircle className="w-4 h-4 text-white" />
-                        : current ? <div className="w-2.5 h-2.5 rounded-full bg-white" />
-                        : <div className="w-2 h-2 rounded-full bg-gray-300" />}
-                    </div>
-                    <p className={`text-[10px] font-medium text-center leading-tight w-14 ${
-                      isCancelledHere ? "text-red-600" : done || current ? "text-teal-700" : "text-gray-400"
-                    }`}>{step.label}</p>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </div>
+      {/* Details row */}
+      <div className="flex flex-wrap gap-x-6 gap-y-2 mb-4 p-3 bg-gray-50 rounded-xl text-xs text-gray-600">
+        <span><span className="font-medium text-gray-800">Amount:</span> {loan.loan_amount ? `₹${loan.loan_amount.toLocaleString("en-IN")}` : "—"}</span>
+        {loan.target_college ? <span><span className="font-medium text-gray-800">College:</span> {loan.target_college}</span> : <span className="text-gray-400">College: —</span>}
+        {loan.target_country ? <span><span className="font-medium text-gray-800">Country:</span> {loan.target_country}</span> : <span className="text-gray-400">Country: —</span>}
+        {(loan.course_name || loan.course_degree) && <span><span className="font-medium text-gray-800">Course:</span> {loan.course_name ?? loan.course_degree}</span>}
       </div>
 
-      {/* Banks section */}
-      {banks.length > 0 && (
-        <div className="mt-4 border-t border-gray-100 pt-4">
-          <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Banks Processing Your Application</p>
-          <div className="space-y-2">
-            {banks.map((b) => (
-              <div key={b.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-xl">
-                <div>
-                  <p className="text-sm font-medium text-gray-900">{b.bank_name}</p>
-                  {b.remarks && <p className="text-xs text-gray-500 mt-0.5">{b.remarks}</p>}
-                </div>
-                <span className={`text-xs px-2.5 py-1 rounded-full font-medium capitalize ${BANK_STATUS_COLOR[b.status] ?? "bg-gray-100 text-gray-600"}`}>
-                  {b.status.replace(/_/g, " ")}
-                </span>
-              </div>
-            ))}
-          </div>
+      {/* Remarks */}
+      {!cancelled && (loan.notes || loan.remarks) && (
+        <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-xl">
+          <p className="text-xs font-medium text-blue-700 mb-1">Remarks from our team</p>
+          <p className="text-sm text-blue-800">{loan.notes ?? loan.remarks}</p>
         </div>
       )}
 
       {/* Cancelled banner */}
       {cancelled && (
-        <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-xl">
+        <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-xl">
           <p className="text-sm font-medium text-red-700 flex items-center gap-1.5">
             <XCircle className="w-4 h-4" /> Application {loan.status === "rejected" ? "Rejected" : "Withdrawn"}
           </p>
-          {(loan.rejection_reason || loan.notes) && (
-            <p className="text-xs text-red-600 mt-1">{loan.rejection_reason ?? loan.notes}</p>
-          )}
+          {(loan.rejection_reason || loan.notes) && <p className="text-xs text-red-600 mt-1">{loan.rejection_reason ?? loan.notes}</p>}
         </div>
       )}
 
-      {/* Remarks */}
-      {!cancelled && (
-        <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-xl">
-          <p className="text-xs font-medium text-blue-700 mb-1">Remarks from our team</p>
-          {(loan.notes || loan.remarks)
-            ? <p className="text-sm text-blue-800">{loan.notes ?? loan.remarks}</p>
-            : <p className="text-sm text-blue-400 italic">No remarks yet. Our team will update you here.</p>}
+      {/* Banks with individual trackers */}
+      {banks.length > 0 ? (
+        <div className="space-y-3 border-t border-gray-100 pt-4">
+          <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Banks Processing Your Application</p>
+          {banks.map((b) => <BankTracker key={b.id} bank={b} />)}
+        </div>
+      ) : (
+        <div className="border-t border-gray-100 pt-4">
+          <p className="text-xs text-gray-400 text-center py-2">No banks assigned yet. Our team is reviewing your application.</p>
         </div>
       )}
     </div>
@@ -468,31 +602,23 @@ function ApplicationsTab({ loans }: { loans: LoanApplication[] }) {
 
 // ─────────────────── Documents Tab ───────────────────
 function DocumentsTab({ loans }: { loans: LoanApplication[] }) {
-  const [checklist, setChecklist] = useState<DocChecklist[]>([]);
   const [documents, setDocuments] = useState<Document[]>([]);
   const [loading, setLoading] = useState(true);
-  const [uploading, setUploading] = useState<string | null>(null); // stores doc_type being uploaded
-  const [uploadingGeneral, setUploadingGeneral] = useState(false);
-  const [selectedLoan, setSelectedLoan] = useState(loans[0]?.id ?? "");
-  const [generalDocType, setGeneralDocType] = useState("");
-  const [generalLoanId, setGeneralLoanId] = useState("");
-  const [file, setFile] = useState<File | null>(null);
-  const [uploadFile, setUploadFile] = useState<Record<string, File | null>>({});
+  const [uploading, setUploading] = useState<string | null>(null);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [extraEduRows, setExtraEduRows] = useState<{ id: number; docType: string }[]>([]);
+  const [extraEduCounter, setExtraEduCounter] = useState(0);
+  const loanId = loans[0]?.id ?? "";
 
   useEffect(() => {
-    const loanId = selectedLoan || loans[0]?.id;
-    Promise.allSettled([
-      api.get<DocChecklist[]>("/api/v1/documents/required", loanId ? { loan_application_id: loanId } : undefined),
-      api.get<Document[]>("/api/v1/documents/my"),
-    ]).then(([cl, docs]) => {
-      if (cl.status === "fulfilled") setChecklist(cl.value);
-      if (docs.status === "fulfilled") setDocuments(docs.value);
-    }).finally(() => setLoading(false));
-  }, [selectedLoan, loans]);
+    api.get<Document[]>("/api/v1/documents/my")
+      .then((d) => { if (Array.isArray(d)) setDocuments(d); })
+      .catch(() => {}).finally(() => setLoading(false));
+  }, []);
 
-  async function uploadForType(docType: string, loanId: string, f: File) {
+  async function uploadDoc(docType: string, f: File) {
+    if (f.size > 10 * 1024 * 1024) { setError("File must be under 10MB"); return; }
     setUploading(docType); setError(""); setSuccess("");
     try {
       const fd = new FormData();
@@ -500,145 +626,116 @@ function DocumentsTab({ loans }: { loans: LoanApplication[] }) {
       if (loanId) fd.append("loan_application_id", loanId);
       const doc = await api.upload<Document>("/api/v1/documents", fd);
       setDocuments((d) => [doc, ...d]);
-      setChecklist((cl) => cl.map((c) => c.document_type === docType ? { ...c, status: "pending" } : c));
-      setSuccess(`${DOC_LABELS[docType] ?? docType} uploaded!`);
-      setUploadFile((p) => ({ ...p, [docType]: null }));
+      setSuccess(`${DOC_LABELS[docType] ?? docType} uploaded successfully!`);
     } catch (err) { setError(err instanceof Error ? err.message : "Upload failed"); }
     finally { setUploading(null); }
   }
 
-  async function handleGeneralUpload(e: React.FormEvent) {
-    e.preventDefault();
-    if (!file || !generalDocType) { setError("Select document type and file"); return; }
-    if (file.size > 10 * 1024 * 1024) { setError("File must be under 10MB"); return; }
-    setError(""); setSuccess(""); setUploadingGeneral(true);
-    try {
-      const fd = new FormData();
-      fd.append("file", file); fd.append("document_type", generalDocType);
-      if (generalLoanId) fd.append("loan_application_id", generalLoanId);
-      const doc = await api.upload<Document>("/api/v1/documents", fd);
-      setDocuments((d) => [doc, ...d]);
-      setSuccess("Document uploaded!"); setFile(null); setGeneralDocType(""); setGeneralLoanId("");
-    } catch (err) { setError(err instanceof Error ? err.message : "Upload failed"); }
-    finally { setUploadingGeneral(false); }
+  // Get latest uploaded doc for a type
+  function getDocStatus(docType: string) {
+    return documents.find((d) => d.document_type === docType);
   }
 
-  const DOC_STATUS_STYLE: Record<string, { badge: string; label: string }> = {
-    uploaded:     { badge: "bg-green-100 text-green-700",  label: "Uploaded" },
-    pending:      { badge: "bg-yellow-100 text-yellow-700", label: "Pending Review" },
-    rejected:     { badge: "bg-red-100 text-red-700",      label: "Rejected" },
-    not_uploaded: { badge: "bg-gray-100 text-gray-500",    label: "Not Uploaded" },
+  const STATUS_STYLE: Record<string, string> = {
+    pending_review: "bg-yellow-100 text-yellow-700", under_review: "bg-blue-100 text-blue-700",
+    verified: "bg-green-100 text-green-700", rejected: "bg-red-100 text-red-700",
   };
 
+
+  function DocRow({ docType }: { docType: string }) {
+    const uploaded = getDocStatus(docType);
+    const isUploading = uploading === docType;
+    return (
+      <div className="flex items-center justify-between p-3 bg-gray-50 rounded-xl gap-3">
+        <div className="flex items-center gap-3 min-w-0">
+          {uploaded?.status === "verified" ? <CheckCircle className="w-4 h-4 text-green-500 shrink-0" />
+            : uploaded?.status === "rejected" ? <XCircle className="w-4 h-4 text-red-500 shrink-0" />
+            : uploaded ? <Clock className="w-4 h-4 text-yellow-500 shrink-0" />
+            : <div className="w-4 h-4 rounded-full border-2 border-gray-300 shrink-0" />}
+          <div className="min-w-0">
+            <p className="text-sm font-medium text-gray-800">{DOC_LABELS[docType]}</p>
+            {uploaded && <p className="text-xs text-gray-400 truncate">{uploaded.file_name}</p>}
+            {uploaded?.rejection_reason && <p className="text-xs text-red-600">{uploaded.rejection_reason}</p>}
+          </div>
+        </div>
+        <div className="flex items-center gap-2 shrink-0">
+          {uploaded && (
+            <>
+              <span className={`text-xs px-2 py-0.5 rounded-full font-medium capitalize ${STATUS_STYLE[uploaded.status] ?? "bg-gray-100 text-gray-500"}`}>
+                {uploaded.status.replace(/_/g, " ")}
+              </span>
+              {uploaded.file_url && <a href={uploaded.file_url} target="_blank" rel="noopener noreferrer" className="text-teal-600 hover:text-teal-700"><Eye className="w-4 h-4" /></a>}
+            </>
+          )}
+          <label className="cursor-pointer">
+            <input type="file" accept=".pdf,.jpg,.jpeg,.png,.webp" className="hidden"
+              onChange={(e) => { const f = e.target.files?.[0]; if (f) uploadDoc(docType, f); }} />
+            <span className={`inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${isUploading ? "bg-gray-100 text-gray-400 cursor-not-allowed" : uploaded ? "bg-gray-100 text-gray-600 hover:bg-gray-200" : "bg-teal-500 text-white hover:bg-teal-600"}`}>
+              <Upload className="w-3 h-3" />{isUploading ? "Uploading..." : uploaded ? "Re-upload" : "Upload"}
+            </span>
+          </label>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
       {error && <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">{error}</div>}
       {success && <div className="p-3 bg-teal-50 border border-teal-200 rounded-lg text-sm text-teal-700">{success}</div>}
-
-      {/* Required Documents Checklist */}
-      {loans.length > 0 && (
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
-          <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
-            <h2 className="text-base font-semibold text-gray-900 flex items-center gap-2"><FileText className="w-4 h-4 text-teal-600" />Required Documents</h2>
-            {loans.length > 1 && (
-              <select value={selectedLoan} onChange={(e) => setSelectedLoan(e.target.value)} className="text-xs border border-gray-200 rounded-lg px-3 py-1.5 bg-white focus:outline-none focus:ring-2 focus:ring-teal-500">
-                {loans.map((l) => <option key={l.id} value={l.id}>{l.application_id ?? l.id}</option>)}
-              </select>
-            )}
-          </div>
-          {loading ? <p className="text-sm text-gray-500 text-center py-6">Loading...</p> : checklist.length === 0 ? (
-            <p className="text-sm text-gray-500 text-center py-4">No required documents found for this application.</p>
-          ) : (
-            <div className="space-y-3">
-              {checklist.map((item) => {
-                const style = DOC_STATUS_STYLE[item.status] ?? DOC_STATUS_STYLE.not_uploaded;
-                const isUploading = uploading === item.document_type;
-                const needsUpload = item.status === "not_uploaded" || item.status === "rejected";
-                return (
-                  <div key={item.document_type} className="flex flex-wrap items-center justify-between gap-3 p-4 bg-gray-50 rounded-xl">
-                    <div className="flex items-center gap-3">
-                      {item.status === "uploaded" || item.status === "pending"
-                        ? <CheckCircle className="w-4 h-4 text-green-500 shrink-0" />
-                        : item.status === "rejected"
-                        ? <XCircle className="w-4 h-4 text-red-500 shrink-0" />
-                        : <div className="w-4 h-4 rounded-full border-2 border-gray-300 shrink-0" />}
-                      <div>
-                        <p className="text-sm font-medium text-gray-900">{item.label}</p>
-                        {item.required && <p className="text-xs text-gray-400">Required</p>}
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <span className={`text-xs px-2.5 py-1 rounded-full font-medium ${style.badge}`}>{style.label}</span>
-                      {needsUpload && (
-                        <label className="cursor-pointer">
-                          <input type="file" accept=".pdf,.jpg,.jpeg,.png,.webp" className="hidden"
-                            onChange={(e) => { const f = e.target.files?.[0]; if (f) uploadForType(item.document_type, selectedLoan, f); }} />
-                          <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${isUploading ? "bg-gray-100 text-gray-400" : "bg-teal-500 text-white hover:bg-teal-600"}`}>
-                            <Upload className="w-3 h-3" />{isUploading ? "Uploading..." : "Upload"}
-                          </span>
-                        </label>
-                      )}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          )}
-        </div>
-      )}
-
-      {/* General Upload */}
-      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
-        <h2 className="text-base font-semibold text-gray-900 mb-4 flex items-center gap-2"><Upload className="w-4 h-4 text-teal-600" />Upload Additional Document</h2>
-        <form onSubmit={handleGeneralUpload} className="space-y-4">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">Document Type</label>
-              <select value={generalDocType} onChange={(e) => setGeneralDocType(e.target.value)} required className="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white">
-                <option value="">Select type</option>
-                {DOC_TYPES.map((t) => <option key={t} value={t}>{DOC_LABELS[t]}</option>)}
-              </select>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">Link to Application (optional)</label>
-              <select value={generalLoanId} onChange={(e) => setGeneralLoanId(e.target.value)} className="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white">
-                <option value="">None</option>
-                {loans.map((l) => <option key={l.id} value={l.id}>{l.application_id ?? l.id}</option>)}
-              </select>
-            </div>
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">File (PDF, JPEG, PNG — max 10MB)</label>
-            <input type="file" accept=".pdf,.jpg,.jpeg,.png,.webp" onChange={(e) => setFile(e.target.files?.[0] ?? null)}
-              className="w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-teal-50 file:text-teal-700 hover:file:bg-teal-100" />
-          </div>
-          <Button type="submit" variant="primary" size="md" disabled={uploadingGeneral}>{uploadingGeneral ? "Uploading..." : "Upload"}</Button>
-        </form>
-      </div>
-
-      {/* All uploaded docs */}
-      {documents.length > 0 && (
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
-          <h2 className="text-base font-semibold text-gray-900 mb-4">All Uploaded Documents</h2>
-          <div className="space-y-3">
-            {documents.map((doc) => (
-              <div key={doc.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
-                <div className="flex items-center gap-3">
-                  {docStatusIcon(doc.status)}
-                  <div>
-                    <p className="text-sm font-medium text-gray-900">{DOC_LABELS[doc.document_type] ?? doc.document_type}</p>
-                    <p className="text-xs text-gray-500">{doc.file_name} {doc.file_size ? `· ${formatSize(doc.file_size)}` : ""} · {formatDate(doc.created_at)}</p>
-                    {doc.rejection_reason && <p className="text-xs text-red-600 mt-0.5">{doc.rejection_reason}</p>}
-                  </div>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className={`text-xs px-2.5 py-1 rounded-full font-medium ${docStatusColor(doc.status ?? "")}`}>{(doc.status ?? "pending").replace("_", " ")}</span>
-                  {doc.file_url && <a href={doc.file_url} target="_blank" rel="noopener noreferrer" className="text-teal-600 hover:text-teal-700"><Eye className="w-4 h-4" /></a>}
-                </div>
+      {loading ? <p className="text-sm text-gray-500 text-center py-8">Loading...</p> : (
+        <>
+          {/* Personal, Co-applicant, Collateral sections */}
+          {DOC_SECTIONS.slice(0, 3).map((section) => (
+            <div key={section.label} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+              <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-4">{section.label} Documents</h2>
+              <div className="space-y-2">
+                {section.types.map((t) => <DocRow key={t} docType={t} />)}
               </div>
-            ))}
+            </div>
+          ))}
+
+          {/* Education section */}
+          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+            <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-4">Education Documents</h2>
+            <div className="space-y-2">
+              {DOC_SECTIONS[3].types.map((t) => <DocRow key={t} docType={t} />)}
+            </div>
+
+            {/* Extra education upload rows */}
+            {extraEduRows.length > 0 && (
+              <div className="space-y-2 mt-2">
+                {extraEduRows.map((row) => (
+                  <div key={row.id} className="flex items-center gap-2 p-3 bg-gray-50 rounded-xl">
+                    <select value={row.docType}
+                      onChange={(e) => setExtraEduRows((r) => r.map((x) => x.id === row.id ? { ...x, docType: e.target.value } : x))}
+                      className="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white">
+                      <option value="">Select degree type</option>
+                      {Object.entries(EXTRA_EDU_TYPES).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
+                    </select>
+                    <label className="cursor-pointer shrink-0">
+                      <input type="file" accept=".pdf,.jpg,.jpeg,.png,.webp" className="hidden"
+                        onChange={(e) => { const f = e.target.files?.[0]; if (f && row.docType) uploadDoc(row.docType, f); }} />
+                      <span className={`inline-flex items-center gap-1 px-3 py-2 rounded-lg text-xs font-medium transition-colors ${!row.docType ? "bg-gray-100 text-gray-400" : uploading === row.docType ? "bg-gray-100 text-gray-400" : "bg-teal-500 text-white hover:bg-teal-600"}`}>
+                        <Upload className="w-3 h-3" />{uploading === row.docType ? "Uploading..." : "Upload"}
+                      </span>
+                    </label>
+                    <button onClick={() => setExtraEduRows((r) => r.filter((x) => x.id !== row.id))}
+                      className="text-gray-400 hover:text-red-500 shrink-0"><XCircle className="w-4 h-4" /></button>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            <div className="mt-3 pt-3 border-t border-gray-100">
+              <button onClick={() => { setExtraEduCounter((c) => c + 1); setExtraEduRows((r) => [...r, { id: extraEduCounter + 1, docType: "" }]); }}
+                className="flex items-center gap-2 text-sm text-teal-600 hover:text-teal-700 font-medium">
+                <span className="w-6 h-6 rounded-full border-2 border-teal-400 flex items-center justify-center text-teal-500 font-bold text-base leading-none">+</span>
+                Add More Education Document
+              </button>
+            </div>
           </div>
-        </div>
+        </>
       )}
     </div>
   );
