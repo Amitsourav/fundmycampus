@@ -688,14 +688,15 @@ function ProfileTab({ profile, onSave }: { profile: Profile | null; onSave: (p: 
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault(); setError(""); setSuccess(false); setSaving(true);
+    const clean = (v: string | null | undefined) => (v && v.trim() !== "" ? v : null);
     try {
       await api.patch("/api/v1/profiles/me", {
-        full_name: form.full_name, phone: form.phone, gender: form.gender,
-        date_of_birth: form.date_of_birth, marital_status: form.marital_status, about: form.about,
-        passport_number: form.passport_number, pan_number: form.pan_number, mother_maiden_name: form.mother_maiden_name,
-        address_line1: form.address_line1, address_line2: form.address_line2, city: form.city,
-        district: form.district, state: form.state, zip_code: form.zip_code, country: form.country,
-        linkedin_url: form.linkedin_url, twitter_url: form.twitter_url, instagram_url: form.instagram_url,
+        full_name: clean(form.full_name), phone: clean(form.phone), gender: clean(form.gender),
+        date_of_birth: clean(form.date_of_birth), marital_status: clean(form.marital_status), about: clean(form.about),
+        passport_number: clean(form.passport_number), pan_number: clean(form.pan_number), mother_maiden_name: clean(form.mother_maiden_name),
+        address_line1: clean(form.address_line1), address_line2: clean(form.address_line2), city: clean(form.city),
+        district: clean(form.district), state: clean(form.state), zip_code: clean(form.zip_code), country: clean(form.country),
+        linkedin_url: clean(form.linkedin_url), twitter_url: clean(form.twitter_url), instagram_url: clean(form.instagram_url),
         contact_consent: form.contact_consent,
       });
       setSuccess(true); onSave(form);
