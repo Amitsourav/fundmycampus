@@ -585,6 +585,7 @@ export function SignupForm() {
         course_start_month: education.start_month || "January",
         course_level: education.course_level || "Masters",
         course_degree: education.degree || "",
+        course_name: education.degree || "",
         target_country: education.country || "",
         target_college: education.college || "",
         loan_amount: financial.loan_amount ? parseFloat(financial.loan_amount) : 0,
