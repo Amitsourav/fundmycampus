@@ -20,7 +20,7 @@ interface Profile {
   address_line1?: string; address_line2?: string; city?: string; district?: string;
   state?: string; zip_code?: string; country?: string;
   linkedin_url?: string; twitter_url?: string; instagram_url?: string;
-  email?: string; referral_code?: string; role?: string; profile_completion_pct?: number; contact_consent?: boolean;
+  email?: string; referral_code?: string; role?: string; profile_completion_pct?: number; contact_consent?: boolean; is_whatsapp?: boolean;
 }
 interface LoanApplication {
   id: string; application_id?: string; status: string; created_at: string; loan_amount?: number;
@@ -49,6 +49,8 @@ const DOC_LABELS: Record<string, string> = {
   graduation_certificate: "Graduation Certificate", pg_certificate: "PG Certificate",
   diploma_certificate: "Diploma", mba_certificate: "MBA",
   ca_cma_certificate: "CA / CMA", btech_be_certificate: "B.Tech / BE",
+  // Other
+  other: "Other Document",
 };
 const DOC_TYPES = Object.keys(DOC_LABELS);
 
@@ -105,17 +107,26 @@ function formatSize(b: number) { return b > 1024 * 1024 ? `${(b / 1024 / 1024).t
 type Section = "overview" | "applications" | "documents" | "notifications" | "referrals" | "profile";
 
 // ─────────────────── Sidebar ───────────────────
-const NAV_ITEMS: { id: Section; label: string; icon: React.ReactNode }[] = [
-  { id: "overview", label: "Overview", icon: <LayoutDashboard className="w-4 h-4" /> },
-  { id: "applications", label: "My Applications", icon: <GraduationCap className="w-4 h-4" /> },
-  { id: "documents", label: "Documents", icon: <FileText className="w-4 h-4" /> },
-  { id: "profile", label: "Edit Profile", icon: <User className="w-4 h-4" /> },
+const NAV_ITEMS: { id: Section; label: string; icon: React.ReactNode; activeColor: string; iconColor: string }[] = [
+  { id: "overview",      label: "Overview",        icon: <LayoutDashboard className="w-4 h-4" />, activeColor: "bg-teal-500 text-white",   iconColor: "text-teal-400" },
+  { id: "applications",  label: "My Applications", icon: <GraduationCap className="w-4 h-4" />,  activeColor: "bg-teal-500 text-white",   iconColor: "text-violet-400" },
+  { id: "documents",     label: "Documents",       icon: <FileText className="w-4 h-4" />,        activeColor: "bg-teal-500 text-white",   iconColor: "text-blue-400" },
+  { id: "profile",       label: "Edit Profile",    icon: <User className="w-4 h-4" />,            activeColor: "bg-teal-500 text-white",   iconColor: "text-orange-400" },
 ];
+
+function pctColor(pct: number) {
+  if (pct < 20) return { bar: "bg-red-400",    text: "text-red-600",    border: "border-red-200",    bg: "bg-red-50",    banner: "bg-red-50 border border-red-200",    bannerText: "text-red-700",    bannerSub: "text-red-400" };
+  if (pct < 50) return { bar: "bg-orange-400", text: "text-orange-600", border: "border-orange-200", bg: "bg-orange-50", banner: "bg-orange-50 border border-orange-200", bannerText: "text-orange-700", bannerSub: "text-orange-400" };
+  if (pct < 80) return { bar: "bg-amber-400",  text: "text-amber-600",  border: "border-amber-200",  bg: "bg-amber-50",  banner: "bg-amber-50 border border-amber-200",  bannerText: "text-amber-700",  bannerSub: "text-amber-400" };
+  if (pct < 100) return { bar: "bg-teal-500",  text: "text-teal-600",   border: "border-teal-200",   bg: "bg-teal-50",   banner: "bg-teal-50 border border-teal-200",    bannerText: "text-teal-700",   bannerSub: "text-teal-400" };
+  return { bar: "bg-green-500", text: "text-green-600", border: "border-green-200", bg: "bg-green-50", banner: "bg-green-50 border border-green-200", bannerText: "text-green-700", bannerSub: "text-green-400" };
+}
 
 // ─────────────────── Overview Tab ───────────────────
 function OverviewTab({ profile, loans, user, onSection }: { profile: Profile | null; loans: LoanApplication[]; user: { email?: string; name?: string } | null; onSection: (s: Section) => void }) {
   const displayName = profile?.full_name || user?.name || user?.email?.split("@")[0] || "User";
   const pct = profile?.profile_completion_pct ?? 0;
+  const pc = pctColor(pct);
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [documents, setDocuments] = useState<Document[]>([]);
   const [checklist, setChecklist] = useState<DocChecklist[]>([]);
@@ -161,7 +172,7 @@ function OverviewTab({ profile, loans, user, onSection }: { profile: Profile | n
 
   const unreadCount = notifications.filter(n => !n.is_read).length;
   const activeLoans = loans.filter(l => !["rejected","withdrawn","disbursed"].includes(l.status));
-  const approvedLoans = loans.filter(l => ["approved","disbursed"].includes(l.status));
+  const approvedLoans = loans.filter(l => ["sanction","disbursed"].includes(l.status));
 
   // Next steps checklist
   const steps = [
@@ -186,14 +197,17 @@ function OverviewTab({ profile, loans, user, onSection }: { profile: Profile | n
       {/* Stats row */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {[
-          { label: "Applications", value: loans.length, color: "text-teal-600", bg: "bg-teal-50" },
-          { label: "Active", value: activeLoans.length, color: "text-yellow-600", bg: "bg-yellow-50" },
-          { label: "Approved", value: approvedLoans.length, color: "text-green-600", bg: "bg-green-50" },
-          { label: "Documents", value: documents.length, color: "text-blue-600", bg: "bg-blue-50" },
+          { label: "Applications", value: loans.length, num: "text-violet-600", bg: "bg-violet-50", border: "border-violet-100", dot: "bg-violet-400" },
+          { label: "Active", value: activeLoans.length, num: "text-orange-500", bg: "bg-orange-50", border: "border-orange-100", dot: "bg-orange-400" },
+          { label: "Approved", value: approvedLoans.length, num: "text-emerald-600", bg: "bg-emerald-50", border: "border-emerald-100", dot: "bg-emerald-400" },
+          { label: "Documents", value: documents.length, num: "text-blue-600", bg: "bg-blue-50", border: "border-blue-100", dot: "bg-blue-400" },
         ].map((s) => (
-          <div key={s.label} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
-            <p className={`text-2xl font-bold ${s.color}`}>{s.value}</p>
-            <p className="text-xs text-gray-500 mt-1">{s.label}</p>
+          <div key={s.label} className={`${s.bg} border ${s.border} rounded-2xl p-5`}>
+            <div className="flex items-center gap-2 mb-1">
+              <div className={`w-2 h-2 rounded-full ${s.dot}`} />
+              <p className="text-xs text-gray-500 font-medium">{s.label}</p>
+            </div>
+            <p className={`text-3xl font-bold ${s.num}`}>{s.value}</p>
           </div>
         ))}
       </div>
@@ -203,23 +217,26 @@ function OverviewTab({ profile, loans, user, onSection }: { profile: Profile | n
         {/* Profile card */}
         <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
           <div className="flex items-center gap-4 mb-4">
-            <div className="w-14 h-14 bg-teal-100 rounded-full flex items-center justify-center shrink-0">
-              <User className="w-7 h-7 text-teal-600" />
+            <div className={`w-14 h-14 ${pc.bg} rounded-full flex items-center justify-center shrink-0 border-2 ${pc.border}`}>
+              <User className={`w-7 h-7 ${pc.text}`} />
             </div>
             <div className="flex-1 min-w-0">
               <p className="font-semibold text-gray-900">{displayName}</p>
               <p className="text-xs text-gray-500 truncate">{user?.email}</p>
             </div>
+            <span className={`text-sm font-bold ${pc.text}`}>{pct}%</span>
           </div>
-          <div className="mb-2 flex justify-between text-xs text-gray-600">
+          <div className="mb-1 flex justify-between text-xs text-gray-500">
             <span>Profile completion</span>
-            <span className="font-semibold text-teal-600">{pct}%</span>
+            <span className={`font-semibold ${pc.text}`}>
+              {pct < 20 ? "Just started" : pct < 50 ? "In progress" : pct < 80 ? "Almost there" : pct < 100 ? "Nearly done!" : "Complete!"}
+            </span>
           </div>
-          <div className="w-full bg-gray-100 rounded-full h-2 mb-4">
-            <div className="bg-teal-500 h-2 rounded-full transition-all" style={{ width: `${pct}%` }} />
+          <div className="w-full bg-gray-100 rounded-full h-2.5 mb-4">
+            <div className={`${pc.bar} h-2.5 rounded-full transition-all`} style={{ width: `${pct}%` }} />
           </div>
-          <button onClick={() => onSection("profile")} className="w-full text-sm text-center text-teal-600 font-medium border border-teal-200 rounded-lg py-2 hover:bg-teal-50 transition-colors">
-            Complete Profile →
+          <button onClick={() => onSection("profile")} className={`w-full text-sm text-center ${pc.text} font-medium border ${pc.border} rounded-lg py-2 ${pc.bg} hover:opacity-80 transition-colors`}>
+            {pct < 100 ? "Complete Profile →" : "View Profile →"}
           </button>
         </div>
 
@@ -582,15 +599,20 @@ function LoanProcessCard({ loan }: { loan: LoanApplication }) {
 function ApplicationsTab({ loans }: { loans: LoanApplication[] }) {
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <h2 className="text-base font-semibold text-gray-900">My Loan Applications</h2>
+      <div className="flex items-center justify-between bg-violet-50 border border-violet-100 rounded-2xl px-5 py-4">
+        <div>
+          <h2 className="text-base font-semibold text-violet-900">My Loan Applications</h2>
+          <p className="text-xs text-violet-400 mt-0.5">{loans.length} application{loans.length !== 1 ? "s" : ""} found</p>
+        </div>
         <Link href="/signup">
           <Button variant="primary" size="sm"><GraduationCap className="w-4 h-4 mr-1.5" />New Application</Button>
         </Link>
       </div>
       {loans.length === 0 ? (
         <div className="bg-white rounded-2xl border border-gray-100 shadow-sm text-center py-16">
-          <GraduationCap className="w-12 h-12 text-gray-300 mx-auto mb-4" />
+          <div className="w-16 h-16 bg-violet-50 rounded-full flex items-center justify-center mx-auto mb-4">
+            <GraduationCap className="w-8 h-8 text-violet-400" />
+          </div>
           <p className="text-gray-500 mb-4">No applications yet</p>
           <Link href="/signup"><Button variant="primary" size="md">Apply for Loan</Button></Link>
         </div>
@@ -687,18 +709,29 @@ function DocumentsTab({ loans }: { loans: LoanApplication[] }) {
       {loading ? <p className="text-sm text-gray-500 text-center py-8">Loading...</p> : (
         <>
           {/* Personal, Co-applicant, Collateral sections */}
-          {DOC_SECTIONS.slice(0, 3).map((section) => (
-            <div key={section.label} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
-              <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-4">{section.label} Documents</h2>
-              <div className="space-y-2">
-                {section.types.map((t) => <DocRow key={t} docType={t} />)}
+          {(() => {
+            const sectionStyles = [
+              { icon: "🪪", accent: "border-l-4 border-blue-400", titleColor: "text-blue-700" },
+              { icon: "👥", accent: "border-l-4 border-orange-400", titleColor: "text-orange-700" },
+              { icon: "🏠", accent: "border-l-4 border-yellow-400", titleColor: "text-yellow-700" },
+            ];
+            return DOC_SECTIONS.slice(0, 3).map((section, i) => (
+              <div key={section.label} className={`bg-white rounded-2xl border border-gray-100 shadow-sm p-6 ${sectionStyles[i].accent}`}>
+                <h2 className={`text-sm font-semibold uppercase tracking-wider mb-4 flex items-center gap-2 ${sectionStyles[i].titleColor}`}>
+                  <span>{sectionStyles[i].icon}</span>{section.label} Documents
+                </h2>
+                <div className="space-y-2">
+                  {section.types.map((t) => <DocRow key={t} docType={t} />)}
+                </div>
               </div>
-            </div>
-          ))}
+            ));
+          })()}
 
           {/* Education section */}
-          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
-            <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-4">Education Documents</h2>
+          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 border-l-4 border-teal-400">
+            <h2 className="text-sm font-semibold uppercase tracking-wider mb-4 flex items-center gap-2 text-teal-700">
+              <span>🎓</span>Education Documents
+            </h2>
             <div className="space-y-2">
               {DOC_SECTIONS[3].types.map((t) => <DocRow key={t} docType={t} />)}
             </div>
@@ -755,8 +788,10 @@ function NotificationsTab() {
   }, [unreadOnly]);
 
   async function markRead(id: string) {
-    await api.patch(`/api/v1/notifications/${id}/read`).catch(() => {});
     setNotifications((n) => n.map((x) => x.id === id ? { ...x, is_read: true } : x));
+    api.patch(`/api/v1/notifications/${id}/read`).catch(() => {
+      setNotifications((n) => n.map((x) => x.id === id ? { ...x, is_read: false } : x));
+    });
   }
   async function markAll() {
     await api.post("/api/v1/notifications/read-all").catch(() => {});
@@ -777,13 +812,20 @@ function NotificationsTab() {
         </div>
       </div>
       {loading ? <p className="text-sm text-gray-500 text-center py-8">Loading...</p> : notifications.length === 0 ? (
-        <div className="text-center py-12"><Bell className="w-10 h-10 text-gray-300 mx-auto mb-3" /><p className="text-sm text-gray-500">No notifications</p></div>
+        <div className="text-center py-12">
+          <div className="w-14 h-14 bg-teal-50 rounded-full flex items-center justify-center mx-auto mb-3">
+            <Bell className="w-7 h-7 text-teal-300" />
+          </div>
+          <p className="text-sm text-gray-500">No notifications</p>
+        </div>
       ) : (
         <div className="space-y-1">
           {notifications.map((n) => (
             <div key={n.id} onClick={() => { markRead(n.id); if (n.link) router.push(n.link); }}
-              className={`flex items-start gap-4 p-4 rounded-xl cursor-pointer hover:bg-gray-50 transition-colors ${!n.is_read ? "bg-teal-50/50" : ""}`}>
-              <Bell className={`w-4 h-4 mt-0.5 shrink-0 ${!n.is_read ? "text-teal-500" : "text-gray-400"}`} />
+              className={`flex items-start gap-4 p-4 rounded-xl cursor-pointer transition-colors ${!n.is_read ? "bg-teal-50 border border-teal-100 hover:bg-teal-100/50" : "hover:bg-gray-50"}`}>
+              <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${!n.is_read ? "bg-teal-100" : "bg-gray-100"}`}>
+                <Bell className={`w-4 h-4 ${!n.is_read ? "text-teal-600" : "text-gray-400"}`} />
+              </div>
               <div className="flex-1 min-w-0">
                 <p className={`text-sm ${!n.is_read ? "font-semibold text-gray-900" : "font-medium text-gray-700"}`}>{n.title}</p>
                 <p className="text-xs text-gray-500 mt-0.5">{n.message}</p>
@@ -817,7 +859,10 @@ const EARNINGS_TABLE = [
 ];
 
 const REFERRAL_STATUS_STEPS: Record<string, number> = {
-  signed_up: 1, loan_applied: 2, loan_sanctioned: 3, loan_disbursed: 4,
+  // DB values (what backend actually stores)
+  applied: 1, sanctioned: 2, disbursed: 3,
+  // Also handle prefixed variants in case backend uses these
+  signed_up: 1, loan_applied: 1, loan_sanctioned: 2, loan_disbursed: 3,
 };
 
 function ReferralsTab({ profile }: { profile: Profile | null }) {
@@ -928,14 +973,16 @@ function ReferralsTab({ profile }: { profile: Profile | null }) {
             </thead>
             <tbody>
               {EARNINGS_TABLE.map((row) => (
-                <tr key={row.referrals} className={`border-b border-gray-50 ${referrals.length >= row.referrals ? "bg-teal-50/40" : ""}`}>
+                <tr key={row.referrals} className={`border-b border-gray-50 ${referrals.length >= row.referrals ? "bg-emerald-50" : ""}`}>
                   <td className="py-3 text-gray-900 font-medium flex items-center gap-2">
-                    {referrals.length >= row.referrals && <CheckCircle className="w-3.5 h-3.5 text-teal-500" />}
+                    {referrals.length >= row.referrals
+                      ? <CheckCircle className="w-3.5 h-3.5 text-emerald-500" />
+                      : <div className="w-3.5 h-3.5 rounded-full border-2 border-gray-200" />}
                     {row.referrals} {row.referrals === 1 ? "friend" : "friends"}
                   </td>
                   <td className="py-3 text-right text-gray-700">₹{row.total.toLocaleString("en-IN")}</td>
-                  <td className="py-3 text-right text-yellow-600 font-medium">{row.bonus > 0 ? `+₹${row.bonus.toLocaleString("en-IN")}` : "—"}</td>
-                  <td className="py-3 text-right font-bold text-teal-700">₹{(row.total + row.bonus).toLocaleString("en-IN")}</td>
+                  <td className="py-3 text-right font-medium">{row.bonus > 0 ? <span className="text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full text-xs">+₹{row.bonus.toLocaleString("en-IN")}</span> : <span className="text-gray-300">—</span>}</td>
+                  <td className="py-3 text-right font-bold text-emerald-700">₹{(row.total + row.bonus).toLocaleString("en-IN")}</td>
                 </tr>
               ))}
             </tbody>
@@ -989,11 +1036,11 @@ function ReferralsTab({ profile }: { profile: Profile | null }) {
         ) : (
           <div className="space-y-3">
             {payouts.map((p) => (
-              <div key={p.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
+              <div key={p.id} className="flex items-center justify-between p-4 bg-green-50 border border-green-100 rounded-xl">
                 <div className="flex items-center gap-3">
                   <div className="w-9 h-9 bg-green-100 rounded-xl flex items-center justify-center text-base">💰</div>
                   <div>
-                    <p className="text-sm font-bold text-gray-900">₹{p.amount.toLocaleString("en-IN")}</p>
+                    <p className="text-sm font-bold text-green-700">₹{p.amount.toLocaleString("en-IN")}</p>
                     <p className="text-xs text-gray-500 capitalize">{p.payout_type.replace(/_/g, " ")} · {formatDate(p.created_at)}</p>
                   </div>
                 </div>
@@ -1043,6 +1090,7 @@ function ProfileTab({ profile, onSave }: { profile: Profile | null; onSave: (p: 
     if (val(form.twitter_url)) payload.twitter_url = val(form.twitter_url);
     if (val(form.instagram_url)) payload.instagram_url = val(form.instagram_url);
     payload.contact_consent = form.contact_consent ?? false;
+    payload.is_whatsapp = form.is_whatsapp ?? false;
     try {
       await api.patch("/api/v1/profiles/me", payload);
       setSuccess(true); onSave(form);
@@ -1096,6 +1144,12 @@ function ProfileTab({ profile, onSave }: { profile: Profile | null; onSave: (p: 
                 {!form.phone_verified && form.phone && <Link href="/otp-verify"><button type="button" className="px-3 py-2.5 text-xs font-medium text-teal-600 border border-teal-300 rounded-lg hover:bg-teal-50">Verify</button></Link>}
                 {form.phone_verified && <span className="flex items-center text-xs text-green-600 gap-1"><CheckCircle className="w-4 h-4" />Verified</span>}
               </div>
+              <label className="flex items-center gap-2 mt-2 cursor-pointer">
+                <input type="checkbox" checked={form.is_whatsapp ?? false}
+                  onChange={(e) => setForm((p) => ({ ...p, is_whatsapp: e.target.checked }))}
+                  className="w-4 h-4 accent-teal-500" />
+                <span className="text-xs text-gray-500">This number is on WhatsApp</span>
+              </label>
             </div>
             <div><label className="block text-sm font-medium text-gray-700 mb-1.5">Gender</label>
               <select value={form.gender ?? ""} onChange={(e) => f("gender", e.target.value)} className={`${inp} bg-white`}>
@@ -1255,21 +1309,27 @@ export default function DashboardPage() {
         ) : (
           <>
             {/* Profile Completion Bar */}
-            {profile && (profile.profile_completion_pct ?? 0) < 100 && (
-              <div className="mb-6 bg-gradient-to-r from-teal-500 to-teal-600 rounded-2xl p-4 text-white">
-                <div className="flex items-center justify-between mb-2">
-                  <div className="flex items-center gap-2">
-                    <User className="w-4 h-4" />
-                    <span className="text-sm font-semibold">Complete your profile</span>
+            {profile && (profile.profile_completion_pct ?? 0) < 100 && (() => {
+              const p = profile.profile_completion_pct ?? 0;
+              const c = pctColor(p);
+              return (
+                <div className={`mb-6 ${c.banner} rounded-2xl p-4`}>
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center gap-2">
+                      <User className={`w-4 h-4 ${c.bannerText}`} />
+                      <span className={`text-sm font-semibold ${c.bannerText}`}>
+                        {p < 20 ? "Profile is incomplete — start now" : p < 50 ? "Keep going, add more details" : p < 80 ? "Almost there!" : "Nearly complete!"}
+                      </span>
+                    </div>
+                    <span className={`text-lg font-bold ${c.bannerText}`}>{p}%</span>
                   </div>
-                  <span className="text-lg font-bold">{profile.profile_completion_pct ?? 0}%</span>
+                  <div className="w-full bg-white rounded-full h-2 mb-2">
+                    <div className={`${c.bar} h-2 rounded-full transition-all`} style={{ width: `${p}%` }} />
+                  </div>
+                  <p className={`text-xs ${c.bannerSub}`}>A complete profile helps us match you with the best loan offers faster.</p>
                 </div>
-                <div className="w-full bg-white/30 rounded-full h-2.5 mb-2">
-                  <div className="bg-white h-2.5 rounded-full transition-all" style={{ width: `${profile.profile_completion_pct ?? 0}%` }} />
-                </div>
-                <p className="text-xs text-teal-100">A complete profile helps us match you with the best loan offers faster.</p>
-              </div>
-            )}
+              );
+            })()}
 
             <div className="flex gap-6">
               {/* Sidebar — desktop */}
@@ -1277,8 +1337,8 @@ export default function DashboardPage() {
                 <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-3 sticky top-24">
                   {NAV_ITEMS.map((item) => (
                     <button key={item.id} onClick={() => handleSection(item.id)}
-                      className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-colors mb-1 ${activeSection === item.id ? "bg-teal-500 text-white" : "text-gray-600 hover:bg-gray-100"}`}>
-                      {item.icon}{item.label}
+                      className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-colors mb-1 ${activeSection === item.id ? item.activeColor : "text-gray-600 hover:bg-gray-100"}`}>
+                      <span className={activeSection === item.id ? "text-white" : item.iconColor}>{item.icon}</span>{item.label}
                     </button>
                   ))}
                 </div>
