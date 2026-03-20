@@ -1089,11 +1089,11 @@ function ProfileTab({ profile, onSave }: { profile: Profile | null; onSave: (p: 
     if (val(form.linkedin_url)) payload.linkedin_url = val(form.linkedin_url);
     if (val(form.twitter_url)) payload.twitter_url = val(form.twitter_url);
     if (val(form.instagram_url)) payload.instagram_url = val(form.instagram_url);
-    payload.contact_consent = form.contact_consent ?? false;
-    payload.is_whatsapp = form.is_whatsapp ?? false;
+    payload.contact_consent = !!form.contact_consent;
+    payload.is_whatsapp = !!form.is_whatsapp;
     try {
-      await api.patch("/api/v1/profiles/me", payload);
-      setSuccess(true); onSave(form);
+      const updated = await api.patch<Profile>("/api/v1/profiles/me", payload);
+      setSuccess(true); onSave(updated);
     } catch (err) { setError(err instanceof Error ? err.message : "Failed to save"); }
     finally { setSaving(false); }
   }
