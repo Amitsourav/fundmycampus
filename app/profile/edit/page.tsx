@@ -64,7 +64,12 @@ export default function EditProfilePage() {
   useEffect(() => {
     if (!user) return;
     api.get<ProfileData>("/api/v1/profiles/me")
-      .then((data) => setProfile({ ...defaultProfile, ...data }))
+      .then((data) => {
+        const sanitized = Object.fromEntries(
+          Object.entries(data).map(([k, v]) => [k, v ?? ""])
+        );
+        setProfile({ ...defaultProfile, ...sanitized });
+      })
       .catch(() => {})
       .finally(() => setFetchLoading(false));
   }, [user]);
