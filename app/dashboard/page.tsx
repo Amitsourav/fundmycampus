@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/Button";
 import {
   User, FileText, LogOut, GraduationCap, Clock, CheckCircle, XCircle,
   Bell, Gift, LayoutDashboard, Upload, Eye, Copy, Phone, AlertCircle,
-  ChevronRight, Menu, X
+  ChevronRight, Menu, X, MessageCircle, Send, ChevronDown
 } from "lucide-react";
 
 // ─────────────────── Types ───────────────────
@@ -104,14 +104,15 @@ function timeAgo(d: string) {
 function formatDate(d: string) { return new Date(d).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" }); }
 function formatSize(b: number) { return b > 1024 * 1024 ? `${(b / 1024 / 1024).toFixed(1)} MB` : `${(b / 1024).toFixed(0)} KB`; }
 
-type Section = "overview" | "applications" | "documents" | "notifications" | "referrals" | "profile";
+type Section = "overview" | "applications" | "documents" | "notifications" | "referrals" | "profile" | "chat";
 
 // ─────────────────── Sidebar ───────────────────
 const NAV_ITEMS: { id: Section; label: string; icon: React.ReactNode; activeColor: string; iconColor: string }[] = [
-  { id: "overview",      label: "Overview",        icon: <LayoutDashboard className="w-4 h-4" />, activeColor: "bg-teal-500 text-white",   iconColor: "text-teal-400" },
-  { id: "applications",  label: "My Applications", icon: <GraduationCap className="w-4 h-4" />,  activeColor: "bg-teal-500 text-white",   iconColor: "text-violet-400" },
-  { id: "documents",     label: "Documents",       icon: <FileText className="w-4 h-4" />,        activeColor: "bg-teal-500 text-white",   iconColor: "text-blue-400" },
-  { id: "profile",       label: "Edit Profile",    icon: <User className="w-4 h-4" />,            activeColor: "bg-teal-500 text-white",   iconColor: "text-orange-400" },
+  { id: "overview",      label: "Overview",        icon: <LayoutDashboard className="w-4 h-4" />, activeColor: "bg-teal-500 text-white", iconColor: "text-teal-400" },
+  { id: "applications",  label: "My Applications", icon: <GraduationCap className="w-4 h-4" />,  activeColor: "bg-teal-500 text-white", iconColor: "text-violet-400" },
+  { id: "documents",     label: "Documents",       icon: <FileText className="w-4 h-4" />,        activeColor: "bg-teal-500 text-white", iconColor: "text-blue-400" },
+  { id: "chat",          label: "Chat with Expert",icon: <MessageCircle className="w-4 h-4" />,   activeColor: "bg-teal-500 text-white", iconColor: "text-green-500" },
+  { id: "profile",       label: "Edit Profile",    icon: <User className="w-4 h-4" />,            activeColor: "bg-teal-500 text-white", iconColor: "text-orange-400" },
 ];
 
 function pctColor(pct: number) {
@@ -402,6 +403,33 @@ function OverviewTab({ profile, loans, user, onSection }: { profile: Profile | n
             <button onClick={() => onSection("documents")} className="text-sm text-teal-600 font-medium hover:text-teal-700">Upload documents →</button>
           </div>
         )}
+      </div>
+
+      {/* Chat CTA */}
+      <div className="bg-gradient-to-br from-emerald-50 to-teal-50 border border-teal-100 rounded-2xl p-5">
+        <div className="flex items-start justify-between gap-4">
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 bg-teal-500 rounded-2xl flex items-center justify-center shrink-0 shadow-sm">
+              <MessageCircle className="w-6 h-6 text-white" />
+            </div>
+            <div>
+              <p className="font-semibold text-gray-900 text-sm">Chat with your Expert</p>
+              <p className="text-xs text-gray-500 mt-0.5">Get instant answers on your loan application, documents & eligibility</p>
+            </div>
+          </div>
+          <button onClick={() => onSection("chat")}
+            className="shrink-0 px-4 py-2 bg-teal-500 hover:bg-teal-600 text-white text-xs font-semibold rounded-xl transition-colors whitespace-nowrap">
+            Open Chat →
+          </button>
+        </div>
+        <div className="mt-4 grid grid-cols-3 gap-3">
+          {["Loan eligibility", "Document checklist", "Application status"].map((q) => (
+            <button key={q} onClick={() => onSection("chat")}
+              className="text-xs text-teal-700 bg-white border border-teal-100 rounded-xl py-2 px-3 hover:bg-teal-50 transition-colors text-center font-medium shadow-sm">
+              {q}
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* Referral teaser */}
@@ -1222,6 +1250,263 @@ function ProfileTab({ profile, onSave }: { profile: Profile | null; onSave: (p: 
   );
 }
 
+// ─────────────────── Chat ───────────────────
+interface ChatMessage {
+  id: string;
+  user_id: string;
+  sender_id: string;
+  sender_role: "user" | "counselor" | "admin";
+  message: string;
+  is_read: boolean;
+  created_at: string;
+}
+
+function useChatMessages(active: boolean) {
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const lastRef = React.useRef<string | null>(null);
+
+  useEffect(() => {
+    if (!active) return;
+    let cancelled = false;
+    async function fetch(since?: string) {
+      try {
+        const params: Record<string, string> = {};
+        if (since) params.since = since;
+        const data = await api.get<ChatMessage[]>("/api/v1/chat/messages", params);
+        if (cancelled) return;
+        if (since) {
+          setMessages((prev) => {
+            const ids = new Set(prev.map((m) => m.id));
+            const fresh = data.filter((m) => !ids.has(m.id));
+            return fresh.length ? [...prev, ...fresh] : prev;
+          });
+        } else {
+          setMessages(data);
+        }
+        if (data.length > 0) lastRef.current = data[data.length - 1].created_at;
+      } catch { /* ignore */ }
+    }
+    fetch();
+    api.patch("/api/v1/chat/messages/read").catch(() => {});
+    const id = setInterval(() => fetch(lastRef.current ?? undefined), 4000);
+    return () => { cancelled = true; clearInterval(id); };
+  }, [active]);
+
+  return { messages, setMessages, lastRef };
+}
+
+// Full-page chat section (desktop sidebar)
+function ChatSection({ userId }: { userId: string }) {
+  const { messages, setMessages, lastRef } = useChatMessages(true);
+  const [text, setText] = useState("");
+  const [sending, setSending] = useState(false);
+  const bottomRef = React.useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+
+  async function sendMessage(e: React.FormEvent) {
+    e.preventDefault();
+    const msg = text.trim();
+    if (!msg || sending) return;
+    setText("");
+    setSending(true);
+    try {
+      const sent = await api.post<ChatMessage>("/api/v1/chat/send", { message: msg });
+      setMessages((prev) => [...prev, sent]);
+      lastRef.current = sent.created_at;
+    } catch { setText(msg); }
+    finally { setSending(false); }
+  }
+
+  function formatTime(d: string) {
+    return new Date(d).toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" });
+  }
+
+  const QUICK = ["What documents do I need?", "What's my loan status?", "How long does approval take?"];
+
+  return (
+    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden flex flex-col" style={{ height: "calc(100vh - 180px)", minHeight: 500 }}>
+      {/* Header */}
+      <div className="flex items-center gap-3 px-5 py-4 bg-gradient-to-r from-teal-500 to-teal-600 shrink-0">
+        <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
+          <MessageCircle className="w-5 h-5 text-white" />
+        </div>
+        <div className="flex-1">
+          <p className="text-sm font-semibold text-white">FundMyCampus Expert</p>
+          <div className="flex items-center gap-1.5">
+            <div className="w-1.5 h-1.5 bg-green-300 rounded-full animate-pulse" />
+            <p className="text-xs text-teal-100">Online — typically replies in minutes</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Messages */}
+      <div className="flex-1 overflow-y-auto px-5 py-4 space-y-4 bg-gray-50">
+        {messages.length === 0 && (
+          <div className="text-center py-12">
+            <div className="w-16 h-16 bg-teal-50 rounded-full flex items-center justify-center mx-auto mb-4">
+              <MessageCircle className="w-8 h-8 text-teal-400" />
+            </div>
+            <p className="text-sm font-semibold text-gray-700 mb-1">Start a conversation</p>
+            <p className="text-xs text-gray-400 mb-6">Our experts are here to help with your loan journey</p>
+            <div className="flex flex-wrap gap-2 justify-center">
+              {QUICK.map((q) => (
+                <button key={q} onClick={() => setText(q)}
+                  className="text-xs bg-white border border-teal-200 text-teal-700 rounded-full px-4 py-2 hover:bg-teal-50 transition-colors font-medium shadow-sm">
+                  {q}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+        {messages.map((m) => {
+          const isMe = m.sender_id === userId || m.sender_role === "user";
+          return (
+            <div key={m.id} className={`flex gap-3 ${isMe ? "flex-row-reverse" : "flex-row"}`}>
+              {!isMe && (
+                <div className="w-8 h-8 rounded-full bg-teal-500 flex items-center justify-center shrink-0 self-end">
+                  <User className="w-4 h-4 text-white" />
+                </div>
+              )}
+              <div className={`max-w-[70%] ${isMe ? "items-end" : "items-start"} flex flex-col gap-1`}>
+                {!isMe && <p className="text-[10px] font-semibold text-teal-600 px-1 capitalize">{m.sender_role}</p>}
+                <div className={`px-4 py-2.5 rounded-2xl ${isMe ? "bg-teal-500 text-white rounded-tr-sm" : "bg-white text-gray-800 rounded-tl-sm border border-gray-100 shadow-sm"}`}>
+                  <p className="text-sm leading-relaxed">{m.message}</p>
+                </div>
+                <p className={`text-[10px] px-1 ${isMe ? "text-gray-400" : "text-gray-400"}`}>{formatTime(m.created_at)}</p>
+              </div>
+            </div>
+          );
+        })}
+        <div ref={bottomRef} />
+      </div>
+
+      {/* Quick replies (when messages exist) */}
+      {messages.length > 0 && (
+        <div className="flex gap-2 px-5 py-2 bg-gray-50 border-t border-gray-100 overflow-x-auto shrink-0">
+          {QUICK.map((q) => (
+            <button key={q} onClick={() => setText(q)}
+              className="text-xs bg-white border border-gray-200 text-gray-600 rounded-full px-3 py-1.5 hover:border-teal-300 hover:text-teal-700 transition-colors whitespace-nowrap font-medium shrink-0">
+              {q}
+            </button>
+          ))}
+        </div>
+      )}
+
+      {/* Input */}
+      <form onSubmit={sendMessage} className="flex items-center gap-3 px-4 py-3 bg-white border-t border-gray-100 shrink-0">
+        <input
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          placeholder="Type your message..."
+          className="flex-1 px-4 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400 bg-gray-50"
+          disabled={sending}
+        />
+        <button type="submit" disabled={!text.trim() || sending}
+          className="w-10 h-10 bg-teal-500 hover:bg-teal-600 disabled:opacity-40 rounded-xl flex items-center justify-center transition-colors shrink-0">
+          <Send className="w-4 h-4 text-white" />
+        </button>
+      </form>
+    </div>
+  );
+}
+
+// Mobile-only floating chat widget
+function ChatWidget({ userId, unread }: { userId: string; unread: number }) {
+  const [open, setOpen] = useState(false);
+  const { messages, setMessages, lastRef } = useChatMessages(open);
+  const [text, setText] = useState("");
+  const [sending, setSending] = useState(false);
+  const bottomRef = React.useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (open) bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages, open]);
+
+  async function sendMessage(e: React.FormEvent) {
+    e.preventDefault();
+    const msg = text.trim();
+    if (!msg || sending) return;
+    setText(""); setSending(true);
+    try {
+      const sent = await api.post<ChatMessage>("/api/v1/chat/send", { message: msg });
+      setMessages((prev) => [...prev, sent]);
+      lastRef.current = sent.created_at;
+    } catch { setText(msg); }
+    finally { setSending(false); }
+  }
+
+  function formatTime(d: string) {
+    return new Date(d).toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" });
+  }
+
+  return (
+    <div className="lg:hidden">
+      {open && (
+        <div className="fixed bottom-20 right-4 z-50 w-80 flex flex-col bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden" style={{ height: "460px" }}>
+          <div className="flex items-center gap-3 px-4 py-3 bg-gradient-to-r from-teal-500 to-teal-600 shrink-0">
+            <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center">
+              <MessageCircle className="w-4 h-4 text-white" />
+            </div>
+            <div className="flex-1">
+              <p className="text-sm font-semibold text-white">Expert Chat</p>
+              <div className="flex items-center gap-1">
+                <div className="w-1.5 h-1.5 bg-green-300 rounded-full animate-pulse" />
+                <p className="text-[10px] text-teal-100">Online</p>
+              </div>
+            </div>
+            <button onClick={() => setOpen(false)} className="text-white/80 hover:text-white">
+              <ChevronDown className="w-5 h-5" />
+            </button>
+          </div>
+          <div className="flex-1 overflow-y-auto px-4 py-3 space-y-3 bg-gray-50">
+            {messages.length === 0 && (
+              <div className="text-center py-8">
+                <MessageCircle className="w-8 h-8 text-gray-300 mx-auto mb-2" />
+                <p className="text-xs text-gray-400">No messages yet. Say hi!</p>
+              </div>
+            )}
+            {messages.map((m) => {
+              const isMe = m.sender_id === userId || m.sender_role === "user";
+              return (
+                <div key={m.id} className={`flex ${isMe ? "justify-end" : "justify-start"}`}>
+                  <div className={`max-w-[78%] px-3 py-2 ${isMe ? "bg-teal-500 text-white rounded-2xl rounded-tr-sm" : "bg-white text-gray-800 rounded-2xl rounded-tl-sm border border-gray-100 shadow-sm"}`}>
+                    {!isMe && <p className="text-[10px] font-semibold text-teal-600 mb-0.5 capitalize">{m.sender_role}</p>}
+                    <p className="text-sm leading-relaxed">{m.message}</p>
+                    <p className={`text-[10px] mt-1 text-right ${isMe ? "text-teal-100" : "text-gray-400"}`}>{formatTime(m.created_at)}</p>
+                  </div>
+                </div>
+              );
+            })}
+            <div ref={bottomRef} />
+          </div>
+          <form onSubmit={sendMessage} className="flex items-center gap-2 px-3 py-2.5 border-t border-gray-100 bg-white shrink-0">
+            <input value={text} onChange={(e) => setText(e.target.value)} placeholder="Type a message..."
+              className="flex-1 px-3 py-2 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400 bg-gray-50"
+              disabled={sending} />
+            <button type="submit" disabled={!text.trim() || sending}
+              className="w-8 h-8 bg-teal-500 hover:bg-teal-600 disabled:opacity-40 rounded-xl flex items-center justify-center transition-colors shrink-0">
+              <Send className="w-3.5 h-3.5 text-white" />
+            </button>
+          </form>
+        </div>
+      )}
+      <button onClick={() => setOpen((v) => !v)}
+        className="fixed bottom-4 right-4 z-50 bg-teal-500 hover:bg-teal-600 text-white rounded-full shadow-lg flex items-center justify-center transition-all active:scale-95 relative"
+        style={{ width: 52, height: 52 }}>
+        {open ? <X className="w-5 h-5" /> : <MessageCircle className="w-5 h-5" />}
+        {!open && unread > 0 && (
+          <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center">
+            {unread > 9 ? "9+" : unread}
+          </span>
+        )}
+      </button>
+    </div>
+  );
+}
+
 // ─────────────────── Main Dashboard ───────────────────
 export default function DashboardPage() {
   const { user, loading, signOut } = useAuth();
@@ -1233,8 +1518,24 @@ export default function DashboardPage() {
   const [dataLoading, setDataLoading] = useState(true);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [unreadNotifCount, setUnreadNotifCount] = useState(0);
+  const [unreadChatCount, setUnreadChatCount] = useState(0);
 
   useEffect(() => { if (!loading && !user) router.push("/login"); }, [loading, user, router]);
+
+  // Poll chat unread count
+  useEffect(() => {
+    if (!user) return;
+    let cancelled = false;
+    async function fetchChatUnread() {
+      try {
+        const data = await api.get<{ unread_count: number }>("/api/v1/chat/unread");
+        if (!cancelled) setUnreadChatCount(data.unread_count);
+      } catch { /* ignore */ }
+    }
+    fetchChatUnread();
+    const id = setInterval(fetchChatUnread, 5000);
+    return () => { cancelled = true; clearInterval(id); };
+  }, [user]);
 
   useEffect(() => {
     if (!user) return;
@@ -1338,7 +1639,13 @@ export default function DashboardPage() {
                   {NAV_ITEMS.map((item) => (
                     <button key={item.id} onClick={() => handleSection(item.id)}
                       className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-colors mb-1 ${activeSection === item.id ? item.activeColor : "text-gray-600 hover:bg-gray-100"}`}>
-                      <span className={activeSection === item.id ? "text-white" : item.iconColor}>{item.icon}</span>{item.label}
+                      <span className={activeSection === item.id ? "text-white" : item.iconColor}>{item.icon}</span>
+                      <span className="flex-1 text-left">{item.label}</span>
+                      {item.id === "chat" && unreadChatCount > 0 && (
+                        <span className="w-5 h-5 bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center shrink-0">
+                          {unreadChatCount > 9 ? "9+" : unreadChatCount}
+                        </span>
+                      )}
                     </button>
                   ))}
                 </div>
@@ -1356,7 +1663,13 @@ export default function DashboardPage() {
                     {NAV_ITEMS.map((item) => (
                       <button key={item.id} onClick={() => handleSection(item.id)}
                         className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-colors mb-1 ${activeSection === item.id ? "bg-teal-500 text-white" : "text-gray-600 hover:bg-gray-100"}`}>
-                        {item.icon}{item.label}
+                        {item.icon}
+                        <span className="flex-1 text-left">{item.label}</span>
+                        {item.id === "chat" && unreadChatCount > 0 && (
+                          <span className="w-5 h-5 bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center shrink-0">
+                            {unreadChatCount > 9 ? "9+" : unreadChatCount}
+                          </span>
+                        )}
                       </button>
                     ))}
                   </div>
@@ -1373,6 +1686,7 @@ export default function DashboardPage() {
                     {activeSection === "applications" && <ApplicationsTab loans={loans} />}
                     {activeSection === "documents" && <DocumentsTab loans={loans} />}
                     {activeSection === "notifications" && <NotificationsTab />}
+                    {activeSection === "chat" && user && <ChatSection userId={user.id} />}
                     {activeSection === "profile" && <ProfileTab profile={profile} onSave={setProfile} />}
                   </>
                 )}
@@ -1381,6 +1695,7 @@ export default function DashboardPage() {
           </>
         )}
       </div>
+      {user && <ChatWidget userId={user.id} unread={unreadChatCount} />}
     </div>
   );
 }

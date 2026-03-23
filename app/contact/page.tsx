@@ -17,17 +17,38 @@ export default function ContactPage() {
     loanType: "abroad",
     message: "",
   });
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState("");
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Form submitted:", formData);
+    setError(""); setLoading(true);
+    try {
+      const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8787";
+      const res = await fetch(`${API_URL}/api/v1/contacts`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          message: formData.message,
+          loan_type: formData.loanType,
+        }),
+      });
+      if (!res.ok) throw new Error("Submission failed. Please try again.");
+      setSuccess(true);
+      setFormData({ name: "", email: "", phone: "", loanType: "abroad", message: "" });
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Something went wrong.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const contactInfo = [
@@ -91,6 +112,16 @@ export default function ContactPage() {
                   Send us a Message
                 </h2>
                 <form onSubmit={handleSubmit} className="space-y-5">
+                  {success && (
+                    <div className="p-4 bg-teal-50 border border-teal-200 rounded-xl text-sm text-teal-800 font-medium">
+                      ✅ Thank you! Our team will get back to you within 24 hours.
+                    </div>
+                  )}
+                  {error && (
+                    <div className="p-4 bg-red-50 border border-red-200 rounded-xl text-sm text-red-700">
+                      {error}
+                    </div>
+                  )}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Full Name *
@@ -167,9 +198,9 @@ export default function ContactPage() {
                     />
                   </div>
 
-                  <Button type="submit" variant="primary" size="lg" fullWidth>
-                    Send Message
-                    <Send className="ml-2 h-5 w-5" />
+                  <Button type="submit" variant="primary" size="lg" fullWidth disabled={loading || success}>
+                    {loading ? "Sending..." : success ? "Message Sent!" : "Send Message"}
+                    {!loading && !success && <Send className="ml-2 h-5 w-5" />}
                   </Button>
                 </form>
               </Card>

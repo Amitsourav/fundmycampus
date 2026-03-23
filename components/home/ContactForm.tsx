@@ -48,6 +48,8 @@ const contactDetails = [
   },
 ];
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8787";
+
 export const ContactForm: React.FC = () => {
   const [formData, setFormData] = useState({
     name: "",
@@ -55,17 +57,31 @@ export const ContactForm: React.FC = () => {
     phone: "",
     message: "",
   });
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState("");
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Form submitted:", formData);
+    setError(""); setLoading(true);
+    try {
+      const res = await fetch(`${API_URL}/api/v1/contacts`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+      if (!res.ok) throw new Error("Submission failed. Please try again.");
+      setSuccess(true);
+      setFormData({ name: "", email: "", phone: "", message: "" });
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Something went wrong.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -95,6 +111,16 @@ export const ContactForm: React.FC = () => {
             variants={fadeInUp}
           >
             <form onSubmit={handleSubmit} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 md:p-8 space-y-5">
+              {success && (
+                <div className="p-4 bg-teal-50 border border-teal-200 rounded-xl text-sm text-teal-800 font-medium">
+                  ✅ Thank you! Our team will get back to you within 24 hours.
+                </div>
+              )}
+              {error && (
+                <div className="p-4 bg-red-50 border border-red-200 rounded-xl text-sm text-red-700">
+                  {error}
+                </div>
+              )}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Full Name *
@@ -155,9 +181,9 @@ export const ContactForm: React.FC = () => {
                 />
               </div>
 
-              <Button type="submit" variant="primary" size="lg" fullWidth>
-                Submit Enquiry
-                <Send className="ml-2 h-5 w-5" />
+              <Button type="submit" variant="primary" size="lg" fullWidth disabled={loading || success}>
+                {loading ? "Submitting..." : success ? "Submitted!" : "Submit Enquiry"}
+                {!loading && !success && <Send className="ml-2 h-5 w-5" />}
               </Button>
             </form>
           </motion.div>
