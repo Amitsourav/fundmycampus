@@ -5,6 +5,7 @@ import "./globals.css";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { AuthProvider } from "@/lib/auth-context";
+import ChatWidget from "@/components/chat/ChatWidget";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -54,6 +55,7 @@ export default function RootLayout({
           <Header />
           <main className="min-h-screen pt-12">{children}</main>
           <Footer />
+          <ChatWidget />
         </AuthProvider>
       </body>
     </html>
