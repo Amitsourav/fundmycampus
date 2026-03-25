@@ -57,7 +57,7 @@ export const Hero: React.FC = () => {
             initial="hidden"
             animate="visible"
             variants={staggerContainer}
-            className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center min-h-screen"
+            className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center min-h-[600px] md:min-h-screen"
           >
             {/* Left Content */}
             <div className="lg:col-span-6 order-2 lg:order-1">
@@ -218,7 +218,7 @@ export const Hero: React.FC = () => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: 0.6 }}
-                  className="absolute bottom-8 -left-4 bg-white rounded-2xl shadow-xl p-4 border border-gray-100"
+                  className="absolute bottom-8 -left-4 bg-white rounded-2xl shadow-xl p-4 border border-gray-100 hidden sm:block"
                 >
                   <div className="flex items-center gap-3">
                     <div className="w-12 h-12 bg-teal-500 rounded-xl flex items-center justify-center shadow-md">
@@ -236,7 +236,7 @@ export const Hero: React.FC = () => {
                   initial={{ opacity: 0, y: -20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: 0.8 }}
-                  className="absolute top-8 -right-4 bg-black rounded-2xl shadow-xl p-4"
+                  className="absolute top-8 -right-4 bg-black rounded-2xl shadow-xl p-4 hidden sm:block"
                 >
                   <p className="text-xs text-gray-400">Loans Disbursed</p>
                   <p className="text-2xl font-bold text-teal-400">₹500Cr+</p>
@@ -247,7 +247,7 @@ export const Hero: React.FC = () => {
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.5, delay: 1 }}
-                  className="absolute top-1/2 -left-8 bg-teal-500 rounded-full p-3 shadow-lg"
+                  className="absolute top-1/2 -left-8 bg-teal-500 rounded-full p-3 shadow-lg hidden sm:block"
                 >
                   <Shield className="w-5 h-5 text-black" />
                 </motion.div>

@@ -40,7 +40,7 @@ export const ToolsPreview: React.FC = () => {
   ];
 
   return (
-    <section className="py-20 bg-white">
+    <section className="py-12 md:py-20 bg-white">
       <div className="max-w-screen-xl mx-auto px-6 md:px-8">
         {/* Header */}
         <motion.div

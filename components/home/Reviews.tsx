@@ -57,7 +57,7 @@ export const Reviews: React.FC = () => {
   const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + reviews.length) % reviews.length);
 
   return (
-    <section className="py-20 bg-white">
+    <section className="py-12 md:py-20 bg-white">
       <div className="max-w-screen-xl mx-auto px-6 md:px-8">
         {/* Header */}
         <motion.div
@@ -105,7 +105,7 @@ export const Reviews: React.FC = () => {
             </div>
 
             {/* Quote */}
-            <blockquote className="text-gray-700 text-lg leading-relaxed max-w-2xl mx-auto mb-6">
+            <blockquote className="text-gray-700 text-base md:text-lg leading-relaxed max-w-2xl mx-auto mb-6">
               "{reviews[currentSlide].text}"
             </blockquote>
 

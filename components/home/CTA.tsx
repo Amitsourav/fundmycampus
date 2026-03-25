@@ -13,8 +13,8 @@ import { fadeInUp } from "@/lib/animations";
 
 export const CTA: React.FC = () => {
   return (
-    <section className="py-32 bg-noir text-ivory">
-      <div className="container mx-auto px-8">
+    <section className="py-16 md:py-32 bg-noir text-ivory">
+      <div className="container mx-auto px-4 md:px-8">
         <motion.div
           initial="hidden"
           whileInView="visible"

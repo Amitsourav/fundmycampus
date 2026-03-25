@@ -43,14 +43,14 @@ export const AbroadFocus: React.FC = () => {
   ];
 
   return (
-    <section className="py-32 bg-white">
-      <div className="container mx-auto px-8">
+    <section className="py-16 md:py-32 bg-white">
+      <div className="container mx-auto px-4 md:px-8">
         {/* Section Title */}
         <SectionTitle
           title="Study Abroad Excellence"
           subtitle="Premium education loans for the world's most prestigious institutions. Experience seamless financing for your global academic journey."
           align="center"
-          className="mb-20"
+          className="mb-10 md:mb-20"
         />
 
         {/* Destinations Grid */}
@@ -59,7 +59,7 @@ export const AbroadFocus: React.FC = () => {
           whileInView="visible"
           viewport={{ once: true, margin: "-100px" }}
           variants={staggerContainer}
-          className="mb-20"
+          className="mb-10 md:mb-20"
         >
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
             {destinations.map((destination, index) => (
@@ -85,7 +85,7 @@ export const AbroadFocus: React.FC = () => {
           whileInView="visible"
           viewport={{ once: true, margin: "-100px" }}
           variants={fadeInUp}
-          className="mb-20"
+          className="mb-10 md:mb-20"
         >
           <div className="max-w-4xl mx-auto">
             <h3 className="font-serif text-display-sm text-center text-noir mb-12">
@@ -110,7 +110,7 @@ export const AbroadFocus: React.FC = () => {
           whileInView="visible"
           viewport={{ once: true }}
           variants={fadeInUp}
-          className="flex justify-center mb-20"
+          className="flex justify-center mb-10 md:mb-20"
         >
           <div className="w-24 h-px bg-noir/20" />
         </motion.div>

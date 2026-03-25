@@ -58,7 +58,7 @@ export const WhyFundMyCampus: React.FC = () => {
   ];
 
   return (
-    <section className="py-20 bg-gray-50">
+    <section className="py-12 md:py-20 bg-gray-50">
       <div className="max-w-screen-xl mx-auto px-6 md:px-8">
         {/* Header */}
         <motion.div
@@ -66,7 +66,7 @@ export const WhyFundMyCampus: React.FC = () => {
           whileInView="visible"
           viewport={{ once: true }}
           variants={staggerContainer}
-          className="text-center mb-16"
+          className="text-center mb-10 md:mb-16"
         >
           <motion.h2 
             variants={fadeInUp}
@@ -96,7 +96,7 @@ export const WhyFundMyCampus: React.FC = () => {
               key={index}
               variants={staggerItem}
               whileHover={{ y: -8, scale: 1.02 }}
-              className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100 group cursor-pointer"
+              className="bg-white rounded-2xl p-5 md:p-8 shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100 group cursor-pointer"
             >
               {/* Icon */}
               <div className="w-16 h-16 bg-teal-50 rounded-xl flex items-center justify-center mb-6 group-hover:bg-teal-100 transition-colors duration-300">

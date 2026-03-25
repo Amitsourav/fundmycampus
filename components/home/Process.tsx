@@ -40,8 +40,8 @@ export const Process: React.FC = () => {
   ];
 
   return (
-    <section id="process" className="py-32 bg-charcoal-50">
-      <div className="container mx-auto px-8">
+    <section id="process" className="py-16 md:py-32 bg-charcoal-50">
+      <div className="container mx-auto px-4 md:px-8">
         <SectionTitle
           title="Our Process"
           subtitle="A streamlined, transparent approach to education financing that prioritizes your success."
@@ -68,7 +68,7 @@ export const Process: React.FC = () => {
                   <div className="hidden lg:block absolute top-12 left-full w-full h-px bg-noir/20 z-0" />
                 )}
                 
-                <div className="relative z-10 bg-white p-8 border border-noir/10 hover:border-noir/20 transition-all duration-700 group">
+                <div className="relative z-10 bg-white p-5 md:p-8 border border-noir/10 hover:border-noir/20 transition-all duration-700 group">
                   <div className="text-4xl font-serif text-charcoal-300 mb-4 group-hover:text-olive transition-colors duration-500">
                     {step.number}
                   </div>
