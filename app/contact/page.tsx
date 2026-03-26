@@ -74,8 +74,34 @@ export default function ContactPage() {
     },
   ];
 
+  const localBusinessSchema = {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    name: "FundMyCampus",
+    url: "https://www.fundmycampus.com",
+    telephone: "+91-78272-25354",
+    email: "contact@fundmycampus.com",
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: "123, Financial District",
+      addressLocality: "Mumbai",
+      addressRegion: "Maharashtra",
+      postalCode: "400001",
+      addressCountry: "IN",
+    },
+    openingHoursSpecification: [
+      { "@type": "OpeningHoursSpecification", dayOfWeek: ["Monday","Tuesday","Wednesday","Thursday","Friday"], opens: "09:00", closes: "19:00" },
+      { "@type": "OpeningHoursSpecification", dayOfWeek: ["Saturday"], opens: "10:00", closes: "17:00" },
+    ],
+    description: "Education loan financing platform helping Indian students access loans for study abroad and domestic universities.",
+  };
+
   return (
     <div className="pt-20">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }}
+      />
       {/* Hero Section */}
       <section className="py-16 bg-gradient-to-br from-primary-50 to-white">
         <div className="container mx-auto px-4">
@@ -86,7 +112,7 @@ export default function ContactPage() {
             className="max-w-3xl mx-auto text-center"
           >
             <h1 className="text-4xl md:text-5xl font-display font-bold text-gray-900 mb-6">
-              Get in Touch
+              Contact FundMyCampus — Free Loan Consultation
             </h1>
             <p className="text-xl text-gray-800">
               Have questions about education loans? Our expert team is here to help you 

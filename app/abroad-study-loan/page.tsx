@@ -105,9 +105,9 @@ export default function AbroadStudyLoanPage() {
                 variants={fadeInUp}
                 className="font-serif text-4xl md:text-5xl lg:text-6xl text-black mb-6 leading-tight"
               >
-                Your Global
-                <span className="block text-teal-600">Education Journey</span>
-                Starts Here
+                Study Abroad
+                <span className="block text-teal-600">Education Loans</span>
+                Collateral-Free
               </motion.h1>
 
               <motion.p

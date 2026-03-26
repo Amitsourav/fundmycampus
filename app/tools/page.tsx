@@ -629,8 +629,8 @@ export default function ToolsPage() {
                 variants={fadeInUp}
                 className="font-serif text-4xl md:text-5xl lg:text-6xl text-black mb-6 leading-tight"
               >
-                Smart Tools for
-                <span className="block text-teal-600">Financial Planning</span>
+                Free Education Loan
+                <span className="block text-teal-600">Calculators & Tools</span>
               </motion.h1>
 
               <motion.p

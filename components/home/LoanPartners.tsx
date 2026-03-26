@@ -150,6 +150,7 @@ export const LoanPartners: React.FC = () => {
                         src={partner.logo}
                         alt={partner.name}
                         className="max-w-full max-h-full object-contain"
+                        loading="lazy"
                         onError={(e) => {
                           const target = e.target as HTMLImageElement;
                           target.src = `https://via.placeholder.com/80x40/f3f4f6/374151?text=${partner.name.substring(0, 3)}`;
@@ -171,6 +172,7 @@ export const LoanPartners: React.FC = () => {
                         src={partner.logo}
                         alt={partner.name}
                         className="max-w-full max-h-full object-contain"
+                        loading="lazy"
                         onError={(e) => {
                           const target = e.target as HTMLImageElement;
                           target.src = `https://via.placeholder.com/80x40/f3f4f6/374151?text=${partner.name.substring(0, 3)}`;

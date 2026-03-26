@@ -64,6 +64,7 @@ export const DreamsFlight: React.FC = () => {
               src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&auto=format&fit=crop&q=90"
               alt="Students studying together with books and laptops for education"
               className="w-full h-[300px] md:h-[400px] lg:h-[500px] object-cover rounded-2xl shadow-xl"
+              loading="lazy"
             />
           </motion.div>
 

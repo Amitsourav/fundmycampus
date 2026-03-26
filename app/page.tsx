@@ -51,9 +51,47 @@ const homeFaqs = [
   }
 ];
 
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: homeFaqs.map((faq) => ({
+    "@type": "Question",
+    name: faq.question,
+    acceptedAnswer: {
+      "@type": "Answer",
+      text: faq.answer,
+    },
+  })),
+};
+
+const orgSchema = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "FundMyCampus",
+  url: "https://www.fundmycampus.com",
+  logo: "https://www.fundmycampus.com/logo.png",
+  description: "Education loan financing platform connecting Indian students with 12+ banking partners for study abroad and India education loans.",
+  contactPoint: {
+    "@type": "ContactPoint",
+    telephone: "+91-78272-25354",
+    contactType: "customer service",
+    areaServed: "IN",
+    availableLanguage: ["English", "Hindi"],
+  },
+  sameAs: [],
+};
+
 export default function HomePage() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(orgSchema) }}
+      />
       <Hero />
       <DreamsFlight />
       <CTABanner />

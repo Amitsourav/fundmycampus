@@ -229,6 +229,7 @@ export default function ChatWidget() {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const isLoggedIn = !!user;
+  const greetedRef = useRef(false);
   const needsGuestForm = !isLoggedIn && !guestReady && !getGuestToken();
 
   // Scroll to bottom on new messages
@@ -243,10 +244,17 @@ export default function ChatWidget() {
     if (open && inputRef.current) inputRef.current.focus();
   }, [open, guestReady]);
 
-  // Reset unread when opening
+  // Reset unread when opening + greet logged-in user
   useEffect(() => {
     if (open) setUnread(0);
-  }, [open]);
+    if (open && isLoggedIn && !greetedRef.current && messages.length === 0) {
+      greetedRef.current = true;
+      const name = user?.name?.split(" ")[0] || "";
+      addSystemMessage(
+        `Hi${name ? ` ${name}` : ""}! Welcome to FundMyCampus. How can I help you today?`
+      );
+    }
+  }, [open, isLoggedIn]);
 
   // On mount / auth change, resume guest session if token exists
   useEffect(() => {

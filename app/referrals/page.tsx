@@ -135,6 +135,7 @@ export default function ReferralsPage() {
           <p>📋 Friend&apos;s loan gets sanctioned → You earn <strong>₹1,000</strong> (+ ₹5,000 bonus every 5th referral)</p>
           <p>💰 Loan is disbursed → You earn <strong>₹1,000</strong> + friend gets <strong>₹1,000</strong> bonus</p>
         </div>
+        <p className="mt-3 text-xs text-gray-500">* Minimum loan amount must be ₹10 Lakhs to qualify for referral rewards.</p>
       </div>
 
       {/* Referrals List */}

@@ -40,6 +40,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       description: metaDescription,
       images: post.image ? [post.image] : [],
     },
+    alternates: {
+      canonical: `https://www.fundmycampus.com/blogs/${slug}`,
+    },
   };
 }
 
@@ -53,5 +56,35 @@ export default async function BlogPostPage({ params }: PageProps) {
 
   const relatedPosts = await getRelatedPosts(post.category, slug);
 
-  return <BlogDetailClient post={post} relatedPosts={relatedPosts} />;
+  const blogPostingSchema = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.title,
+    description: post.seoDescription || post.excerpt,
+    image: post.image || undefined,
+    author: {
+      "@type": "Person",
+      name: post.author,
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "FundMyCampus",
+      url: "https://www.fundmycampus.com",
+    },
+    datePublished: post.date,
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": `https://www.fundmycampus.com/blogs/${slug}`,
+    },
+  };
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(blogPostingSchema) }}
+      />
+      <BlogDetailClient post={post} relatedPosts={relatedPosts} />
+    </>
+  );
 }

@@ -161,9 +161,9 @@ export default function IndiaStudyLoanPage() {
                 variants={fadeInUp}
                 className="font-serif text-4xl md:text-5xl lg:text-6xl text-black mb-6 leading-tight"
               >
-                Fund Your
-                <span className="block text-teal-600">Indian Education</span>
-                Dreams
+                Education Loans for
+                <span className="block text-teal-600">IIT, IIM, AIIMS</span>
+                & Top Universities
               </motion.h1>
 
               <motion.p

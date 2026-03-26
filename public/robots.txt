@@ -1,0 +1,15 @@
+User-agent: *
+Allow: /
+Disallow: /login
+Disallow: /signup
+Disallow: /otp-verify
+Disallow: /forgot-password
+Disallow: /reset-password
+Disallow: /dashboard
+Disallow: /profile
+Disallow: /documents
+Disallow: /notifications
+Disallow: /referrals
+Disallow: /api/
+
+Sitemap: https://www.fundmycampus.com/sitemap.xml

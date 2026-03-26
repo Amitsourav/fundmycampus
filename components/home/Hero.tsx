@@ -66,9 +66,9 @@ export const Hero: React.FC = () => {
                 variants={textReveal}
                 className="font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl text-black mb-6 md:mb-8 leading-none"
               >
-                Funding Your
-                <span className="block text-black">Education</span>
-                <span className="block text-black">Dreams</span>
+                Education Loans
+                <span className="block text-black">for Study Abroad</span>
+                <span className="block text-black">& India</span>
               </motion.h1>
 
               {/* Subheadline - Simple and clean */}

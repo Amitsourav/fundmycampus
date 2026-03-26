@@ -56,6 +56,7 @@ export function BlogListingClient({ featured, posts, categories }: BlogListingCl
                         src={featured.image}
                         alt={featured.title}
                         className="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity"
+                        loading="lazy"
                       />
                     </div>
                     <div className="p-8 lg:p-12 flex flex-col justify-center">
@@ -152,6 +153,7 @@ export function BlogListingClient({ featured, posts, categories }: BlogListingCl
                               src={post.image}
                               alt={post.title}
                               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                              loading="lazy"
                             />
                             <span className="absolute top-3 left-3 px-2 py-1 bg-white/90 backdrop-blur-sm text-xs font-medium text-gray-800 rounded">
                               {post.category}
