@@ -33,13 +33,11 @@ export const metadata: Metadata = {
     title: "FundMyCampus — Education Loans for Study Abroad & India",
     description: "Get collateral-free education loans starting at 6.75% for studying abroad or in India. Fast 48-hour approval. 15,000+ students funded.",
     url: "https://www.fundmycampus.com",
-    images: [{ url: "/og-image.jpg", width: 1200, height: 630, alt: "FundMyCampus — Education Loan Platform" }],
   },
   twitter: {
     card: "summary_large_image",
     title: "FundMyCampus — Education Loans for Study Abroad & India",
     description: "Get collateral-free education loans starting at 6.75% for studying abroad or in India. Fast 48-hour approval.",
-    images: ["/og-image.jpg"],
   },
   alternates: {
     canonical: "https://www.fundmycampus.com",
