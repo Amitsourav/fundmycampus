@@ -153,6 +153,8 @@ export const LoanPartners: React.FC = () => {
                         src={partner.logo}
                         alt={partner.name}
                         className="max-w-full max-h-full object-contain"
+                        width={56}
+                        height={40}
                         loading="lazy"
                         onError={(e) => {
                           const target = e.target as HTMLImageElement;
@@ -175,6 +177,8 @@ export const LoanPartners: React.FC = () => {
                         src={partner.logo}
                         alt={partner.name}
                         className="max-w-full max-h-full object-contain"
+                        width={48}
+                        height={32}
                         loading="lazy"
                         onError={(e) => {
                           const target = e.target as HTMLImageElement;
@@ -212,9 +216,9 @@ export const LoanPartners: React.FC = () => {
           transition={{ duration: 0.5, delay: 0.2 }}
           className="text-center mt-8"
         >
-          <Link href={user ? "/dashboard" : "/login"}>
+          <Link href={user ? "/dashboard" : "/signup"}>
             <Button variant="primary" size="lg">
-              Check Your Eligibility Now
+              {user ? "Check Your Eligibility Now" : "Create Free Account to Check Eligibility"}
             </Button>
           </Link>
         </motion.div>

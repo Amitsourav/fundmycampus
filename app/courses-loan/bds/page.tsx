@@ -182,7 +182,9 @@ export default function BDSEducationLoanPage() {
                   src="https://images.unsplash.com/photo-1606811841689-23dfddce3e95?w=800"
                   alt="Dental professionals working in modern clinic"
                   className="w-full h-[400px] md:h-[500px] object-cover"
-                  loading="lazy"
+                  width={800}
+                  height={500}
+                  fetchPriority="high"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
               </div>

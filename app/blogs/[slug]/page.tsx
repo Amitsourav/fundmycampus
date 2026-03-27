@@ -56,22 +56,33 @@ export default async function BlogPostPage({ params }: PageProps) {
 
   const relatedPosts = await getRelatedPosts(post.category, slug);
 
+  // Convert human-readable date to ISO 8601 for schema
+  const isoDate = post.date ? new Date(post.date).toISOString().split("T")[0] : undefined;
+  // Ensure image URL is absolute
+  const absoluteImage = post.image
+    ? post.image.startsWith("http") ? post.image : `https://www.fundmycampus.com${post.image}`
+    : undefined;
+
   const blogPostingSchema = {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
     headline: post.title,
     description: post.seoDescription || post.excerpt,
-    image: post.image || undefined,
+    image: absoluteImage,
     author: {
-      "@type": "Person",
-      name: post.author,
+      "@type": "Organization",
+      name: "FundMyCampus",
     },
     publisher: {
       "@type": "Organization",
       name: "FundMyCampus",
       url: "https://www.fundmycampus.com",
+      logo: {
+        "@type": "ImageObject",
+        url: "https://www.fundmycampus.com/images/logo.png",
+      },
     },
-    datePublished: post.date,
+    datePublished: isoDate,
     mainEntityOfPage: {
       "@type": "WebPage",
       "@id": `https://www.fundmycampus.com/blogs/${slug}`,

@@ -26,6 +26,8 @@ export const CTABanner: React.FC = () => {
                 src="https://illustrations.popsy.co/amber/student-going-to-school.svg"
                 alt="Student with luggage ready for study abroad"
                 className="w-32 h-32 md:w-40 md:h-40 object-contain"
+                width={160}
+                height={160}
                 loading="lazy"
               />
             </motion.div>

@@ -251,7 +251,9 @@ export default function HotelManagementEducationLoanPage() {
                   src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800"
                   alt="Luxury hotel lobby and hospitality environment"
                   className="w-full h-[400px] md:h-[500px] object-cover"
-                  loading="lazy"
+                  width={800}
+                  height={500}
+                  fetchPriority="high"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
               </div>

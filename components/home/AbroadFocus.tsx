@@ -34,7 +34,7 @@ export const AbroadFocus: React.FC = () => {
     },
     {
       title: "No Collateral",
-      description: "Up to ₹75 Lakhs without security",
+      description: "Up to ₹40 Lakhs without collateral for select institutions",
     },
     {
       title: "100% Financing",

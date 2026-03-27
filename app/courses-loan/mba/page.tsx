@@ -227,7 +227,7 @@ export default function MBAEducationLoanPage() {
             </motion.div>
 
             <motion.div initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.6, delay: 0.2 }} className="relative">
-              <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&auto=format&fit=crop&q=90" alt="MBA students in business environment" className="w-full h-[400px] md:h-[500px] object-cover rounded-2xl shadow-2xl" />
+              <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&auto=format&fit=crop&q=90" alt="MBA students in business environment" className="w-full h-[400px] md:h-[500px] object-cover rounded-2xl shadow-2xl" width={800} height={500} fetchPriority="high" />
               <div className="absolute -bottom-6 -left-6 bg-white p-4 rounded-xl shadow-lg border border-gray-100">
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 bg-teal-100 rounded-full flex items-center justify-center">
@@ -461,6 +461,7 @@ export default function MBAEducationLoanPage() {
                 </motion.div>
               ))}
             </div>
+            <p className="px-6 py-3 text-xs text-gray-400">Source: AmbitionBox & LinkedIn Salary Insights 2025. Figures are indicative and vary by institute, experience, and location.</p>
           </motion.div>
         </div>
       </section>

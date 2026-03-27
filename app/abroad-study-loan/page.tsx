@@ -30,7 +30,7 @@ export default function AbroadStudyLoanPage() {
     },
     {
       name: "Australia",
-      image: "https://images.unsplash.com/photo-1523482580672-f109ba8cb9be?w=800&auto=format&fit=crop&q=80",
+      image: "https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?w=800&auto=format&fit=crop&q=80",
       universities: "ANU, Melbourne, Sydney",
       avgLoan: "₹25-40 Lakhs"
     },
@@ -79,8 +79,27 @@ export default function AbroadStudyLoanPage() {
     { step: "4", title: "Disbursement", description: "Funds transferred directly to university" },
   ];
 
+  const financialProductSchema = {
+    "@context": "https://schema.org",
+    "@type": "FinancialProduct",
+    name: "Study Abroad Education Loan",
+    description: "Collateral-free education loans up to ₹1.5 Crore for studying abroad in 50+ countries. Starting at 6.75% interest with 48-hour approval.",
+    provider: {
+      "@type": "Organization",
+      name: "FundMyCampus",
+      url: "https://www.fundmycampus.com",
+    },
+    annualPercentageRate: { "@type": "QuantitativeValue", minValue: 6.75, maxValue: 13, unitCode: "P1" },
+    amount: { "@type": "MonetaryAmount", currency: "INR", maxValue: 15000000 },
+    feesAndCommissionsSpecification: "Processing fee varies by lender, typically 0.25% to 1%",
+  };
+
   return (
     <div className="pt-20 bg-white">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(financialProductSchema) }}
+      />
       {/* Hero Section - Split Layout */}
       <section className="relative py-10 md:py-12 overflow-hidden bg-white">
         {/* Background decoration */}
@@ -179,6 +198,9 @@ export default function AbroadStudyLoanPage() {
                   src="https://images.unsplash.com/photo-1523482580672-f109ba8cb9be?w=800&auto=format&fit=crop&q=90"
                   alt="International students at university abroad"
                   className="w-full h-[400px] md:h-[500px] object-cover rounded-2xl shadow-2xl"
+                  width={800}
+                  height={500}
+                  fetchPriority="high"
                 />
                 {/* Floating card */}
                 <div className="absolute -bottom-6 -left-6 bg-white p-4 rounded-xl shadow-lg border border-gray-100">
@@ -260,10 +282,13 @@ export default function AbroadStudyLoanPage() {
                   className="bg-white rounded-xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-md transition-shadow duration-300"
                 >
                   <div className="h-48 relative overflow-hidden">
-                    <img 
+                    <img
                       src={country.image}
                       alt={country.name}
                       className="w-full h-full object-cover"
+                      width={400}
+                      height={192}
+                      loading="lazy"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-charcoal/60 to-transparent" />
                     <div className="absolute bottom-4 left-6 text-white">
@@ -301,6 +326,8 @@ export default function AbroadStudyLoanPage() {
                 src="https://images.unsplash.com/photo-1488998427799-e3362cec87c3?w=1200&auto=format&fit=crop&q=80"
                 alt="International students completing loan application process"
                 className="w-full h-[250px] object-cover"
+                width={1200}
+                height={250}
                 loading="lazy"
               />
               <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-transparent to-black/60" />
@@ -378,6 +405,31 @@ export default function AbroadStudyLoanPage() {
                 ))}
               </ul>
             </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* Popular Course Loans */}
+      <section className="py-10 md:py-12 bg-gray-50">
+        <div className="max-w-screen-xl mx-auto px-6 md:px-8">
+          <h2 className="font-serif text-display-md text-black mb-4 text-center">Course-Specific Loan Options</h2>
+          <p className="text-lg text-gray-800 text-center mb-10">Explore tailored education loan solutions for your chosen course</p>
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+            {[
+              { name: "MBA Loan", href: "/courses-loan/mba" },
+              { name: "MBBS Loan", href: "/courses-loan/mbbs" },
+              { name: "B.Tech Loan", href: "/courses-loan/btech" },
+              { name: "BBA Loan", href: "/courses-loan/bba" },
+              { name: "BCA Loan", href: "/courses-loan/bca" },
+              { name: "BDS Loan", href: "/courses-loan/bds" },
+              { name: "B.Sc Nursing", href: "/courses-loan/bsc-nursing" },
+              { name: "CA Loan", href: "/courses-loan/ca" },
+              { name: "Hotel Mgmt", href: "/courses-loan/hotel-management" },
+            ].map((course) => (
+              <Link key={course.href} href={course.href} className="bg-white rounded-lg p-4 text-center border border-gray-200 hover:border-teal-300 hover:shadow-md transition-all duration-200">
+                <span className="text-sm font-medium text-gray-800 hover:text-teal-600">{course.name}</span>
+              </Link>
+            ))}
           </div>
         </div>
       </section>

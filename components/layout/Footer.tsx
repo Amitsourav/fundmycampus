@@ -16,7 +16,7 @@ export const Footer: React.FC = () => {
 
           {/* Brand — 3 cols */}
           <div className="lg:col-span-3">
-            <img src="/images/logo.png" alt="FundMyCampus" className="h-20 w-auto mb-4 brightness-0 invert" />
+            <img src="/images/logo.png" alt="FundMyCampus" className="h-20 w-auto mb-4 brightness-0 invert" width={200} height={80} loading="lazy" />
             <p className="text-gray-500 text-sm leading-relaxed mb-4">
               Premium education financing for ambitious students worldwide.
             </p>
@@ -55,10 +55,8 @@ export const Footer: React.FC = () => {
             <div>
               <h4 className="text-sm uppercase tracking-wide-lg mb-5 text-gray-100 font-semibold">Company</h4>
               <ul className="space-y-3">
-                <li><Link href="/about" className="text-sm text-gray-400 hover:text-white transition-colors">About</Link></li>
                 <li><Link href="/contact" className="text-sm text-gray-400 hover:text-white transition-colors">Contact</Link></li>
                 <li><Link href="/blogs" className="text-sm text-gray-400 hover:text-white transition-colors">Blogs</Link></li>
-                <li><Link href="/careers" className="text-sm text-gray-400 hover:text-white transition-colors">Careers</Link></li>
               </ul>
             </div>
 

@@ -206,7 +206,9 @@ export default function CAEducationLoanPage() {
                   src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=800"
                   alt="Accounting and finance workspace with calculator and documents"
                   className="w-full h-[400px] md:h-[500px] object-cover"
-                  loading="lazy"
+                  width={800}
+                  height={500}
+                  fetchPriority="high"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
               </div>

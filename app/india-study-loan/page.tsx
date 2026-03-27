@@ -55,7 +55,7 @@ export default function IndiaStudyLoanPage() {
   ];
 
   const loanFeatures = [
-    { icon: DollarSign, title: "Up to ₹40 Lakhs", description: "Complete financing for tuition, hostel and other expenses" },
+    { icon: DollarSign, title: "Up to ₹75 Lakhs", description: "Complete financing for tuition, hostel and other expenses at premier institutions" },
     { icon: Shield, title: "No Collateral", description: "Up to ₹7.5 Lakhs without any security for premier institutions" },
     { icon: Clock, title: "Quick Approval", description: "Loan approval within 7-10 working days" },
     { icon: Award, title: "Best Interest Rates", description: "Starting from 6.75% per annum with flexible terms" },
@@ -106,8 +106,27 @@ export default function IndiaStudyLoanPage() {
     }
   ];
 
+  const financialProductSchema = {
+    "@context": "https://schema.org",
+    "@type": "FinancialProduct",
+    name: "Education Loan for Study in India",
+    description: "Education loans up to ₹75 Lakhs for IITs, IIMs, AIIMS, NITs and top Indian universities. Low interest rates starting at 6.75% with quick approval.",
+    provider: {
+      "@type": "Organization",
+      name: "FundMyCampus",
+      url: "https://www.fundmycampus.com",
+    },
+    annualPercentageRate: { "@type": "QuantitativeValue", minValue: 6.75, maxValue: 12, unitCode: "P1" },
+    amount: { "@type": "MonetaryAmount", currency: "INR", maxValue: 7500000 },
+    feesAndCommissionsSpecification: "Processing fee varies by lender, typically 0.25% to 1%",
+  };
+
   return (
     <div className="pt-20 bg-white">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(financialProductSchema) }}
+      />
       {/* Hero Section - Split Layout */}
       <section className="relative py-10 md:py-12 overflow-hidden bg-white">
         {/* Background decoration */}
@@ -171,7 +190,7 @@ export default function IndiaStudyLoanPage() {
                 className="text-lg text-gray-800 mb-8 leading-relaxed max-w-lg"
               >
                 Achieve your academic dreams at India's premier institutions with our
-                comprehensive education loan solutions. Get up to ₹40 Lakhs with competitive rates.
+                comprehensive education loan solutions. Get up to ₹75 Lakhs for premier institutions with competitive rates.
               </motion.p>
 
               {/* Quick Stats */}
@@ -288,10 +307,13 @@ export default function IndiaStudyLoanPage() {
                   className="bg-white rounded-xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-md transition-shadow duration-300"
                 >
                   <div className="h-48 relative overflow-hidden">
-                    <img 
+                    <img
                       src={institution.image}
                       alt={institution.name}
                       className="w-full h-full object-cover"
+                      width={400}
+                      height={192}
+                      loading="lazy"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-charcoal/60 to-transparent" />
                     <div className="absolute bottom-4 left-6 text-white">
@@ -453,6 +475,31 @@ export default function IndiaStudyLoanPage() {
                 ))}
               </ul>
             </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* Popular Course Loans */}
+      <section className="py-10 md:py-12 bg-gray-50">
+        <div className="max-w-screen-xl mx-auto px-6 md:px-8">
+          <h2 className="font-serif text-display-md text-black mb-4 text-center">Course-Specific Loan Options</h2>
+          <p className="text-lg text-gray-800 text-center mb-10">Explore tailored education loan solutions for your chosen course</p>
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+            {[
+              { name: "B.Tech Loan", href: "/courses-loan/btech" },
+              { name: "MBBS Loan", href: "/courses-loan/mbbs" },
+              { name: "MBA Loan", href: "/courses-loan/mba" },
+              { name: "BBA Loan", href: "/courses-loan/bba" },
+              { name: "BCA Loan", href: "/courses-loan/bca" },
+              { name: "BDS Loan", href: "/courses-loan/bds" },
+              { name: "B.Sc Nursing", href: "/courses-loan/bsc-nursing" },
+              { name: "CA Loan", href: "/courses-loan/ca" },
+              { name: "Hotel Mgmt", href: "/courses-loan/hotel-management" },
+            ].map((course) => (
+              <Link key={course.href} href={course.href} className="bg-white rounded-lg p-4 text-center border border-gray-200 hover:border-teal-300 hover:shadow-md transition-all duration-200">
+                <span className="text-sm font-medium text-gray-800 hover:text-teal-600">{course.name}</span>
+              </Link>
+            ))}
           </div>
         </div>
       </section>

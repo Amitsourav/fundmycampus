@@ -56,6 +56,8 @@ export function BlogListingClient({ featured, posts, categories }: BlogListingCl
                         src={featured.image}
                         alt={featured.title}
                         className="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity"
+                        width={600}
+                        height={256}
                         loading="lazy"
                       />
                     </div>
@@ -153,6 +155,8 @@ export function BlogListingClient({ featured, posts, categories }: BlogListingCl
                               src={post.image}
                               alt={post.title}
                               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                              width={400}
+                              height={192}
                               loading="lazy"
                             />
                             <span className="absolute top-3 left-3 px-2 py-1 bg-white/90 backdrop-blur-sm text-xs font-medium text-gray-800 rounded">
@@ -199,7 +203,7 @@ export function BlogListingClient({ featured, posts, categories }: BlogListingCl
         faqs={[
           {
             question: "How often do you publish new articles?",
-            answer: "We publish 2-3 new articles every week covering various aspects of education loans, study abroad guidance, and financial planning tips for students and parents."
+            answer: "We regularly publish new articles covering education loans, study abroad guidance, and financial planning tips for students and parents. Our content library is growing every week."
           },
           {
             question: "Can I contribute to the blog?",

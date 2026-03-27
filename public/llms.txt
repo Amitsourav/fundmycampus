@@ -1,0 +1,39 @@
+# FundMyCampus
+
+> Education loan financing platform connecting Indian students with 12+ banking partners for study abroad and India education loans.
+
+## About
+
+FundMyCampus is an education loan marketplace that helps Indian students secure financing for higher education both in India and abroad. We partner with leading banks and NBFCs including ICICI Bank, Axis Bank, Credila, Tata Capital, Avanse, and more to offer collateral-free education loans starting at 6.75% interest with 48-hour approval.
+
+## Key Services
+
+- **Study Abroad Education Loans**: Up to 1.5 Crore for universities in 50+ countries including USA, UK, Canada, Australia, Germany, and Singapore
+- **Study in India Education Loans**: Up to 75 Lakhs for IITs, IIMs, AIIMS, NITs, and other premier institutions
+- **Course-Specific Loans**: Specialized financing for B.Tech, MBBS, MBA, BBA, BCA, BDS, B.Sc Nursing, CA, and Hotel Management programs
+- **Free Loan Tools**: EMI calculator, eligibility checker, loan comparison tool, cost of study estimator, and SOP reviewer
+
+## Contact
+
+- Website: https://www.fundmycampus.com
+- Email: deepak@fundmycampus.com
+- Phone: +91 78272 25354
+- Address: 1st Floor, C Block, 3471, Greenfield Colony, Faridabad, Haryana 121003, India
+
+## Important Pages
+
+- Homepage: https://www.fundmycampus.com
+- Study Abroad Loans: https://www.fundmycampus.com/abroad-study-loan
+- Study in India Loans: https://www.fundmycampus.com/india-study-loan
+- Loan Tools: https://www.fundmycampus.com/tools
+- Blog: https://www.fundmycampus.com/blogs
+- Contact: https://www.fundmycampus.com/contact
+- B.Tech Loan: https://www.fundmycampus.com/courses-loan/btech
+- MBBS Loan: https://www.fundmycampus.com/courses-loan/mbbs
+- MBA Loan: https://www.fundmycampus.com/courses-loan/mba
+- BBA Loan: https://www.fundmycampus.com/courses-loan/bba
+- BCA Loan: https://www.fundmycampus.com/courses-loan/bca
+- BDS Loan: https://www.fundmycampus.com/courses-loan/bds
+- B.Sc Nursing Loan: https://www.fundmycampus.com/courses-loan/bsc-nursing
+- CA Loan: https://www.fundmycampus.com/courses-loan/ca
+- Hotel Management Loan: https://www.fundmycampus.com/courses-loan/hotel-management

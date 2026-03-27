@@ -109,7 +109,7 @@ export const Header: React.FC = () => {
             {/* Logo */}
             <Link href="/" className="relative group">
               <motion.div whileHover={{ scale: 1.02 }} transition={{ duration: 0.3 }} className="flex items-center">
-                <img src="/images/logo.png" alt="FundMyCampus — Education Loan Platform" className="h-32 w-64 -my-11 object-contain" />
+                <img src="/images/logo.png" alt="FundMyCampus — Education Loan Platform" className="h-32 w-64 -my-11 object-contain" width={256} height={128} fetchPriority="high" />
               </motion.div>
             </Link>
 

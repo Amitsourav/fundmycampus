@@ -95,6 +95,8 @@ export const Reviews: React.FC = () => {
               src={reviews[currentSlide].image}
               alt={reviews[currentSlide].name}
               className="w-20 h-20 rounded-full object-cover mx-auto mb-6 border-4 border-white shadow-md"
+              width={80}
+              height={80}
               loading="lazy"
             />
 

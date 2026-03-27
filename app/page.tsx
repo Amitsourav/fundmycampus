@@ -69,8 +69,22 @@ const orgSchema = {
   "@type": "Organization",
   name: "FundMyCampus",
   url: "https://www.fundmycampus.com",
-  logo: "https://www.fundmycampus.com/logo.png",
+  logo: {
+    "@type": "ImageObject",
+    url: "https://www.fundmycampus.com/images/logo.png",
+    width: 256,
+    height: 128,
+  },
   description: "Education loan financing platform connecting Indian students with 12+ banking partners for study abroad and India education loans.",
+  foundingDate: "2026",
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: "1st Floor, C Block, 3471, Greenfield Colony",
+    addressLocality: "Faridabad",
+    addressRegion: "Haryana",
+    postalCode: "121003",
+    addressCountry: "IN",
+  },
   contactPoint: {
     "@type": "ContactPoint",
     telephone: "+91-78272-25354",
@@ -78,12 +92,27 @@ const orgSchema = {
     areaServed: "IN",
     availableLanguage: ["English", "Hindi"],
   },
-  sameAs: [],
+};
+
+const websiteSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "FundMyCampus",
+  url: "https://www.fundmycampus.com",
+  potentialAction: {
+    "@type": "SearchAction",
+    target: "https://www.fundmycampus.com/blogs?q={search_term_string}",
+    "query-input": "required name=search_term_string",
+  },
 };
 
 export default function HomePage() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
+      />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}

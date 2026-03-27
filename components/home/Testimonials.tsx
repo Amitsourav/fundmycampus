@@ -24,7 +24,7 @@ export const Testimonials: React.FC = () => {
     },
     {
       title: "No Collateral",
-      description: "Non-collateral education loans up to your entire education cost without any security deposit.",
+      description: "Collateral-free education loans up to ₹75 Lakhs for study in India and up to ₹1.5 Crore with collateral for study abroad.",
       icon: Shield,
     },
     {
