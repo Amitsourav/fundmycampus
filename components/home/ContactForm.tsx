@@ -38,12 +38,12 @@ const contactDetails = [
   },
   {
     icon: Mail,
-    label: "contact@fundmycampus.com",
-    href: "mailto:contact@fundmycampus.com",
+    label: "deepak@fundmycampus.com",
+    href: "mailto:deepak@fundmycampus.com",
   },
   {
     icon: MapPin,
-    label: "Delhi, India",
+    label: "Faridabad, Haryana, India",
     href: "#",
   },
 ];

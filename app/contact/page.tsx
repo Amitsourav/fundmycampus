@@ -60,12 +60,12 @@ export default function ContactPage() {
     {
       icon: Mail,
       title: "Email",
-      details: ["contact@fundmycampus.com"],
+      details: ["deepak@fundmycampus.com"],
     },
     {
       icon: MapPin,
       title: "Address",
-      details: ["123, Financial District", "Mumbai, Maharashtra 400001"],
+      details: ["1st Floor, C Block, 3471", "Greenfield Colony, Faridabad, Haryana 121003"],
     },
     {
       icon: Clock,
@@ -80,13 +80,13 @@ export default function ContactPage() {
     name: "FundMyCampus",
     url: "https://www.fundmycampus.com",
     telephone: "+91-78272-25354",
-    email: "contact@fundmycampus.com",
+    email: "deepak@fundmycampus.com",
     address: {
       "@type": "PostalAddress",
-      streetAddress: "123, Financial District",
-      addressLocality: "Mumbai",
-      addressRegion: "Maharashtra",
-      postalCode: "400001",
+      streetAddress: "1st Floor, C Block, 3471, Greenfield Colony",
+      addressLocality: "Faridabad",
+      addressRegion: "Haryana",
+      postalCode: "121003",
       addressCountry: "IN",
     },
     openingHoursSpecification: [
@@ -238,13 +238,13 @@ export default function ContactPage() {
               whileInView="visible"
               viewport={{ once: true }}
               variants={fadeInUp}
-              className="space-y-6"
+              className="space-y-3"
             >
               <div>
-                <h2 className="text-2xl font-display font-bold text-gray-900 mb-6">
+                <h2 className="text-2xl font-display font-bold text-gray-900 mb-3">
                   Contact Information
                 </h2>
-                <p className="text-gray-800 mb-8">
+                <p className="text-gray-800 mb-3">
                   Reach out to us through any of the following channels. 
                   Our team typically responds within 24 hours.
                 </p>
@@ -253,7 +253,7 @@ export default function ContactPage() {
               {contactInfo.map((info, index) => {
                 const Icon = info.icon;
                 return (
-                  <Card key={index} padding="md">
+                  <Card key={index} padding="sm">
                     <div className="flex items-start space-x-4">
                       <div className="p-3 bg-primary-100 rounded-lg flex-shrink-0">
                         <Icon className="h-6 w-6 text-primary-600" />
