@@ -40,7 +40,7 @@ export const ToolsPreview: React.FC = () => {
   ];
 
   return (
-    <section className="py-12 md:py-20 bg-white">
+    <section className="py-10 md:py-12 bg-white">
       <div className="max-w-screen-xl mx-auto px-6 md:px-8">
         {/* Header */}
         <motion.div
@@ -131,7 +131,7 @@ export const ToolsPreview: React.FC = () => {
                 </p>
               </div>
               <Link href="/tools">
-                <Button variant="primary" size="lg">
+                <Button variant="primary-light" size="lg">
                   Explore All Tools
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>

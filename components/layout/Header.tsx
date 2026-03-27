@@ -70,7 +70,7 @@ export const Header: React.FC = () => {
     <>
       {/* Community Top Bar */}
       <div className="fixed top-0 left-0 w-full z-50 bg-gradient-to-r from-teal-600 via-teal-500 to-teal-600 text-white">
-        <div className="w-full px-6 md:px-12 py-3 flex items-center justify-between">
+        <div className="max-w-screen-xl mx-auto px-6 md:px-8 py-2.5 flex items-center justify-between">
           <p className="hidden md:flex items-center gap-1 text-sm font-medium">
             <span>✨</span>
             Join our community for exclusive tips &amp; updates!
@@ -99,16 +99,17 @@ export const Header: React.FC = () => {
         initial="hidden"
         animate="visible"
         variants={fadeIn}
-        className={`fixed top-[48px] left-0 w-full z-50 transition-all duration-600 bg-white border-b border-gray-100 ${
-          isScrolled ? "shadow-soft-xl py-4" : "py-6"
+        className={`fixed top-[44px] left-1/2 -translate-x-1/2 z-50 transition-all duration-600 ${
+          isScrolled
+            ? "mt-2 w-[95%] max-w-screen-xl bg-gray-50/95 backdrop-blur-md shadow-soft-xl rounded-full py-2 px-4 md:px-6 border border-gray-300"
+            : "mt-3 w-[95%] max-w-screen-xl bg-gray-50/90 backdrop-blur-sm rounded-full py-3 px-4 md:px-8 border border-gray-300"
         }`}
       >
-        <div className="max-w-screen-xl mx-auto px-6 md:px-8">
-          <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between">
             {/* Logo */}
             <Link href="/" className="relative group">
               <motion.div whileHover={{ scale: 1.02 }} transition={{ duration: 0.3 }} className="flex items-center">
-                <img src="/images/logo.png" alt="FundMyCampus" className="h-40 w-80 -my-16 object-contain" />
+                <img src="/images/logo.png" alt="FundMyCampus — Education Loan Platform" className="h-32 w-64 -my-11 object-contain" />
               </motion.div>
             </Link>
 
@@ -122,7 +123,7 @@ export const Header: React.FC = () => {
                       onMouseEnter={() => setIsProductDropdownOpen(true)}
                       onMouseLeave={() => setIsProductDropdownOpen(false)}
                     >
-                      <button className="flex items-center space-x-1 text-base font-medium text-black hover:text-teal-500 transition-colors duration-300 group">
+                      <button className="flex items-center space-x-1 text-base font-medium text-gray-800 hover:text-teal-600 transition-colors duration-300 group">
                         <span>{link.label}</span>
                         <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${isProductDropdownOpen ? "rotate-180" : ""}`} />
                         <span className="absolute -bottom-1 left-0 w-full h-0.5 bg-teal-500 origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300" />
@@ -167,7 +168,7 @@ export const Header: React.FC = () => {
                       </AnimatePresence>
                     </div>
                   ) : (
-                    <Link href={link.href} className="relative text-base font-medium text-black hover:text-teal-500 transition-colors duration-300 group">
+                    <Link href={link.href} className="relative text-base font-medium text-gray-800 hover:text-teal-600 transition-colors duration-300 group">
                       {link.label}
                       <span className="absolute -bottom-1 left-0 w-full h-0.5 bg-teal-500 origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300" />
                     </Link>
@@ -182,7 +183,7 @@ export const Header: React.FC = () => {
                 <div className="relative" ref={userMenuRef}>
                   <button
                     onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-                    className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors"
+                    className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-white/10 transition-colors"
                   >
                     <div className="w-8 h-8 bg-teal-500 rounded-full flex items-center justify-center">
                       <User className="w-4 h-4 text-white" />
@@ -214,7 +215,7 @@ export const Header: React.FC = () => {
               ) : !loading ? (
                 <>
                   <Link href="/login">
-                    <Button variant="ghost" size="sm" className="!text-black hover:!text-teal-500">
+                    <Button variant="ghost" size="sm" className="!text-gray-800 hover:!text-teal-600 hover:!bg-gray-100">
                       <LogIn className="w-4 h-4 mr-1.5" />
                       Login
                     </Button>
@@ -230,11 +231,10 @@ export const Header: React.FC = () => {
             </div>
 
             {/* Mobile Menu Button */}
-            <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="lg:hidden p-2 text-black">
+            <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="lg:hidden p-2 text-white">
               {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
           </div>
-        </div>
 
         {/* Mobile Navigation */}
         <AnimatePresence>
@@ -244,7 +244,7 @@ export const Header: React.FC = () => {
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.3 }}
-              className="lg:hidden bg-white border-t border-gray-200"
+              className="lg:hidden bg-white border-t border-gray-100 rounded-b-2xl mt-2"
             >
               <nav className="max-w-screen-xl mx-auto px-6 py-6">
                 {navLinks.map((link, index) => (

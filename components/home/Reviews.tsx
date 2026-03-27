@@ -57,7 +57,7 @@ export const Reviews: React.FC = () => {
   const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + reviews.length) % reviews.length);
 
   return (
-    <section className="py-12 md:py-20 bg-white">
+    <section className="py-10 md:py-12 bg-white">
       <div className="max-w-screen-xl mx-auto px-6 md:px-8">
         {/* Header */}
         <motion.div

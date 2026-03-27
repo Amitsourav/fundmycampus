@@ -82,7 +82,7 @@ export default function AbroadStudyLoanPage() {
   return (
     <div className="pt-20 bg-white">
       {/* Hero Section - Split Layout */}
-      <section className="relative py-16 md:py-24 overflow-hidden bg-white">
+      <section className="relative py-10 md:py-12 overflow-hidden bg-white">
         {/* Background decoration */}
         <div className="absolute top-0 right-0 w-1/2 h-full bg-teal-50 -skew-x-12 translate-x-20 hidden lg:block" />
 
@@ -199,7 +199,7 @@ export default function AbroadStudyLoanPage() {
       </section>
 
       {/* Loan Features */}
-      <section className="py-20 bg-gradient-to-br from-teal-50 via-white to-teal-100">
+      <section className="py-10 md:py-12 bg-gradient-to-br from-teal-50 via-white to-teal-100">
         <div className="max-w-screen-xl mx-auto px-6 md:px-8">
           <div className="text-center mb-16">
             <h2 className="font-serif text-display-md text-black mb-4">
@@ -233,7 +233,7 @@ export default function AbroadStudyLoanPage() {
       </section>
 
       {/* Countries Section */}
-      <section className="py-20 bg-white">
+      <section className="py-10 md:py-12 bg-white">
         <div className="max-w-screen-xl mx-auto px-6 md:px-8">
           <div className="text-center mb-16">
             <h2 className="font-serif text-display-md text-black mb-4">
@@ -285,7 +285,7 @@ export default function AbroadStudyLoanPage() {
       </section>
 
       {/* Process Section */}
-      <section className="py-20 bg-gradient-to-br from-teal-50 via-white to-teal-100">
+      <section className="py-10 md:py-12 bg-gradient-to-br from-teal-50 via-white to-teal-100">
         <div className="max-w-screen-xl mx-auto px-6 md:px-8">
           <div className="text-center mb-16">
             <h2 className="font-serif text-display-md text-black mb-4">
@@ -334,7 +334,7 @@ export default function AbroadStudyLoanPage() {
       </section>
 
       {/* Eligibility & Documents */}
-      <section className="py-20 bg-white">
+      <section className="py-10 md:py-12 bg-white">
         <div className="max-w-screen-xl mx-auto px-6 md:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             {/* Eligibility */}
@@ -423,7 +423,7 @@ export default function AbroadStudyLoanPage() {
       />
 
       {/* CTA Section */}
-      <section className="py-20 bg-teal-500">
+      <section className="py-10 md:py-12 bg-teal-500">
         <div className="max-w-screen-xl mx-auto px-6 md:px-8">
           <motion.div
             initial="hidden"

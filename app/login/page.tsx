@@ -1,9 +1,5 @@
-import { LoginForm } from "@/components/auth/LoginForm";
+import { AnimatedLoginPage } from "@/components/auth/AnimatedLoginPage";
 
 export default function LoginPage() {
-  return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-      <LoginForm />
-    </div>
-  );
+  return <AnimatedLoginPage />;
 }

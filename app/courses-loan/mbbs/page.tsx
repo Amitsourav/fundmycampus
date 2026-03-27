@@ -167,7 +167,7 @@ export default function MBBSEducationLoanPage() {
   return (
     <div className="pt-20 bg-white">
       {/* Hero Section - Split Layout */}
-      <section className="relative py-16 md:py-24 overflow-hidden bg-white">
+      <section className="relative py-10 md:py-12 overflow-hidden bg-white">
         <div className="absolute top-0 left-0 w-1/2 h-full bg-teal-50 skew-x-12 -translate-x-20 hidden lg:block" />
 
         <div className="relative z-10 max-w-screen-xl mx-auto px-6 md:px-8">
@@ -245,7 +245,7 @@ export default function MBBSEducationLoanPage() {
       </section>
 
       {/* Loan Features */}
-      <section className="py-20 bg-gradient-to-r from-teal-50 to-white">
+      <section className="py-10 md:py-12 bg-gradient-to-r from-teal-50 to-white">
         <div className="max-w-screen-xl mx-auto px-6 md:px-8">
           <div className="text-center mb-16">
             <h2 className="font-serif text-display-md text-black mb-4">
@@ -280,7 +280,7 @@ export default function MBBSEducationLoanPage() {
       </section>
 
       {/* Industry Facts */}
-      <section className="py-20 bg-white">
+      <section className="py-10 md:py-12 bg-white">
         <div className="max-w-screen-xl mx-auto px-6 md:px-8">
           <div className="text-center mb-16">
             <h2 className="font-serif text-display-md text-black mb-4">
@@ -314,7 +314,7 @@ export default function MBBSEducationLoanPage() {
       </section>
 
       {/* MBBS Specializations */}
-      <section className="py-20 bg-gradient-to-bl from-white via-teal-50 to-teal-50">
+      <section className="py-10 md:py-12 bg-gradient-to-bl from-white via-teal-50 to-teal-50">
         <div className="max-w-screen-xl mx-auto px-6 md:px-8">
           <div className="text-center mb-16">
             <h2 className="font-serif text-display-md text-black mb-4">
@@ -362,7 +362,7 @@ export default function MBBSEducationLoanPage() {
       </section>
 
       {/* Top MBBS Colleges */}
-      <section className="py-20 bg-white">
+      <section className="py-10 md:py-12 bg-white">
         <div className="max-w-screen-xl mx-auto px-6 md:px-8">
           <div className="text-center mb-16">
             <h2 className="font-serif text-display-md text-black mb-4">
@@ -430,7 +430,7 @@ export default function MBBSEducationLoanPage() {
       </section>
 
       {/* Career Prospects */}
-      <section className="py-20 bg-gradient-to-tr from-teal-100 via-white to-teal-50">
+      <section className="py-10 md:py-12 bg-gradient-to-tr from-teal-100 via-white to-teal-50">
         <div className="max-w-screen-xl mx-auto px-6 md:px-8">
           <div className="text-center mb-16">
             <h2 className="font-serif text-display-md text-black mb-4">
@@ -481,7 +481,7 @@ export default function MBBSEducationLoanPage() {
       </section>
 
       {/* Eligibility & Documents */}
-      <section className="py-20 bg-white">
+      <section className="py-10 md:py-12 bg-white">
         <div className="max-w-screen-xl mx-auto px-6 md:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             {/* Eligibility */}
@@ -562,7 +562,7 @@ export default function MBBSEducationLoanPage() {
       />
 
       {/* CTA Section */}
-      <section className="py-20 bg-teal-500">
+      <section className="py-10 md:py-12 bg-teal-500">
         <div className="max-w-screen-xl mx-auto px-6 md:px-8">
           <motion.div
             initial="hidden"

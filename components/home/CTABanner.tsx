@@ -2,12 +2,13 @@
 
 import React from "react";
 import { motion } from "framer-motion";
+import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { ArrowRight } from "lucide-react";
 
 export const CTABanner: React.FC = () => {
   return (
-    <section className="py-12 bg-white">
+    <section className="py-10 md:py-12 bg-white">
       <div className="max-w-screen-xl mx-auto px-6 md:px-8">
         <div className="relative bg-teal-500 rounded-2xl overflow-hidden">
           {/* Background decorative shapes */}
@@ -35,10 +36,12 @@ export const CTABanner: React.FC = () => {
             </h2>
 
             {/* Right - CTA Button */}
-            <Button variant="primary" size="lg" className="bg-black hover:bg-gray-900 text-white whitespace-nowrap">
-              Get Started
-              <ArrowRight className="ml-2 w-5 h-5" />
-            </Button>
+            <Link href="/signup">
+              <Button variant="primary" size="lg" className="whitespace-nowrap">
+                Get Started
+                <ArrowRight className="ml-2 w-5 h-5" />
+              </Button>
+            </Link>
           </div>
         </div>
       </div>

@@ -606,7 +606,7 @@ export default function ToolsPage() {
   return (
     <div className="pt-20 bg-white min-h-screen">
       {/* Hero Section - Split Layout */}
-      <section className="relative py-16 md:py-20 overflow-hidden bg-white">
+      <section className="relative py-10 md:py-12 overflow-hidden bg-white">
         {/* Background decoration */}
         <div className="absolute top-0 right-0 w-1/3 h-full bg-teal-500 -skew-x-12 translate-x-20 hidden lg:block" />
 
@@ -715,7 +715,7 @@ export default function ToolsPage() {
       {/* Tools Sections Container */}
       <div ref={toolsSectionRef}>
       {/* EMI Calculator Section */}
-      <section id="emi-calculator" className="py-20 bg-white">
+      <section id="emi-calculator" className="py-10 md:py-12 bg-white">
         <div className="max-w-screen-xl mx-auto px-6 md:px-8">
           <motion.div
             initial="hidden"
@@ -878,7 +878,7 @@ export default function ToolsPage() {
       </section>
 
       {/* Cost Calculator Section */}
-      <section id="cost-calculator" className="py-20 bg-gradient-to-br from-teal-50 via-white to-teal-100">
+      <section id="cost-calculator" className="py-10 md:py-12 bg-gradient-to-br from-teal-50 via-white to-teal-100">
         <div className="max-w-screen-xl mx-auto px-6 md:px-8">
           <motion.div
             initial="hidden"
@@ -1105,7 +1105,7 @@ export default function ToolsPage() {
       </section>
 
       {/* Loan Eligibility Calculator Section */}
-      <section id="eligibility-calculator" className="py-20 bg-white">
+      <section id="eligibility-calculator" className="py-10 md:py-12 bg-white">
         <div className="max-w-screen-xl mx-auto px-6 md:px-8">
           <motion.div
             initial="hidden"
@@ -1291,7 +1291,7 @@ export default function ToolsPage() {
       </section>
 
       {/* Loan Comparison Tool Section */}
-      <section id="comparison-tool" className="py-20 bg-gradient-to-br from-teal-50 via-white to-teal-100">
+      <section id="comparison-tool" className="py-10 md:py-12 bg-gradient-to-br from-teal-50 via-white to-teal-100">
         <div className="max-w-screen-xl mx-auto px-6 md:px-8">
           <motion.div
             initial="hidden"
@@ -1543,7 +1543,7 @@ export default function ToolsPage() {
       </section>
 
       {/* Tax Benefit Calculator Section */}
-      <section id="tax-calculator" className="py-20 bg-white">
+      <section id="tax-calculator" className="py-10 md:py-12 bg-white">
         <div className="max-w-screen-xl mx-auto px-6 md:px-8">
           <motion.div
             initial="hidden"
@@ -1713,7 +1713,7 @@ export default function ToolsPage() {
       </section>
 
       {/* SOP Review Tool Section */}
-      <section id="sop-review" className="py-20 bg-gradient-to-br from-teal-50 via-white to-teal-100">
+      <section id="sop-review" className="py-10 md:py-12 bg-gradient-to-br from-teal-50 via-white to-teal-100">
         <div className="max-w-screen-xl mx-auto px-6 md:px-8">
           <motion.div
             initial="hidden"
@@ -1930,7 +1930,7 @@ export default function ToolsPage() {
       </div>
 
       {/* Tips Section */}
-      <section className="py-20 bg-white">
+      <section className="py-10 md:py-12 bg-white">
         <div className="max-w-screen-xl mx-auto px-6 md:px-8">
           <motion.div
             initial="hidden"

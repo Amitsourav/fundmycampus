@@ -103,7 +103,7 @@ export default function ContactPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }}
       />
       {/* Hero Section */}
-      <section className="py-16 bg-gradient-to-br from-primary-50 to-white">
+      <section className="py-10 md:py-12 bg-gradient-to-br from-primary-50 to-white">
         <div className="container mx-auto px-4">
           <motion.div
             initial="hidden"
@@ -123,7 +123,7 @@ export default function ContactPage() {
       </section>
 
       {/* Contact Form & Info */}
-      <section className="py-16 bg-white">
+      <section className="py-10 md:py-12 bg-white">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
             {/* Contact Form */}

@@ -40,7 +40,7 @@ export const Process: React.FC = () => {
   ];
 
   return (
-    <section id="process" className="py-16 md:py-32 bg-charcoal-50">
+    <section id="process" className="py-10 md:py-12 bg-charcoal-50">
       <div className="container mx-auto px-4 md:px-8">
         <SectionTitle
           title="Our Process"

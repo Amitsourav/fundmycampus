@@ -17,15 +17,28 @@ export const Footer: React.FC = () => {
     "Services": [
       { label: "Study Abroad Loans", href: "/abroad-study-loan" },
       { label: "Study in India Loans", href: "/india-study-loan" },
+      { label: "Loan Tools & Calculators", href: "/tools" },
       { label: "Loan Process", href: "/#process" },
+    ],
+    "Course Loans": [
+      { label: "B.Tech Education Loan", href: "/courses-loan/btech" },
+      { label: "MBBS Education Loan", href: "/courses-loan/mbbs" },
+      { label: "MBA Education Loan", href: "/courses-loan/mba" },
+      { label: "BBA Education Loan", href: "/courses-loan/bba" },
+      { label: "BCA Education Loan", href: "/courses-loan/bca" },
+      { label: "BDS Education Loan", href: "/courses-loan/bds" },
+      { label: "B.Sc Nursing Loan", href: "/courses-loan/bsc-nursing" },
+      { label: "CA Education Loan", href: "/courses-loan/ca" },
+      { label: "Hotel Management Loan", href: "/courses-loan/hotel-management" },
     ],
     "Company": [
       { label: "About", href: "/about" },
       { label: "Contact", href: "/contact" },
+      { label: "Blogs", href: "/blogs" },
       { label: "Careers", href: "/careers" },
     ],
     "Legal": [
-      { label: "Privacy", href: "/privacy" },
+      { label: "Privacy Policy", href: "/privacy" },
     ],
   };
 
@@ -45,7 +58,7 @@ export const Footer: React.FC = () => {
             <img
               src="/images/logo.png"
               alt="FundMyCampus"
-              className="h-32 w-auto mb-4 brightness-0 invert"
+              className="h-40 w-auto mb-4 brightness-0 invert"
             />
             <p className="text-gray-300 leading-relaxed mb-6 max-w-sm">
               Premium education financing for ambitious students pursuing excellence at the world's finest institutions.
@@ -59,7 +72,7 @@ export const Footer: React.FC = () => {
           </motion.div>
 
           {/* Links Grid */}
-          <div className="lg:col-span-6 grid grid-cols-2 md:grid-cols-3 gap-8">
+          <div className="lg:col-span-6 grid grid-cols-2 md:grid-cols-4 gap-8">
             {Object.entries(footerLinks).map(([category, links], categoryIndex) => (
               <motion.div
                 key={category}

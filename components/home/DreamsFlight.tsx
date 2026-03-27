@@ -27,7 +27,7 @@ export const DreamsFlight: React.FC = () => {
   };
 
   return (
-    <section className="relative py-12 md:py-20 bg-white overflow-hidden">
+    <section className="relative py-10 md:py-12 bg-white overflow-hidden">
 
       <div className="relative z-10 max-w-screen-xl mx-auto px-6 md:px-8">
         <motion.div

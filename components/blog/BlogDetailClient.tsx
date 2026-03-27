@@ -281,7 +281,7 @@ export function BlogDetailClient({ post, relatedPosts }: BlogDetailClientProps) 
                     placeholder="Your email"
                     className="w-full px-4 py-2 rounded-lg mb-3 text-sm"
                   />
-                  <Button variant="primary" size="sm" className="w-full">
+                  <Button variant="primary-light" size="sm" className="w-full">
                     Subscribe
                   </Button>
                 </div>

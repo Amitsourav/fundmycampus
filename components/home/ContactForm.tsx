@@ -85,7 +85,7 @@ export const ContactForm: React.FC = () => {
   };
 
   return (
-    <section id="contact-form" className="py-20 bg-gradient-to-br from-gray-50 via-white to-teal-50/30">
+    <section id="contact-form" className="py-10 md:py-12 bg-gradient-to-br from-gray-50 via-white to-teal-50/30">
       <div className="max-w-screen-xl mx-auto px-6 md:px-8">
         <motion.div
           initial="hidden"

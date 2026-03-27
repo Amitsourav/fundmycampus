@@ -1,11 +1,14 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/Button";
 import { fadeInUp, staggerContainer } from "@/lib/animations";
+import { useAuth } from "@/lib/auth-context";
 
 export const LoanPartners: React.FC = () => {
+  const { user } = useAuth();
   const partners = [
     {
       name: "ICICI Bank",
@@ -94,7 +97,7 @@ export const LoanPartners: React.FC = () => {
   ];
 
   return (
-    <section className="py-20 bg-white">
+    <section className="py-10 md:py-12 bg-white">
       <div className="max-w-screen-xl mx-auto px-6 md:px-8">
         {/* Header */}
         <motion.div
@@ -209,9 +212,11 @@ export const LoanPartners: React.FC = () => {
           transition={{ duration: 0.5, delay: 0.2 }}
           className="text-center mt-8"
         >
-          <Button variant="primary" size="lg">
-            Check Your Eligibility Now
-          </Button>
+          <Link href={user ? "/dashboard" : "/login"}>
+            <Button variant="primary" size="lg">
+              Check Your Eligibility Now
+            </Button>
+          </Link>
         </motion.div>
       </div>
     </section>

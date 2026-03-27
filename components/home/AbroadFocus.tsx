@@ -43,7 +43,7 @@ export const AbroadFocus: React.FC = () => {
   ];
 
   return (
-    <section className="py-16 md:py-32 bg-white">
+    <section className="py-10 md:py-12 bg-white">
       <div className="container mx-auto px-4 md:px-8">
         {/* Section Title */}
         <SectionTitle

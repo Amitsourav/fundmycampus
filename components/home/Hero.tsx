@@ -12,6 +12,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { fadeInUp, staggerContainer, staggerItem, textReveal } from "@/lib/animations";
 import { ArrowRight, Globe, Shield, Clock } from "lucide-react";
+import { Marquee } from "@/components/ui/marquee";
 
 export const Hero: React.FC = () => {
   const trustIndicators = [
@@ -24,6 +25,21 @@ export const Hero: React.FC = () => {
     { icon: Globe, text: "Study in 50+ countries" },
     { icon: Shield, text: "100% financing available" },
     { icon: Clock, text: "48-hour approval" },
+  ];
+
+  const bankPartners = [
+    { name: "ICICI Bank", logo: "/images/banks/icici.jpeg" },
+    { name: "Axis Bank", logo: "/images/banks/Axis.png" },
+    { name: "Credila", logo: "/images/banks/credila.png" },
+    { name: "PNB", logo: "/images/banks/pnb.png" },
+    { name: "Union Bank", logo: "/images/banks/union.jpeg" },
+    { name: "IDFC First", logo: "/images/banks/idfc.png" },
+    { name: "Yes Bank", logo: "/images/banks/yes.png" },
+    { name: "Avanse", logo: "/images/banks/avanse.png" },
+    { name: "Tata Capital", logo: "/images/banks/tata.png" },
+    { name: "Auxilo", logo: "/images/banks/auxilo.png" },
+    { name: "Prodigy Finance", logo: "/images/banks/prodigy.png" },
+    { name: "Poonawalla", logo: "/images/banks/poonawala.jpeg" },
   ];
 
   return (
@@ -52,19 +68,19 @@ export const Hero: React.FC = () => {
 
       {/* Main Content */}
       <div className="relative z-10 w-full">
-        <div className="max-w-screen-xl mx-auto px-6 md:px-8 pt-12 pb-20">
+        <div className="max-w-screen-xl mx-auto px-6 md:px-8 pt-10 pb-6">
           <motion.div
             initial="hidden"
             animate="visible"
             variants={staggerContainer}
-            className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center min-h-[600px] md:min-h-screen"
+            className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center"
           >
             {/* Left Content */}
             <div className="lg:col-span-6 order-2 lg:order-1">
               {/* Main Headline - Left aligned like inspiration */}
               <motion.h1
                 variants={textReveal}
-                className="font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl text-black mb-6 md:mb-8 leading-none"
+                className="font-serif text-4xl sm:text-5xl md:text-5xl lg:text-6xl xl:text-7xl text-black mb-6 md:mb-7 leading-none"
               >
                 Education Loans
                 <span className="block text-black">for Study Abroad</span>
@@ -74,7 +90,7 @@ export const Hero: React.FC = () => {
               {/* Subheadline - Simple and clean */}
               <motion.p 
                 variants={staggerItem}
-                className="text-xl text-gray-800 mb-12 leading-relaxed max-w-lg"
+                className="text-lg text-gray-800 mb-10 leading-relaxed max-w-lg"
               >
                 We help fuel educational dreams by removing the barriers to financial access through private student loans.
               </motion.p>
@@ -255,6 +271,31 @@ export const Hero: React.FC = () => {
             </motion.div>
           </motion.div>
         </div>
+      </div>
+
+      {/* Bank Partners Ribbon */}
+      <div className="relative z-20 pb-4">
+        <p className="text-center text-sm font-medium text-gray-500 mb-4 tracking-wide uppercase">
+          Trusted by 12+ Banking Partners
+        </p>
+        <Marquee duration={30} pauseOnHover fade fadeAmount={8}>
+          {bankPartners.map((bank) => (
+            <div
+              key={bank.name}
+              className="flex items-center gap-4 mx-8 px-6 py-3 bg-white/80 backdrop-blur-sm rounded-full border border-gray-200/60 shadow-sm"
+            >
+              <img
+                src={bank.logo}
+                alt={bank.name}
+                className="h-9 w-14 object-contain"
+                loading="lazy"
+              />
+              <span className="text-base font-bold text-gray-800 whitespace-nowrap">
+                {bank.name}
+              </span>
+            </div>
+          ))}
+        </Marquee>
       </div>
 
       {/* Curved bottom section like inspiration */}

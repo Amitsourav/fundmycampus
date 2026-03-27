@@ -102,6 +102,7 @@ function timeAgo(d: string) {
   return `${Math.floor(hrs / 24)}d ago`;
 }
 function formatDate(d: string) { return new Date(d).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" }); }
+function shortId(id: string) { return id.length > 8 ? id.slice(0, 8) : id; }
 function formatSize(b: number) { return b > 1024 * 1024 ? `${(b / 1024 / 1024).toFixed(1)} MB` : `${(b / 1024).toFixed(0)} KB`; }
 
 type Section = "overview" | "applications" | "documents" | "notifications" | "referrals" | "profile" | "chat";
@@ -195,23 +196,6 @@ function OverviewTab({ profile, loans, user, onSection }: { profile: Profile | n
 
   return (
     <div className="space-y-6">
-      {/* Stats row */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        {[
-          { label: "Applications", value: loans.length, num: "text-violet-600", bg: "bg-violet-50", border: "border-violet-100", dot: "bg-violet-400" },
-          { label: "Active", value: activeLoans.length, num: "text-orange-500", bg: "bg-orange-50", border: "border-orange-100", dot: "bg-orange-400" },
-          { label: "Approved", value: approvedLoans.length, num: "text-emerald-600", bg: "bg-emerald-50", border: "border-emerald-100", dot: "bg-emerald-400" },
-          { label: "Documents", value: documents.length, num: "text-blue-600", bg: "bg-blue-50", border: "border-blue-100", dot: "bg-blue-400" },
-        ].map((s) => (
-          <div key={s.label} className={`${s.bg} border ${s.border} rounded-2xl p-5`}>
-            <div className="flex items-center gap-2 mb-1">
-              <div className={`w-2 h-2 rounded-full ${s.dot}`} />
-              <p className="text-xs text-gray-500 font-medium">{s.label}</p>
-            </div>
-            <p className={`text-3xl font-bold ${s.num}`}>{s.value}</p>
-          </div>
-        ))}
-      </div>
 
       {/* Profile + Next Steps */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -282,7 +266,7 @@ function OverviewTab({ profile, loans, user, onSection }: { profile: Profile | n
                   <div className="flex items-center gap-3">
                     {loanStatusIcon(loan.status)}
                     <div>
-                      <p className="text-sm font-medium text-gray-900">{loan.loan_amount ? `₹${loan.loan_amount.toLocaleString("en-IN")}` : loan.application_id ?? "Application"}</p>
+                      <p className="text-sm font-medium text-gray-900">{loan.loan_amount ? `₹${loan.loan_amount.toLocaleString("en-IN")}` : shortId(loan.application_id ?? "Application")}</p>
                       <p className="text-xs text-gray-500">{formatDate(loan.created_at)}</p>
                     </div>
                   </div>
@@ -552,7 +536,7 @@ function LoanProcessCard({ loan }: { loan: LoanApplication }) {
           <p className="font-semibold text-gray-900 text-base">
             {loan.loan_amount ? `₹${loan.loan_amount.toLocaleString("en-IN")}` : "Loan Application"}
           </p>
-          <p className="text-xs text-gray-500 mt-0.5">{loan.application_id ?? loan.id} · Applied {formatDate(loan.created_at)}</p>
+          <p className="text-xs text-gray-500 mt-0.5">{shortId(loan.application_id ?? loan.id)} · Applied {formatDate(loan.created_at)}</p>
         </div>
         {/* Best bank status badge */}
         {bestBank ? (
@@ -625,6 +609,10 @@ function LoanProcessCard({ loan }: { loan: LoanApplication }) {
 
 // ─────────────────── Applications Tab ───────────────────
 function ApplicationsTab({ loans }: { loans: LoanApplication[] }) {
+  const hasActiveApplication = loans.some(
+    (loan) => !["rejected", "withdrawn", "cancelled"].includes(loan.status)
+  );
+
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between bg-violet-50 border border-violet-100 rounded-2xl px-5 py-4">
@@ -632,9 +620,11 @@ function ApplicationsTab({ loans }: { loans: LoanApplication[] }) {
           <h2 className="text-base font-semibold text-violet-900">My Loan Applications</h2>
           <p className="text-xs text-violet-400 mt-0.5">{loans.length} application{loans.length !== 1 ? "s" : ""} found</p>
         </div>
-        <Link href="/signup">
-          <Button variant="primary" size="sm"><GraduationCap className="w-4 h-4 mr-1.5" />New Application</Button>
-        </Link>
+        {!hasActiveApplication && (
+          <Link href="/signup">
+            <Button variant="primary" size="sm"><GraduationCap className="w-4 h-4 mr-1.5" />New Application</Button>
+          </Link>
+        )}
       </div>
       {loans.length === 0 ? (
         <div className="bg-white rounded-2xl border border-gray-100 shadow-sm text-center py-16">
@@ -984,6 +974,7 @@ function ReferralsTab({ profile }: { profile: Profile | null }) {
           <p className="text-xs font-semibold text-teal-700 flex items-center gap-1.5">🎁 Bonus Milestone</p>
           <p className="text-xs text-teal-600 mt-1">Every 10th successful referral earns you an extra <strong>₹5,000</strong> bonus on top of the regular reward!</p>
         </div>
+        <p className="mt-3 text-xs text-gray-500">* Minimum loan amount must be ₹10 Lakhs to qualify for referral rewards.</p>
       </div>
 
       {/* Earnings potential table */}
