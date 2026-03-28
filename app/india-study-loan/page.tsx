@@ -58,7 +58,7 @@ export default function IndiaStudyLoanPage() {
     { icon: DollarSign, title: "Up to ₹75 Lakhs", description: "Complete financing for tuition, hostel and other expenses at premier institutions" },
     { icon: Shield, title: "No Collateral", description: "Up to ₹7.5 Lakhs without any security for premier institutions" },
     { icon: Clock, title: "Quick Approval", description: "Loan approval within 7-10 working days" },
-    { icon: Award, title: "Best Interest Rates", description: "Starting from 6.75% per annum with flexible terms" },
+    { icon: Award, title: "Best Interest Rates", description: "Starting from 6.85% per annum with flexible terms" },
   ];
 
   const eligibilityIndia = [
@@ -110,13 +110,13 @@ export default function IndiaStudyLoanPage() {
     "@context": "https://schema.org",
     "@type": "FinancialProduct",
     name: "Education Loan for Study in India",
-    description: "Education loans up to ₹75 Lakhs for IITs, IIMs, AIIMS, NITs and top Indian universities. Low interest rates starting at 6.75% with quick approval.",
+    description: "Education loans up to ₹75 Lakhs for IITs, IIMs, AIIMS, NITs and top Indian universities. Low interest rates starting at 6.85% with quick approval.",
     provider: {
       "@type": "Organization",
       name: "FundMyCampus",
       url: "https://www.fundmycampus.com",
     },
-    annualPercentageRate: { "@type": "QuantitativeValue", minValue: 6.75, maxValue: 12, unitCode: "P1" },
+    annualPercentageRate: { "@type": "QuantitativeValue", minValue: 6.85, maxValue: 12, unitCode: "P1" },
     amount: { "@type": "MonetaryAmount", currency: "INR", maxValue: 7500000 },
     feesAndCommissionsSpecification: "Processing fee varies by lender, typically 0.25% to 1%",
   };
@@ -218,7 +218,7 @@ export default function IndiaStudyLoanPage() {
                     <Award className="w-5 h-5 text-black" />
                   </div>
                   <div>
-                    <p className="font-bold text-black">6.75%</p>
+                    <p className="font-bold text-black">6.85%</p>
                     <p className="text-xs text-gray-700">Interest Rate</p>
                   </div>
                 </div>
@@ -515,7 +515,7 @@ export default function IndiaStudyLoanPage() {
           },
           {
             question: "What is the interest rate for education loans in India?",
-            answer: "Interest rates for education loans in India typically range from 6.75% to 12% per annum. Government banks offer lower rates (6.75%-9.5%), while private banks and NBFCs may charge 9%-12%. Female students often get a 0.5% concession on interest rates."
+            answer: "Interest rates for education loans in India typically range from 6.85% to 12% per annum. Government banks offer lower rates (6.85%-9.5%), while private banks and NBFCs may charge 9%-12%. Female students often get a 0.5% concession on interest rates."
           },
           {
             question: "Is collateral required for education loans in India?",

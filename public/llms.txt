@@ -4,7 +4,7 @@
 
 ## About
 
-FundMyCampus is an education loan marketplace that helps Indian students secure financing for higher education both in India and abroad. We partner with leading banks and NBFCs including ICICI Bank, Axis Bank, Credila, Tata Capital, Avanse, and more to offer collateral-free education loans starting at 6.75% interest with 48-hour approval.
+FundMyCampus is an education loan marketplace that helps Indian students secure financing for higher education both in India and abroad. We partner with leading banks and NBFCs including ICICI Bank, Axis Bank, Credila, Tata Capital, Avanse, and more to offer collateral-free education loans starting at 6.85% interest with 48-hour approval.
 
 ## Key Services
 

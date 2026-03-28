@@ -530,7 +530,7 @@ export default function MBAEducationLoanPage() {
           },
           {
             question: "Do IIM students get special loan benefits?",
-            answer: "Yes, IIM students enjoy several benefits including higher loan limits (up to ₹50 Lakhs), lower interest rates (as low as 6.75%), 100% collateral-free loans, and faster approvals. Many banks have special tie-ups with IIMs for priority processing."
+            answer: "Yes, IIM students enjoy several benefits including higher loan limits (up to ₹50 Lakhs), lower interest rates (as low as 6.85%), 100% collateral-free loans, and faster approvals. Many banks have special tie-ups with IIMs for priority processing."
           },
           {
             question: "What is the ROI of taking an MBA loan?",

@@ -253,7 +253,7 @@ export default function BDSEducationLoanPage() {
                 </div>
                 <div className="text-center p-4 bg-white rounded-xl shadow-md border border-gray-100">
                   <Award className="h-6 w-6 text-teal-600 mx-auto mb-2" />
-                  <div className="font-bold text-black">6.75%</div>
+                  <div className="font-bold text-black">6.85%</div>
                   <div className="text-xs text-gray-700">Interest Rate</div>
                 </div>
               </motion.div>

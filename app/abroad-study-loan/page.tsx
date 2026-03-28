@@ -52,7 +52,7 @@ export default function AbroadStudyLoanPage() {
     { icon: DollarSign, title: "Up to ₹1.5 Crore", description: "Complete financing for tuition and living expenses" },
     { icon: Shield, title: "Zero Collateral", description: "Up to ₹7.5 Lakhs without any security" },
     { icon: Clock, title: "48-Hour Approval", description: "Quick decision on your loan application" },
-    { icon: Award, title: "Competitive Rates", description: "Starting from 6.75% per annum" },
+    { icon: Award, title: "Competitive Rates", description: "Starting from 6.85% per annum" },
   ];
 
   const eligibility = [
@@ -83,13 +83,13 @@ export default function AbroadStudyLoanPage() {
     "@context": "https://schema.org",
     "@type": "FinancialProduct",
     name: "Study Abroad Education Loan",
-    description: "Collateral-free education loans up to ₹1.5 Crore for studying abroad in 50+ countries. Starting at 6.75% interest with 48-hour approval.",
+    description: "Collateral-free education loans up to ₹1.5 Crore for studying abroad in 50+ countries. Starting at 6.85% interest with 48-hour approval.",
     provider: {
       "@type": "Organization",
       name: "FundMyCampus",
       url: "https://www.fundmycampus.com",
     },
-    annualPercentageRate: { "@type": "QuantitativeValue", minValue: 6.75, maxValue: 13, unitCode: "P1" },
+    annualPercentageRate: { "@type": "QuantitativeValue", minValue: 6.85, maxValue: 13, unitCode: "P1" },
     amount: { "@type": "MonetaryAmount", currency: "INR", maxValue: 15000000 },
     feesAndCommissionsSpecification: "Processing fee varies by lender, typically 0.25% to 1%",
   };
@@ -162,7 +162,7 @@ export default function AbroadStudyLoanPage() {
                     <Award className="w-5 h-5 text-black" />
                   </div>
                   <div>
-                    <p className="font-bold text-black">6.75%</p>
+                    <p className="font-bold text-black">6.85%</p>
                     <p className="text-xs text-gray-700">Interest Rate</p>
                   </div>
                 </div>
@@ -461,7 +461,7 @@ export default function AbroadStudyLoanPage() {
           },
           {
             question: "What is the interest rate for study abroad loans?",
-            answer: "Interest rates for study abroad loans typically range from 6.75% to 13% per annum depending on the lender, loan amount, collateral, and credit profile. Government banks usually offer lower rates, while NBFCs may charge slightly higher but offer faster processing."
+            answer: "Interest rates for study abroad loans typically range from 6.85% to 13% per annum depending on the lender, loan amount, collateral, and credit profile. Government banks usually offer lower rates, while NBFCs may charge slightly higher but offer faster processing."
           },
           {
             question: "Is collateral mandatory for abroad education loans?",

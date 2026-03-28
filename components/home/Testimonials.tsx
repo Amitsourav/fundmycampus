@@ -19,7 +19,7 @@ export const Testimonials: React.FC = () => {
     },
     {
       title: "Competitive Rates",
-      description: "Starting from 6.75% per annum with flexible EMI options tailored to your future income.",
+      description: "Starting from 6.85% per annum with flexible EMI options tailored to your future income.",
       icon: DollarSign,
     },
     {

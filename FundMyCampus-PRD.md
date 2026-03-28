@@ -32,7 +32,7 @@ FundMyCampus is an **education loan platform** that helps Indian students get lo
 > A student fills one application. We match them with the best banks. Our counselors guide them through the entire process until money is disbursed.
 
 **Key numbers:**
-- Collateral-free loans starting at **6.75% interest**
+- Collateral-free loans starting at **6.85% interest**
 - Loans up to **1.5 Crore** (for abroad) and **40 Lakhs** (for India)
 - **48-hour** approval turnaround
 - **12+ banking partners**

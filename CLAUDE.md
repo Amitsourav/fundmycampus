@@ -49,8 +49,8 @@ All key pages currently show the generic root title. Fix:
 
 | Page | Title | Description |
 |------|-------|-------------|
-| `/` | FundMyCampus — Education Loans for Study Abroad & India | Apply for education loans for study abroad or domestic universities. Collateral-free loans starting at 6.75%, 48-hr approval, 15,000+ students helped. |
-| `/abroad-study-loan` | Study Abroad Education Loan — Collateral-Free, Starting 6.75% \| FundMyCampus | Get collateral-free study abroad education loans up to ₹1.5 Crore. Compare ICICI, Axis, Credila & more. 48-hour approval. |
+| `/` | FundMyCampus — Education Loans for Study Abroad & India | Apply for education loans for study abroad or domestic universities. Collateral-free loans starting at 6.85%, 48-hr approval, 15,000+ students helped. |
+| `/abroad-study-loan` | Study Abroad Education Loan — Collateral-Free, Starting 6.85% \| FundMyCampus | Get collateral-free study abroad education loans up to ₹1.5 Crore. Compare ICICI, Axis, Credila & more. 48-hour approval. |
 | `/india-study-loan` | Education Loan for Study in India — IIT, IIM, AIIMS \| FundMyCampus | Education loans up to ₹40 Lakhs for IITs, IIMs, AIIMS, NITs & top Indian universities. Low interest, quick approval. |
 | `/tools` | Free Education Loan Calculators — EMI, Eligibility & Cost Tools \| FundMyCampus | Use free EMI calculator, eligibility checker, loan comparison tool, and SOP reviewer. Plan your education financing smartly. |
 | `/contact` | Contact FundMyCampus — Free Education Loan Consultation | Get free education loan consultation. Call +91 78272 25354 or fill the form. We help with study abroad & India loans. |
@@ -116,7 +116,7 @@ Add `robots: { index: false, follow: false }` to metadata on:
 #### 10. Rewrite H1s with keywords
 | Page | Current H1 | Better H1 |
 |------|-----------|-----------|
-| `/` | "Funding Your Education Dreams" | "Education Loans for Study Abroad & India — Starting 6.75%" |
+| `/` | "Funding Your Education Dreams" | "Education Loans for Study Abroad & India — Starting 6.85%" |
 | `/abroad-study-loan` | "Your Global Education Journey Starts Here" | "Study Abroad Education Loans — Fast, Collateral-Free Financing" |
 | `/india-study-loan` | (check) | "Education Loans for IIT, IIM, AIIMS & Top Indian Universities" |
 | `/tools` | "Smart Tools for Financial Planning" | "Free Education Loan Calculators & Planning Tools" |

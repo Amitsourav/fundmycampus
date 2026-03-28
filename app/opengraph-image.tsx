@@ -83,7 +83,7 @@ export default async function Image() {
             <span style={{ fontSize: 14, color: "#666" }}>Students Funded</span>
           </div>
           <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-            <span style={{ fontSize: 26, fontWeight: 700, color: "#0D9488" }}>6.75%</span>
+            <span style={{ fontSize: 26, fontWeight: 700, color: "#0D9488" }}>6.85%</span>
             <span style={{ fontSize: 14, color: "#666" }}>Starting Rate</span>
           </div>
           <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>

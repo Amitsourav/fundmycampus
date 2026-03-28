@@ -22,8 +22,8 @@ export const WhyFundMyCampus: React.FC = () => {
     {
       icon: DollarSign,
       title: "Competitive Rates",
-      description: "Starting from 6.75% per annum with flexible EMI options tailored to your future income.",
-      highlight: "From 6.75% p.a."
+      description: "Starting from 6.85% per annum with flexible EMI options tailored to your future income.",
+      highlight: "From 6.85% p.a."
     },
     {
       icon: Globe,

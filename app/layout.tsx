@@ -25,19 +25,19 @@ export const metadata: Metadata = {
     default: "FundMyCampus — Education Loans for Study Abroad & India",
     template: "%s | FundMyCampus",
   },
-  description: "Apply for education loans for study abroad or Indian universities. Collateral-free loans starting at 6.75%, 48-hr approval, 15,000+ students helped. Compare ICICI, Axis, Credila & more.",
+  description: "Apply for education loans for study abroad or Indian universities. Collateral-free loans starting at 6.85%, 48-hr approval, 15,000+ students helped. Compare ICICI, Axis, Credila & more.",
   keywords: "education loan study abroad, collateral free education loan india, study abroad loan, education loan without security, NBFC education loan, education loan for abroad studies",
   openGraph: {
     type: "website",
     siteName: "FundMyCampus",
     title: "FundMyCampus — Education Loans for Study Abroad & India",
-    description: "Get collateral-free education loans starting at 6.75% for studying abroad or in India. Fast 48-hour approval. 15,000+ students funded.",
+    description: "Get collateral-free education loans starting at 6.85% for studying abroad or in India. Fast 48-hour approval. 15,000+ students funded.",
     url: "https://www.fundmycampus.com",
   },
   twitter: {
     card: "summary_large_image",
     title: "FundMyCampus — Education Loans for Study Abroad & India",
-    description: "Get collateral-free education loans starting at 6.75% for studying abroad or in India. Fast 48-hour approval.",
+    description: "Get collateral-free education loans starting at 6.85% for studying abroad or in India. Fast 48-hour approval.",
   },
   alternates: {
     canonical: "https://www.fundmycampus.com",

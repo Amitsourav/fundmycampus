@@ -40,7 +40,7 @@ export const LoanJourney: React.FC = () => {
 
   const highlights = [
     { icon: Clock, value: "48hrs", label: "Quick Approval" },
-    { icon: Percent, value: "6.75%", label: "Starting Rate" },
+    { icon: Percent, value: "6.85%", label: "Starting Rate" },
     { icon: Shield, value: "100%", label: "Secure Process" },
   ];
 
