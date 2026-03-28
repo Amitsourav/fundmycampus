@@ -433,33 +433,37 @@ export default function BTechEducationLoanPage() {
             variants={fadeInUp}
             className="bg-white/70 backdrop-blur-xl rounded-card overflow-hidden border border-white/20 shadow-[0_8px_32px_rgba(251,191,36,0.15)] hover:shadow-[0_16px_64px_rgba(251,191,36,0.25)] hover:scale-[1.02] transition-all duration-500"
           >
-            <div className="bg-gradient-to-r from-teal-600 to-teal-500 text-white px-6 py-4">
-              <div className="grid grid-cols-4 gap-4 text-sm font-medium">
-                <div>Job Role</div>
-                <div>Average Salary</div>
-                <div>Growth Potential</div>
-                <div>Market Demand</div>
-              </div>
-            </div>
-
-            <div className="divide-y divide-gray-200">
-              {careerProspects.map((career, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, x: -30 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  className="px-6 py-4 hover:bg-teal-50 transition-colors duration-200"
-                >
-                  <div className="grid grid-cols-4 gap-4 items-center text-sm">
-                    <div className="font-medium text-black">{career.role}</div>
-                    <div className="text-teal-600">{career.avgSalary}</div>
-                    <div className="text-green-600">{career.growth}</div>
-                    <div className="text-blue-600">{career.demand}</div>
+            <div className="overflow-x-auto">
+              <div className="min-w-[500px]">
+                <div className="bg-gradient-to-r from-teal-600 to-teal-500 text-white px-6 py-4">
+                  <div className="grid grid-cols-4 gap-4 text-sm font-medium">
+                    <div>Job Role</div>
+                    <div>Average Salary</div>
+                    <div>Growth Potential</div>
+                    <div>Market Demand</div>
                   </div>
-                </motion.div>
-              ))}
+                </div>
+
+                <div className="divide-y divide-gray-200">
+                  {careerProspects.map((career, index) => (
+                    <motion.div
+                      key={index}
+                      initial={{ opacity: 0, x: -30 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.5, delay: index * 0.1 }}
+                      className="px-6 py-4 hover:bg-teal-50 transition-colors duration-200"
+                    >
+                      <div className="grid grid-cols-4 gap-4 items-center text-sm">
+                        <div className="font-medium text-black">{career.role}</div>
+                        <div className="text-teal-600">{career.avgSalary}</div>
+                        <div className="text-green-600">{career.growth}</div>
+                        <div className="text-blue-600">{career.demand}</div>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
             </div>
           </motion.div>
         </div>

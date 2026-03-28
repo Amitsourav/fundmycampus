@@ -434,7 +434,7 @@ export function AnimatedLoginPage() {
       </div>
 
       {/* Right — Login Form */}
-      <div className="flex items-center justify-center p-8 bg-white">
+      <div className="flex items-center justify-center p-4 sm:p-6 md:p-8 bg-white">
         <div className="w-full max-w-[420px]">
           {/* Mobile Logo */}
           <div className="lg:hidden flex items-center justify-center gap-2 text-lg font-semibold mb-12">

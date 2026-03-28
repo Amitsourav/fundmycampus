@@ -82,7 +82,7 @@ export const DreamsFlight: React.FC = () => {
             <div className="flex bg-gray-100 p-1 rounded-xl mb-8 max-w-sm">
               <button
                 onClick={() => setActiveTab("abroad")}
-                className={`flex-1 py-3 px-6 rounded-lg font-medium transition-all duration-300 ${
+                className={`flex-1 py-2.5 sm:py-3 px-3 sm:px-6 rounded-lg font-medium transition-all duration-300 ${
                   activeTab === "abroad"
                     ? "bg-teal-500 text-black shadow-sm"
                     : "text-gray-800 hover:text-black"
@@ -92,7 +92,7 @@ export const DreamsFlight: React.FC = () => {
               </button>
               <button
                 onClick={() => setActiveTab("india")}
-                className={`flex-1 py-3 px-6 rounded-lg font-medium transition-all duration-300 ${
+                className={`flex-1 py-2.5 sm:py-3 px-3 sm:px-6 rounded-lg font-medium transition-all duration-300 ${
                   activeTab === "india"
                     ? "bg-teal-500 text-black shadow-sm"
                     : "text-gray-800 hover:text-black"

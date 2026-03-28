@@ -758,7 +758,7 @@ export default function ToolsPage() {
                       step="50000"
                       value={loanAmount}
                       onChange={(e) => setLoanAmount(Number(e.target.value))}
-                      className="w-full h-2 bg-gradient-to-r from-teal-300 to-teal-500 rounded-lg appearance-none cursor-pointer"
+                      className="w-full h-3 bg-gradient-to-r from-teal-300 to-teal-500 rounded-lg appearance-none cursor-pointer"
                     />
                     <div className="flex justify-between text-xs text-gray-700 mt-1">
                       <span>₹1 Lakh</span>
@@ -782,7 +782,7 @@ export default function ToolsPage() {
                       step="0.1"
                       value={interestRate}
                       onChange={(e) => setInterestRate(Number(e.target.value))}
-                      className="w-full h-2 bg-gradient-to-r from-teal-300 to-teal-500 rounded-lg appearance-none cursor-pointer"
+                      className="w-full h-3 bg-gradient-to-r from-teal-300 to-teal-500 rounded-lg appearance-none cursor-pointer"
                     />
                     <div className="flex justify-between text-xs text-gray-700 mt-1">
                       <span>6%</span>
@@ -806,7 +806,7 @@ export default function ToolsPage() {
                       step="1"
                       value={loanTenure}
                       onChange={(e) => setLoanTenure(Number(e.target.value))}
-                      className="w-full h-2 bg-gradient-to-r from-teal-300 to-teal-500 rounded-lg appearance-none cursor-pointer"
+                      className="w-full h-3 bg-gradient-to-r from-teal-300 to-teal-500 rounded-lg appearance-none cursor-pointer"
                     />
                     <div className="flex justify-between text-xs text-gray-700 mt-1">
                       <span>1 Year</span>
@@ -1148,7 +1148,7 @@ export default function ToolsPage() {
                       step="5000"
                       value={monthlyIncome}
                       onChange={(e) => setMonthlyIncome(Number(e.target.value))}
-                      className="w-full h-2 bg-gradient-to-r from-teal-300 to-teal-500 rounded-lg appearance-none cursor-pointer"
+                      className="w-full h-3 bg-gradient-to-r from-teal-300 to-teal-500 rounded-lg appearance-none cursor-pointer"
                     />
                     <div className="flex justify-between text-xs text-gray-700 mt-1">
                       <span>₹20k</span>
@@ -1172,7 +1172,7 @@ export default function ToolsPage() {
                       step="1000"
                       value={existingEmi}
                       onChange={(e) => setExistingEmi(Number(e.target.value))}
-                      className="w-full h-2 bg-gradient-to-r from-teal-300 to-teal-500 rounded-lg appearance-none cursor-pointer"
+                      className="w-full h-3 bg-gradient-to-r from-teal-300 to-teal-500 rounded-lg appearance-none cursor-pointer"
                     />
                     <div className="flex justify-between text-xs text-gray-700 mt-1">
                       <span>₹0</span>
@@ -1215,7 +1215,7 @@ export default function ToolsPage() {
                       step="5000"
                       value={coApplicantIncome}
                       onChange={(e) => setCoApplicantIncome(Number(e.target.value))}
-                      className="w-full h-2 bg-gradient-to-r from-teal-300 to-teal-500 rounded-lg appearance-none cursor-pointer"
+                      className="w-full h-3 bg-gradient-to-r from-teal-300 to-teal-500 rounded-lg appearance-none cursor-pointer"
                     />
                     <div className="flex justify-between text-xs text-gray-700 mt-1">
                       <span>₹0</span>
@@ -1477,25 +1477,25 @@ export default function ToolsPage() {
               {comparisonResult && (
                 <div className="bg-white/70 backdrop-blur-xl rounded-card p-8 border border-white/20">
                   <h3 className="font-serif text-2xl text-black mb-6 text-center">Comparison Results</h3>
-                  
+
                   <div className="overflow-x-auto">
                     <table className="w-full">
                       <thead>
                         <tr className="border-b border-gray-200">
-                          <th className="text-left py-3 px-4 font-medium text-gray-800"></th>
-                          <th className="text-center py-3 px-4 font-medium text-gray-800">
+                          <th className="text-left py-3 px-2 sm:px-4 font-medium text-gray-800"></th>
+                          <th className="text-center py-3 px-2 sm:px-4 font-medium text-gray-800">
                             Loan Option 1
                             {comparisonResult.bestOption === 1 && (
                               <span className="ml-2 px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">Best</span>
                             )}
                           </th>
-                          <th className="text-center py-3 px-4 font-medium text-gray-800">
+                          <th className="text-center py-3 px-2 sm:px-4 font-medium text-gray-800">
                             Loan Option 2
                             {comparisonResult.bestOption === 2 && (
                               <span className="ml-2 px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">Best</span>
                             )}
                           </th>
-                          <th className="text-center py-3 px-4 font-medium text-gray-800">
+                          <th className="text-center py-3 px-2 sm:px-4 font-medium text-gray-800">
                             Loan Option 3
                             {comparisonResult.bestOption === 3 && (
                               <span className="ml-2 px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">Best</span>
@@ -1505,22 +1505,22 @@ export default function ToolsPage() {
                       </thead>
                       <tbody>
                         <tr className="border-b border-gray-100">
-                          <td className="py-3 px-4 font-medium text-gray-700">Monthly EMI</td>
-                          <td className="py-3 px-4 text-center font-bold text-teal-600">{formatCurrency(comparisonResult.loan1.emi)}</td>
-                          <td className="py-3 px-4 text-center font-bold text-teal-600">{formatCurrency(comparisonResult.loan2.emi)}</td>
-                          <td className="py-3 px-4 text-center font-bold text-teal-600">{formatCurrency(comparisonResult.loan3.emi)}</td>
+                          <td className="py-3 px-2 sm:px-4 font-medium text-gray-700">Monthly EMI</td>
+                          <td className="py-3 px-2 sm:px-4 text-center font-bold text-teal-600">{formatCurrency(comparisonResult.loan1.emi)}</td>
+                          <td className="py-3 px-2 sm:px-4 text-center font-bold text-teal-600">{formatCurrency(comparisonResult.loan2.emi)}</td>
+                          <td className="py-3 px-2 sm:px-4 text-center font-bold text-teal-600">{formatCurrency(comparisonResult.loan3.emi)}</td>
                         </tr>
                         <tr className="border-b border-gray-100">
-                          <td className="py-3 px-4 font-medium text-gray-700">Total Interest</td>
-                          <td className="py-3 px-4 text-center text-black">{formatCurrency(comparisonResult.loan1.totalInterest)}</td>
-                          <td className="py-3 px-4 text-center text-black">{formatCurrency(comparisonResult.loan2.totalInterest)}</td>
-                          <td className="py-3 px-4 text-center text-black">{formatCurrency(comparisonResult.loan3.totalInterest)}</td>
+                          <td className="py-3 px-2 sm:px-4 font-medium text-gray-700">Total Interest</td>
+                          <td className="py-3 px-2 sm:px-4 text-center text-black">{formatCurrency(comparisonResult.loan1.totalInterest)}</td>
+                          <td className="py-3 px-2 sm:px-4 text-center text-black">{formatCurrency(comparisonResult.loan2.totalInterest)}</td>
+                          <td className="py-3 px-2 sm:px-4 text-center text-black">{formatCurrency(comparisonResult.loan3.totalInterest)}</td>
                         </tr>
                         <tr className="border-b border-gray-100">
-                          <td className="py-3 px-4 font-medium text-gray-700">Total Cost (incl. fees)</td>
-                          <td className="py-3 px-4 text-center font-bold text-black">{formatCurrency(comparisonResult.loan1.totalCost)}</td>
-                          <td className="py-3 px-4 text-center font-bold text-black">{formatCurrency(comparisonResult.loan2.totalCost)}</td>
-                          <td className="py-3 px-4 text-center font-bold text-black">{formatCurrency(comparisonResult.loan3.totalCost)}</td>
+                          <td className="py-3 px-2 sm:px-4 font-medium text-gray-700">Total Cost (incl. fees)</td>
+                          <td className="py-3 px-2 sm:px-4 text-center font-bold text-black">{formatCurrency(comparisonResult.loan1.totalCost)}</td>
+                          <td className="py-3 px-2 sm:px-4 text-center font-bold text-black">{formatCurrency(comparisonResult.loan2.totalCost)}</td>
+                          <td className="py-3 px-2 sm:px-4 text-center font-bold text-black">{formatCurrency(comparisonResult.loan3.totalCost)}</td>
                         </tr>
                       </tbody>
                     </table>
@@ -1586,7 +1586,7 @@ export default function ToolsPage() {
                       step="5000"
                       value={interestPaid}
                       onChange={(e) => setInterestPaid(Number(e.target.value))}
-                      className="w-full h-2 bg-gradient-to-r from-teal-300 to-teal-500 rounded-lg appearance-none cursor-pointer"
+                      className="w-full h-3 bg-gradient-to-r from-teal-300 to-teal-500 rounded-lg appearance-none cursor-pointer"
                     />
                     <div className="flex justify-between text-xs text-gray-700 mt-1">
                       <span>₹10k</span>

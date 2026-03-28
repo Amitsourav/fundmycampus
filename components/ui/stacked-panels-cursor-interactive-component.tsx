@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useCallback, useState } from "react";
+import { useRef, useCallback, useState, useEffect } from "react";
 import { motion, useSpring } from "motion/react";
 import { Star } from "lucide-react";
 
@@ -55,12 +55,29 @@ function GoogleIcon() {
   );
 }
 
+function useSlideDistance() {
+  const [dist, setDist] = useState(260);
+  useEffect(() => {
+    function calc() {
+      const w = window.innerWidth;
+      if (w < 1100) setDist(140);
+      else if (w < 1400) setDist(180);
+      else setDist(260);
+    }
+    calc();
+    window.addEventListener("resize", calc);
+    return () => window.removeEventListener("resize", calc);
+  }, []);
+  return dist;
+}
+
 function ReviewPanel({
   index,
   total,
   waveY,
   scaleY,
   isSelected,
+  slideDistance,
   onSelect,
 }: {
   index: number;
@@ -68,6 +85,7 @@ function ReviewPanel({
   waveY: ReturnType<typeof useSpring>;
   scaleY: ReturnType<typeof useSpring>;
   isSelected: boolean;
+  slideDistance: number;
   onSelect: (index: number) => void;
 }) {
   const t = index / (total - 1);
@@ -84,7 +102,7 @@ function ReviewPanel({
       className="absolute rounded-xl cursor-pointer"
       onClick={(e) => { e.stopPropagation(); onSelect(index); }}
       animate={isSelected ? {
-        x: 260,
+        x: slideDistance,
         y: 0,
         scale: 1,
         rotateY: 0,
@@ -165,6 +183,7 @@ export default function StackedPanels() {
   const containerRef = useRef<HTMLDivElement>(null);
   const isHovering = useRef(false);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+  const slideDistance = useSlideDistance();
 
   const waveYSprings = Array.from({ length: PANEL_COUNT }, () =>
     // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -255,6 +274,7 @@ export default function StackedPanels() {
             waveY={waveYSprings[i]}
             scaleY={scaleYSprings[i]}
             isSelected={selectedIndex === i}
+            slideDistance={slideDistance}
             onSelect={handleSelect}
           />
         ))}

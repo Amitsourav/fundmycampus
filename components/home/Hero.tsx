@@ -98,7 +98,25 @@ export const Hero: React.FC = () => {
                 We help fuel educational dreams by removing the barriers to financial access through private student loans.
               </motion.p>
 
-              {/* Single CTA - Clean like inspiration */}
+              {/* Stats badge */}
+              <motion.div variants={staggerItem} className="flex items-center gap-6 mb-8">
+                <div>
+                  <p className="text-2xl sm:text-3xl font-bold text-black">₹500Cr+</p>
+                  <p className="text-xs text-gray-700">Loan Disbursed</p>
+                </div>
+                <div className="h-10 w-px bg-gray-200" />
+                <div>
+                  <p className="text-2xl sm:text-3xl font-bold text-black">15,000+</p>
+                  <p className="text-xs text-gray-700">Students Helped</p>
+                </div>
+                <div className="h-10 w-px bg-gray-200" />
+                <div>
+                  <p className="text-2xl sm:text-3xl font-bold text-black">50+</p>
+                  <p className="text-xs text-gray-700">Countries</p>
+                </div>
+              </motion.div>
+
+              {/* Single CTA */}
               <motion.div variants={staggerItem}>
                 <Link href="/abroad-study-loan">
                   <Button variant="primary" size="lg">
