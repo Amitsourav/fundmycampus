@@ -83,7 +83,8 @@ export const Hero: React.FC = () => {
                 className="font-serif text-4xl sm:text-5xl md:text-5xl lg:text-6xl xl:text-7xl text-black mb-6 md:mb-7 leading-none"
               >
                 Education Loans
-                <span className="block text-black">for Study Abroad & India</span>
+                <span className="block text-black">for Study Abroad</span>
+                <span className="block text-black">& India</span>
               </motion.h1>
 
               {/* Subheadline - Simple and clean */}

@@ -42,21 +42,21 @@ export const Header: React.FC = () => {
   }, []);
 
   const courseOptions = [
-    { label: "Education Loan For BCA", href: "/courses-loan/bca" },
-    { label: "Education Loan For Hotel Management", href: "/courses-loan/hotel-management" },
-    { label: "Education Loan For BDS", href: "/courses-loan/bds" },
-    { label: "Education Loan For BBA", href: "/courses-loan/bba" },
-    { label: "Education Loan MBA", href: "/courses-loan/mba" },
-    { label: "Education Loan For B Tech", href: "/courses-loan/btech" },
-    { label: "Education Loan MBBS", href: "/courses-loan/mbbs" },
-    { label: "Education Loan For Bsc Nursing", href: "/courses-loan/bsc-nursing" },
-    { label: "Education Loan For CA", href: "/courses-loan/ca" },
+    { label: "Education Loan For BCA", href: "/loan-for-bca" },
+    { label: "Education Loan For Hotel Management", href: "/loan-for-hotel-management" },
+    { label: "Education Loan For BDS", href: "/loan-for-bds" },
+    { label: "Education Loan For BBA", href: "/loan-for-bba" },
+    { label: "Education Loan MBA", href: "/loan-for-mba" },
+    { label: "Education Loan For B Tech", href: "/loan-for-btech" },
+    { label: "Education Loan MBBS", href: "/loan-for-mbbs" },
+    { label: "Education Loan For Bsc Nursing", href: "/loan-for-bsc-nursing" },
+    { label: "Education Loan For CA", href: "/loan-for-ca" },
   ];
 
   const productOptions = [
     { label: "Student Loan Abroad", href: "/abroad-study-loan" },
     { label: "Student Loan Domestic", href: "/india-study-loan" },
-    { label: "Student Loan for Courses", href: "/courses-loan", hasSubmenu: true, submenu: courseOptions },
+    { label: "Student Loan for Courses", href: "#", hasSubmenu: true, submenu: courseOptions },
   ];
 
   const navLinks = [

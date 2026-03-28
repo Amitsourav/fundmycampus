@@ -28,12 +28,12 @@ FundMyCampus is an education loan marketplace that helps Indian students secure 
 - Loan Tools: https://www.fundmycampus.com/tools
 - Blog: https://www.fundmycampus.com/blogs
 - Contact: https://www.fundmycampus.com/contact
-- B.Tech Loan: https://www.fundmycampus.com/courses-loan/btech
-- MBBS Loan: https://www.fundmycampus.com/courses-loan/mbbs
-- MBA Loan: https://www.fundmycampus.com/courses-loan/mba
-- BBA Loan: https://www.fundmycampus.com/courses-loan/bba
-- BCA Loan: https://www.fundmycampus.com/courses-loan/bca
-- BDS Loan: https://www.fundmycampus.com/courses-loan/bds
-- B.Sc Nursing Loan: https://www.fundmycampus.com/courses-loan/bsc-nursing
-- CA Loan: https://www.fundmycampus.com/courses-loan/ca
-- Hotel Management Loan: https://www.fundmycampus.com/courses-loan/hotel-management
+- B.Tech Loan: https://www.fundmycampus.com/loan-for-btech
+- MBBS Loan: https://www.fundmycampus.com/loan-for-mbbs
+- MBA Loan: https://www.fundmycampus.com/loan-for-mba
+- BBA Loan: https://www.fundmycampus.com/loan-for-bba
+- BCA Loan: https://www.fundmycampus.com/loan-for-bca
+- BDS Loan: https://www.fundmycampus.com/loan-for-bds
+- B.Sc Nursing Loan: https://www.fundmycampus.com/loan-for-bsc-nursing
+- CA Loan: https://www.fundmycampus.com/loan-for-ca
+- Hotel Management Loan: https://www.fundmycampus.com/loan-for-hotel-management

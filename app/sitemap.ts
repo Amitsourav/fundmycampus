@@ -15,15 +15,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE}/blogs`, lastModified: now },
     { url: `${BASE}/privacy`, lastModified: now },
     // Course pages
-    { url: `${BASE}/courses-loan/btech`, lastModified: now },
-    { url: `${BASE}/courses-loan/mbbs`, lastModified: now },
-    { url: `${BASE}/courses-loan/mba`, lastModified: now },
-    { url: `${BASE}/courses-loan/bba`, lastModified: now },
-    { url: `${BASE}/courses-loan/bca`, lastModified: now },
-    { url: `${BASE}/courses-loan/bds`, lastModified: now },
-    { url: `${BASE}/courses-loan/ca`, lastModified: now },
-    { url: `${BASE}/courses-loan/bsc-nursing`, lastModified: now },
-    { url: `${BASE}/courses-loan/hotel-management`, lastModified: now },
+    { url: `${BASE}/loan-for-btech`, lastModified: now },
+    { url: `${BASE}/loan-for-mbbs`, lastModified: now },
+    { url: `${BASE}/loan-for-mba`, lastModified: now },
+    { url: `${BASE}/loan-for-bba`, lastModified: now },
+    { url: `${BASE}/loan-for-bca`, lastModified: now },
+    { url: `${BASE}/loan-for-bds`, lastModified: now },
+    { url: `${BASE}/loan-for-ca`, lastModified: now },
+    { url: `${BASE}/loan-for-bsc-nursing`, lastModified: now },
+    { url: `${BASE}/loan-for-hotel-management`, lastModified: now },
   ];
 
   // Fetch blog post slugs dynamically

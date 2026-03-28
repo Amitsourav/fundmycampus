@@ -1,6 +1,14 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  async redirects() {
+    const courses = ["bca", "mba", "btech", "mbbs", "bba", "bds", "ca", "bsc-nursing", "hotel-management"];
+    return courses.map((course) => ({
+      source: `/courses-loan/${course}`,
+      destination: `/loan-for-${course}`,
+      permanent: true,
+    }));
+  },
   async headers() {
     return [
       {

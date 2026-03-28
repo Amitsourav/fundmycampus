@@ -39,15 +39,15 @@ export const Footer: React.FC = () => {
             <div>
               <h4 className="text-sm uppercase tracking-wide-lg mb-5 text-gray-100 font-semibold">Course Loans</h4>
               <ul className="space-y-3">
-                <li><Link href="/courses-loan/btech" className="text-sm text-gray-400 hover:text-white transition-colors">B.Tech Loan</Link></li>
-                <li><Link href="/courses-loan/mbbs" className="text-sm text-gray-400 hover:text-white transition-colors">MBBS Loan</Link></li>
-                <li><Link href="/courses-loan/mba" className="text-sm text-gray-400 hover:text-white transition-colors">MBA Loan</Link></li>
-                <li><Link href="/courses-loan/bba" className="text-sm text-gray-400 hover:text-white transition-colors">BBA Loan</Link></li>
-                <li><Link href="/courses-loan/bca" className="text-sm text-gray-400 hover:text-white transition-colors">BCA Loan</Link></li>
-                <li><Link href="/courses-loan/bds" className="text-sm text-gray-400 hover:text-white transition-colors">BDS Loan</Link></li>
-                <li><Link href="/courses-loan/bsc-nursing" className="text-sm text-gray-400 hover:text-white transition-colors">B.Sc Nursing</Link></li>
-                <li><Link href="/courses-loan/ca" className="text-sm text-gray-400 hover:text-white transition-colors">CA Loan</Link></li>
-                <li><Link href="/courses-loan/hotel-management" className="text-sm text-gray-400 hover:text-white transition-colors">Hotel Mgmt</Link></li>
+                <li><Link href="/loan-for-btech" className="text-sm text-gray-400 hover:text-white transition-colors">B.Tech Loan</Link></li>
+                <li><Link href="/loan-for-mbbs" className="text-sm text-gray-400 hover:text-white transition-colors">MBBS Loan</Link></li>
+                <li><Link href="/loan-for-mba" className="text-sm text-gray-400 hover:text-white transition-colors">MBA Loan</Link></li>
+                <li><Link href="/loan-for-bba" className="text-sm text-gray-400 hover:text-white transition-colors">BBA Loan</Link></li>
+                <li><Link href="/loan-for-bca" className="text-sm text-gray-400 hover:text-white transition-colors">BCA Loan</Link></li>
+                <li><Link href="/loan-for-bds" className="text-sm text-gray-400 hover:text-white transition-colors">BDS Loan</Link></li>
+                <li><Link href="/loan-for-bsc-nursing" className="text-sm text-gray-400 hover:text-white transition-colors">B.Sc Nursing</Link></li>
+                <li><Link href="/loan-for-ca" className="text-sm text-gray-400 hover:text-white transition-colors">CA Loan</Link></li>
+                <li><Link href="/loan-for-hotel-management" className="text-sm text-gray-400 hover:text-white transition-colors">Hotel Mgmt</Link></li>
               </ul>
             </div>
 
