@@ -116,7 +116,7 @@ export const LoanJourney: React.FC = () => {
             className="relative flex justify-center"
           >
             {/* Phone Frame */}
-            <div className="relative w-64 h-[520px] bg-black rounded-[3rem] p-3 shadow-2xl">
+            <div className="relative w-52 sm:w-64 h-[440px] sm:h-[520px] bg-black rounded-[3rem] p-3 shadow-2xl">
               {/* Phone Notch */}
               <div className="absolute top-0 left-1/2 -translate-x-1/2 w-28 h-6 bg-black rounded-b-2xl z-20" />
 

@@ -109,7 +109,7 @@ export const Header: React.FC = () => {
             {/* Logo */}
             <Link href="/" className="relative group">
               <motion.div whileHover={{ scale: 1.02 }} transition={{ duration: 0.3 }} className="flex items-center">
-                <img src="/images/logo.png" alt="FundMyCampus — Education Loan Platform" className="h-32 w-64 -my-11 object-contain" width={256} height={128} fetchPriority="high" />
+                <img src="/images/logo.png" alt="FundMyCampus — Education Loan Platform" className="h-20 w-40 sm:h-24 sm:w-48 md:h-32 md:w-64 -my-5 sm:-my-7 md:-my-11 object-contain" width={256} height={128} fetchPriority="high" />
               </motion.div>
             </Link>
 
@@ -231,142 +231,142 @@ export const Header: React.FC = () => {
             </div>
 
             {/* Mobile Menu Button */}
-            <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="lg:hidden p-2 text-white">
+            <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="lg:hidden p-2 text-gray-800">
               {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
           </div>
-
-        {/* Mobile Navigation */}
-        <AnimatePresence>
-          {isMobileMenuOpen && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.3 }}
-              className="lg:hidden bg-white border-t border-gray-100 rounded-b-2xl mt-2"
-            >
-              <nav className="max-w-screen-xl mx-auto px-6 py-6">
-                {navLinks.map((link, index) => (
-                  <motion.div key={index} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: index * 0.1 }}>
-                    {link.hasDropdown ? (
-                      <div>
-                        <button
-                          onClick={() => setIsProductDropdownOpen(!isProductDropdownOpen)}
-                          className="flex items-center justify-between w-full py-3 text-black hover:text-teal-500 transition-colors duration-300 font-medium"
-                        >
-                          <span>{link.label}</span>
-                          <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${isProductDropdownOpen ? "rotate-180" : ""}`} />
-                        </button>
-                        <AnimatePresence>
-                          {isProductDropdownOpen && (
-                            <motion.div
-                              initial={{ opacity: 0, height: 0 }}
-                              animate={{ opacity: 1, height: "auto" }}
-                              exit={{ opacity: 0, height: 0 }}
-                              transition={{ duration: 0.3 }}
-                              className="ml-4 mt-2 space-y-2"
-                            >
-                              {productOptions.map((option, optionIndex) => (
-                                <div key={optionIndex}>
-                                  {option.hasSubmenu ? (
-                                    <div>
-                                      <button
-                                        onClick={() => setIsCoursesDropdownOpen(!isCoursesDropdownOpen)}
-                                        className="flex items-center justify-between w-full py-2 text-gray-800 hover:text-teal-500 transition-colors duration-300 text-sm"
-                                      >
-                                        <span>{option.label}</span>
-                                        <ChevronDown className={`w-3 h-3 transition-transform duration-300 ${isCoursesDropdownOpen ? "rotate-180" : ""}`} />
-                                      </button>
-                                      <AnimatePresence>
-                                        {isCoursesDropdownOpen && (
-                                          <motion.div
-                                            initial={{ opacity: 0, height: 0 }}
-                                            animate={{ opacity: 1, height: "auto" }}
-                                            exit={{ opacity: 0, height: 0 }}
-                                            transition={{ duration: 0.3 }}
-                                            className="ml-4 mt-1 space-y-1"
-                                          >
-                                            {option.submenu?.map((subOption, subIndex) => (
-                                              <Link key={subIndex} href={subOption.href} className="block py-1.5 text-gray-700 hover:text-teal-500 transition-colors duration-300 text-xs" onClick={() => setIsMobileMenuOpen(false)}>
-                                                {subOption.label}
-                                              </Link>
-                                            ))}
-                                          </motion.div>
-                                        )}
-                                      </AnimatePresence>
-                                    </div>
-                                  ) : (
-                                    <Link href={option.href} className="block py-2 text-gray-800 hover:text-teal-500 transition-colors duration-300 text-sm" onClick={() => setIsMobileMenuOpen(false)}>
-                                      {option.label}
-                                    </Link>
-                                  )}
-                                </div>
-                              ))}
-                            </motion.div>
-                          )}
-                        </AnimatePresence>
-                      </div>
-                    ) : (
-                      <Link href={link.href} className="block py-3 text-black hover:text-teal-500 transition-colors duration-300 font-medium" onClick={() => setIsMobileMenuOpen(false)}>
-                        {link.label}
-                      </Link>
-                    )}
-                  </motion.div>
-                ))}
-                <motion.div
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: navLinks.length * 0.1 }}
-                  className="mt-4 pt-4 border-t border-gray-200 flex flex-col gap-3"
-                >
-                  {!loading && user ? (
-                    <>
-                      <Link href="/dashboard" onClick={() => setIsMobileMenuOpen(false)}>
-                        <Button variant="secondary" size="md" fullWidth className="!bg-white !text-black !border-gray-300">
-                          <LayoutDashboard className="w-4 h-4 mr-1.5" />
-                          Dashboard
-                        </Button>
-                      </Link>
-                      <Link href="/profile/edit" onClick={() => setIsMobileMenuOpen(false)}>
-                        <Button variant="secondary" size="md" fullWidth className="!bg-white !text-black !border-gray-300">
-                          <Edit className="w-4 h-4 mr-1.5" />
-                          Edit Profile
-                        </Button>
-                      </Link>
-                      <Button
-                        variant="ghost"
-                        size="md"
-                        fullWidth
-                        className="!text-red-600 hover:!text-red-700"
-                        onClick={() => { setIsMobileMenuOpen(false); signOut(); }}
-                      >
-                        <LogOut className="w-4 h-4 mr-1.5" />
-                        Log Out
-                      </Button>
-                    </>
-                  ) : !loading ? (
-                    <>
-                      <Link href="/login" onClick={() => setIsMobileMenuOpen(false)}>
-                        <Button variant="secondary" size="md" fullWidth className="!bg-white !text-black !border-gray-300">
-                          <LogIn className="w-4 h-4 mr-1.5" />
-                          Login
-                        </Button>
-                      </Link>
-                      <Link href="/signup" onClick={() => setIsMobileMenuOpen(false)}>
-                        <Button variant="primary" size="md" fullWidth>
-                          <UserPlus className="w-4 h-4 mr-1.5" />
-                          Sign Up
-                        </Button>
-                      </Link>
-                    </>
-                  ) : null}
-                </motion.div>
-              </nav>
-            </motion.div>
-          )}
-        </AnimatePresence>
       </motion.header>
+
+      {/* Mobile Navigation - Separate floating panel below header */}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.25 }}
+            className="fixed top-[105px] left-[2.5%] right-[2.5%] z-50 lg:hidden bg-white rounded-2xl shadow-xl border border-gray-200 max-h-[calc(100vh-120px)] overflow-y-auto"
+          >
+            <nav className="px-5 py-5">
+              {navLinks.map((link, index) => (
+                <motion.div key={index} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: index * 0.05 }}>
+                  {link.hasDropdown ? (
+                    <div>
+                      <button
+                        onClick={() => setIsProductDropdownOpen(!isProductDropdownOpen)}
+                        className="flex items-center justify-between w-full py-3 text-black hover:text-teal-500 transition-colors duration-300 font-medium"
+                      >
+                        <span>{link.label}</span>
+                        <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${isProductDropdownOpen ? "rotate-180" : ""}`} />
+                      </button>
+                      <AnimatePresence>
+                        {isProductDropdownOpen && (
+                          <motion.div
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: "auto" }}
+                            exit={{ opacity: 0, height: 0 }}
+                            transition={{ duration: 0.3 }}
+                            className="ml-4 mt-1 space-y-1"
+                          >
+                            {productOptions.map((option, optionIndex) => (
+                              <div key={optionIndex}>
+                                {option.hasSubmenu ? (
+                                  <div>
+                                    <button
+                                      onClick={() => setIsCoursesDropdownOpen(!isCoursesDropdownOpen)}
+                                      className="flex items-center justify-between w-full py-2 text-gray-800 hover:text-teal-500 transition-colors duration-300 text-sm"
+                                    >
+                                      <span>{option.label}</span>
+                                      <ChevronDown className={`w-3 h-3 transition-transform duration-300 ${isCoursesDropdownOpen ? "rotate-180" : ""}`} />
+                                    </button>
+                                    <AnimatePresence>
+                                      {isCoursesDropdownOpen && (
+                                        <motion.div
+                                          initial={{ opacity: 0, height: 0 }}
+                                          animate={{ opacity: 1, height: "auto" }}
+                                          exit={{ opacity: 0, height: 0 }}
+                                          transition={{ duration: 0.3 }}
+                                          className="ml-4 mt-1 space-y-1"
+                                        >
+                                          {option.submenu?.map((subOption, subIndex) => (
+                                            <Link key={subIndex} href={subOption.href} className="block py-1.5 text-gray-700 hover:text-teal-500 transition-colors duration-300 text-xs" onClick={() => setIsMobileMenuOpen(false)}>
+                                              {subOption.label}
+                                            </Link>
+                                          ))}
+                                        </motion.div>
+                                      )}
+                                    </AnimatePresence>
+                                  </div>
+                                ) : (
+                                  <Link href={option.href} className="block py-2 text-gray-800 hover:text-teal-500 transition-colors duration-300 text-sm" onClick={() => setIsMobileMenuOpen(false)}>
+                                    {option.label}
+                                  </Link>
+                                )}
+                              </div>
+                            ))}
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
+                  ) : (
+                    <Link href={link.href} className="block py-3 text-black hover:text-teal-500 transition-colors duration-300 font-medium" onClick={() => setIsMobileMenuOpen(false)}>
+                      {link.label}
+                    </Link>
+                  )}
+                </motion.div>
+              ))}
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: navLinks.length * 0.05 }}
+                className="mt-4 pt-4 border-t border-gray-200 flex flex-col gap-3"
+              >
+                {!loading && user ? (
+                  <>
+                    <Link href="/dashboard" onClick={() => setIsMobileMenuOpen(false)}>
+                      <Button variant="secondary" size="md" fullWidth className="!bg-white !text-black !border-gray-300">
+                        <LayoutDashboard className="w-4 h-4 mr-1.5" />
+                        Dashboard
+                      </Button>
+                    </Link>
+                    <Link href="/profile/edit" onClick={() => setIsMobileMenuOpen(false)}>
+                      <Button variant="secondary" size="md" fullWidth className="!bg-white !text-black !border-gray-300">
+                        <Edit className="w-4 h-4 mr-1.5" />
+                        Edit Profile
+                      </Button>
+                    </Link>
+                    <Button
+                      variant="ghost"
+                      size="md"
+                      fullWidth
+                      className="!text-red-600 hover:!text-red-700"
+                      onClick={() => { setIsMobileMenuOpen(false); signOut(); }}
+                    >
+                      <LogOut className="w-4 h-4 mr-1.5" />
+                      Log Out
+                    </Button>
+                  </>
+                ) : !loading ? (
+                  <>
+                    <Link href="/login" onClick={() => setIsMobileMenuOpen(false)}>
+                      <Button variant="secondary" size="md" fullWidth className="!bg-white !text-black !border-gray-300">
+                        <LogIn className="w-4 h-4 mr-1.5" />
+                        Login
+                      </Button>
+                    </Link>
+                    <Link href="/signup" onClick={() => setIsMobileMenuOpen(false)}>
+                      <Button variant="primary" size="md" fullWidth>
+                        <UserPlus className="w-4 h-4 mr-1.5" />
+                        Sign Up
+                      </Button>
+                    </Link>
+                  </>
+                ) : null}
+              </motion.div>
+            </nav>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 };

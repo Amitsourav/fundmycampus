@@ -143,9 +143,11 @@ Students need to upload documents for their loan. The dashboard shows:
 - Students can upload PDF, JPEG, or PNG files (up to 10 MB each)
 - If rejected, the **reason** is shown so the student knows what to fix
 
-### 4.4 Chat with Expert
+### 4.4 Chatbot
 
-(See Section 7: Chat System for the complete chat flow)
+Students can chat with an **automated chatbot** that answers common questions about loans, documents, eligibility, and the process. The bot matches questions against a FAQ database managed by the team. If the bot can't answer, it provides contact details to reach the team directly.
+
+(See Section 7: Chat System for the complete flow)
 
 ### 4.5 Profile
 
@@ -178,7 +180,7 @@ This is the **complete journey** of a loan application — from the moment a stu
 
 **Step 3.** A counselor is automatically assigned (system picks the counselor with fewest active cases)
 
-**Step 4.** Student gets a welcome notification and can start chatting with their counselor
+**Step 4.** Student gets a welcome notification and can use the chatbot for common questions
 
 ---
 
@@ -541,7 +543,7 @@ Here's how every student action on the website instantly reflects in the admin p
 |---------------|----------------|
 | Signs up + fills application | New row in Loans page + counselor auto-assigned + notification to counselor |
 | Uploads a document | Document appears in Review queue with "Pending" badge |
-| Sends a chat message | Message appears in Chat page + unread count badge goes up |
+| Uses chatbot | Conversation logged in Guest Chats page (if guest) |
 | Fills the contact form | New row in Contacts page + email sent to team |
 | Starts guest chat on website | Conversation logged in Guest Chats page for review |
 | Friend signs up via referral code | New row in Referrals page with status "Signed Up" |
@@ -556,7 +558,6 @@ Here's how every student action on the website instantly reflects in the admin p
 | Updates bank status | That bank's progress bar advances + notification |
 | Verifies a document | Document shows green "Verified" + notification |
 | Rejects a document | Document shows red "Rejected" with reason + notification |
-| Sends a chat message | Message appears in student's chat window |
 | Sends a notification | Notification bell rings + optional email sent |
 | Processes referral payout | Student sees payout status update + money via Razorpay |
 
@@ -564,7 +565,7 @@ Here's how every student action on the website instantly reflects in the admin p
 
 ## 7. Chat System — How Conversations Work End-to-End
 
-The chat system has **3 different modes** depending on who is chatting and where:
+The chat system has **2 modes** depending on whether the visitor has an account or not:
 
 ### Mode 1: Guest Chat (No signup needed)
 
@@ -582,9 +583,7 @@ This is for **website visitors** who haven't created an account yet.
 - If no match: shows fallback message with contact info and option to talk to a real person
 
 **Step 5.** If visitor clicks "Talk to Expert"
-- System hands off the chat to a live counselor
-- Counselor gets notified
-- Conversation continues with a real person
+- System shows contact details (phone, email) so the visitor can reach the team directly
 
 **Behind the scenes:**
 - Guest gets a token (valid for 30 days) saved in their browser
@@ -594,54 +593,31 @@ This is for **website visitors** who haven't created an account yet.
 
 ---
 
-### Mode 2: Bot Chat (Logged-in student, talking to bot first)
+### Mode 2: Bot Chat (Logged-in student)
 
-After logging in, students can also chat with the bot before reaching a counselor.
+After logging in, students can chat with the same automated bot from their dashboard.
 
 **Step 1.** Student clicks chat in their dashboard
 
 **Step 2.** Bot answers from FAQ database. Same matching system as guest chat. Shows quick reply buttons after each answer.
 
-**Step 3.** If student wants a real person — clicks "Talk to Counselor"
-- If a counselor is already assigned to their loan, chat is transferred to that counselor
-- If no counselor yet, student is told to submit their loan application first
+**Step 3.** If the bot can't answer, it provides contact details (phone, email) so the student can reach the team directly.
 
----
-
-### Mode 3: Direct Chat with Counselor (After counselor assignment)
-
-This is the main chat used throughout the loan journey.
-
-**What the student sees (Dashboard):**
-- Shows "FundMyCampus Expert" with online status
-- "Online — typically replies in minutes"
-- Full message history with timestamps
-- Quick question buttons: "What documents do I need?", "What's my loan status?", "How long does approval take?"
-- Type and send messages
-- Messages are checked for new replies every 4 seconds
-
-**What the counselor sees (Admin Panel):**
-- Left panel: List of all students they're chatting with (shows student name, last message time, unread count, searchable by name or email)
-- Right panel: Selected conversation (full message history, student messages on left in gray, counselor replies on right in blue, type and send replies)
-
-**Notifications:**
-- When student sends message — counselor sees unread badge
-- When counselor replies — student sees it in dashboard
-- Unread count badge shown on sidebar in admin panel
+**Note:** Currently, the chat system is **bot-only** (automated FAQ responses). There is no live counselor chat feature on the student website. All human communication between counselors and students happens via phone, email, or WhatsApp outside the platform. The admin panel has chat infrastructure ready for a future live chat feature.
 
 ---
 
 ### Chat System — Quick Summary
 
-| Feature | Guest Chat | Bot Chat | Counselor Chat |
-|---------|-----------|----------|----------------|
-| **Who uses it** | Website visitors | Logged-in students | Logged-in students |
-| **Requires account?** | No (just name + phone) | Yes | Yes + loan application |
-| **Who responds?** | Automated bot (FAQ) | Automated bot (FAQ) | Real counselor |
-| **Can transfer to human?** | Yes ("Talk to Expert") | Yes ("Talk to Counselor") | Already human |
-| **Visible in admin?** | Guest Chats page | Chat page | Chat page |
-| **Chat history saved?** | 30 days (browser token) | Forever (in account) | Forever (in account) |
-| **Quick reply buttons** | Yes (from FAQ config) | Yes (from FAQ config) | Yes (preset questions) |
+| Feature | Guest Chat | Bot Chat (Logged-in) |
+|---------|-----------|---------------------|
+| **Who uses it** | Website visitors | Logged-in students |
+| **Requires account?** | No (just name + phone) | Yes |
+| **Who responds?** | Automated bot (FAQ) | Automated bot (FAQ) |
+| **Can transfer to human?** | No — shows contact details | No — shows contact details |
+| **Visible in admin?** | Guest Chats page | Not yet |
+| **Chat history saved?** | 30 days (browser token) | Forever (in account) |
+| **Quick reply buttons** | Yes (from FAQ config) | Yes (from FAQ config) |
 
 ---
 
@@ -818,13 +794,12 @@ Most platforms connect students to just one bank. **We send their application to
 Just like tracking a delivery, students can see **exactly where their loan is** with each bank — in a clear 7-step visual tracker. No guessing, no calling to ask "what's the status?"
 
 ### 10.3 Dedicated Counselor for Every Student
-Every student is **automatically assigned a personal counselor** who guides them through the entire process. Students can chat with their counselor directly from the dashboard — no emails, no phone tag.
+Every student is **automatically assigned a personal counselor** who guides them through the entire process. Counselors communicate with students via phone, email, and WhatsApp. All application progress, document reviews, and status updates are managed through the admin panel.
 
-### 10.4 Three-Layer Chat System
-- **Guest chat** captures leads without any signup
-- **Bot chat** answers common questions instantly 24/7
-- **Counselor chat** provides human support when needed
-- Smooth handoff between all three layers
+### 10.4 Smart Chatbot on Every Page
+- **Guest chat** captures leads without any signup — just name and phone
+- **Bot chat** answers common questions instantly 24/7 for logged-in students too
+- FAQ-powered with quick reply buttons, managed by the team from admin panel
 
 ### 10.5 Smart Referral Program with Real Money
 Students earn **2,000+ per referral** with milestone bonuses. Both the referrer AND the friend benefit. Payouts are processed via Razorpay. The complete payout tracking is built right into the dashboard — transparent and trustworthy.
@@ -881,7 +856,7 @@ Students never have to wonder what's happening. Every status change, document re
 | **Dashboard Overview** | Profile completion, checklist, recent activity |
 | **My Applications** | Loan applications with 7-step bank-wise tracker |
 | **Documents** | Upload and track document verification status |
-| **Chat with Expert** | Bot chat into counselor chat, real-time messaging |
+| **Chatbot** | Automated FAQ chatbot for common questions |
 | **Profile Edit** | Full profile with personal, identity, address details |
 | **Notifications** | All updates about applications, documents, referrals |
 | **Referrals** | Referral code, share link, earnings, payout history |
@@ -894,7 +869,7 @@ Students never have to wonder what's happening. Every status change, document re
 | **Loans List** | All applications — filterable by status and counselor |
 | **Loan Detail** | Full application view + update status + assign counselor + match banks |
 | **Documents** | Review queue grouped by student — preview, verify, or reject with reason |
-| **Chat** | Two-panel view: conversation list + message thread with students |
+| **Chat** | View chatbot conversations (infrastructure ready for future live chat) |
 | **Guest Chats** | View conversations from website visitors (read-only) |
 | **FAQ Management** | Configure chatbot answers, keywords, quick replies, and priority |
 | **Contacts** | Contact form submissions — update status and add notes |

@@ -188,7 +188,7 @@ export const LoanPartners: React.FC = () => {
                     </div>
                     <span className="font-medium text-gray-900">{partner.name}</span>
                   </div>
-                  <div className="grid grid-cols-3 gap-2 text-xs">
+                  <div className="grid grid-cols-3 gap-2 text-[11px] sm:text-xs">
                     <div className="bg-gray-50 rounded p-2">
                       <p className="text-gray-700 mb-1">Processing</p>
                       <p className="font-medium text-gray-800">{partner.processingFees}</p>

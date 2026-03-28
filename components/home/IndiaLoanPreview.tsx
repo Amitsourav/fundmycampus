@@ -40,7 +40,7 @@ export const IndiaLoanPreview: React.FC = () => {
           className="max-w-6xl mx-auto"
         >
           <Card padding="xl" className="border border-noir/10">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
               {/* Content */}
               <div>
                 <span className="inline-block px-3 py-1 text-xs uppercase tracking-wide-lg text-charcoal-500 border border-charcoal-200 mb-6">

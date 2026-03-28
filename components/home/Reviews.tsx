@@ -87,7 +87,7 @@ export const Reviews: React.FC = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
-          className="bg-gray-50 rounded-2xl p-8 md:p-12 max-w-4xl mx-auto"
+          className="bg-gray-50 rounded-2xl p-5 sm:p-8 md:p-12 max-w-4xl mx-auto"
         >
           <div className="text-center">
             {/* Avatar */}
@@ -156,12 +156,12 @@ export const Reviews: React.FC = () => {
           className="mt-12"
         >
           <div className="bg-black rounded-xl p-8 md:p-10">
-            <div className="grid grid-cols-3 gap-8 text-center">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-8 text-center">
               <div>
                 <p className="font-serif text-2xl md:text-3xl text-teal-500 mb-1">4.9/5</p>
                 <p className="text-gray-700 text-sm">Average Rating</p>
               </div>
-              <div className="border-l border-r border-gray-800">
+              <div className="sm:border-l sm:border-r border-gray-800">
                 <p className="font-serif text-2xl md:text-3xl text-teal-500 mb-1">2,500+</p>
                 <p className="text-gray-700 text-sm">Happy Reviews</p>
               </div>

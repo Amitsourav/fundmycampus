@@ -105,14 +105,13 @@ function formatDate(d: string) { return new Date(d).toLocaleDateString("en-IN", 
 function shortId(id: string) { return id.length > 8 ? id.slice(0, 8) : id; }
 function formatSize(b: number) { return b > 1024 * 1024 ? `${(b / 1024 / 1024).toFixed(1)} MB` : `${(b / 1024).toFixed(0)} KB`; }
 
-type Section = "overview" | "applications" | "documents" | "notifications" | "referrals" | "profile" | "chat";
+type Section = "overview" | "applications" | "documents" | "notifications" | "referrals" | "profile";
 
 // ─────────────────── Sidebar ───────────────────
 const NAV_ITEMS: { id: Section; label: string; icon: React.ReactNode; activeColor: string; iconColor: string }[] = [
   { id: "overview",      label: "Overview",        icon: <LayoutDashboard className="w-4 h-4" />, activeColor: "bg-teal-500 text-white", iconColor: "text-teal-400" },
   { id: "applications",  label: "My Applications", icon: <GraduationCap className="w-4 h-4" />,  activeColor: "bg-teal-500 text-white", iconColor: "text-violet-400" },
   { id: "documents",     label: "Documents",       icon: <FileText className="w-4 h-4" />,        activeColor: "bg-teal-500 text-white", iconColor: "text-blue-400" },
-  { id: "chat",          label: "Chat with Expert",icon: <MessageCircle className="w-4 h-4" />,   activeColor: "bg-teal-500 text-white", iconColor: "text-green-500" },
   { id: "profile",       label: "Edit Profile",    icon: <User className="w-4 h-4" />,            activeColor: "bg-teal-500 text-white", iconColor: "text-orange-400" },
 ];
 
@@ -389,33 +388,6 @@ function OverviewTab({ profile, loans, user, onSection }: { profile: Profile | n
         )}
       </div>
 
-      {/* Chat CTA */}
-      <div className="bg-gradient-to-br from-emerald-50 to-teal-50 border border-teal-100 rounded-2xl p-5">
-        <div className="flex items-start justify-between gap-4">
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 bg-teal-500 rounded-2xl flex items-center justify-center shrink-0 shadow-sm">
-              <MessageCircle className="w-6 h-6 text-white" />
-            </div>
-            <div>
-              <p className="font-semibold text-gray-900 text-sm">Chat with your Expert</p>
-              <p className="text-xs text-gray-500 mt-0.5">Get instant answers on your loan application, documents & eligibility</p>
-            </div>
-          </div>
-          <button onClick={() => onSection("chat")}
-            className="shrink-0 px-4 py-2 bg-teal-500 hover:bg-teal-600 text-white text-xs font-semibold rounded-xl transition-colors whitespace-nowrap">
-            Open Chat →
-          </button>
-        </div>
-        <div className="mt-4 grid grid-cols-3 gap-3">
-          {["Loan eligibility", "Document checklist", "Application status"].map((q) => (
-            <button key={q} onClick={() => onSection("chat")}
-              className="text-xs text-teal-700 bg-white border border-teal-100 rounded-xl py-2 px-3 hover:bg-teal-50 transition-colors text-center font-medium shadow-sm">
-              {q}
-            </button>
-          ))}
-        </div>
-      </div>
-
       {/* Referral teaser */}
       <div onClick={() => onSection("referrals")} className="cursor-pointer bg-gradient-to-r from-teal-500 to-teal-600 rounded-2xl p-5 text-white flex items-center justify-between gap-4 hover:from-teal-600 hover:to-teal-700 transition-all">
         <div className="flex items-center gap-3">
@@ -479,8 +451,8 @@ function BankTracker({ bank }: { bank: BankApplication }) {
           {bank.status.replace(/_/g, " ")}
         </span>
       </div>
-      <div className="overflow-x-auto">
-        <div className="min-w-[480px] relative">
+      <div className="overflow-x-auto -mx-1 px-1 pb-1">
+        <div className="min-w-[520px] relative">
           <div className="absolute top-4 left-4 right-4 h-0.5 bg-gray-200" />
           <div className={`absolute top-4 left-4 h-0.5 transition-all ${cancelled ? "bg-red-400" : "bg-teal-500"}`}
             style={{ width: `calc((100% - 32px) * ${activeStep} / ${LOAN_STEPS.length - 1})` }} />
@@ -490,7 +462,7 @@ function BankTracker({ bank }: { bank: BankApplication }) {
               const current = !cancelled && i === activeStep;
               const isCancelledHere = cancelled && i === activeStep;
               return (
-                <div key={step.key} className="flex flex-col items-center gap-1.5">
+                <div key={step.key} className="flex flex-col items-center gap-1.5 w-[70px]">
                   <div className={`w-7 h-7 rounded-full flex items-center justify-center border-2 transition-all bg-white ${
                     isCancelledHere ? "border-red-400 bg-red-50" :
                     done ? "border-teal-500 bg-teal-500" :
@@ -501,7 +473,7 @@ function BankTracker({ bank }: { bank: BankApplication }) {
                       : current ? <div className="w-2 h-2 rounded-full bg-white" />
                       : <div className="w-1.5 h-1.5 rounded-full bg-gray-300" />}
                   </div>
-                  <p className={`text-[10px] font-medium text-center leading-tight w-12 ${
+                  <p className={`text-[9px] sm:text-[10px] font-medium text-center leading-tight ${
                     isCancelledHere ? "text-red-600" : done || current ? "text-teal-700" : "text-gray-400"
                   }`}>{step.label}</p>
                 </div>
@@ -919,7 +891,7 @@ function ReferralsTab({ profile }: { profile: Profile | null }) {
         {/* Code box */}
         {profile?.referral_code && (
           <div className="flex items-center gap-3 mb-6">
-            <div className="flex-1 px-4 py-3 bg-white/15 backdrop-blur-sm rounded-xl font-mono text-2xl font-bold tracking-widest text-center">
+            <div className="flex-1 px-3 sm:px-4 py-3 bg-white/15 backdrop-blur-sm rounded-xl font-mono text-base sm:text-2xl font-bold tracking-wider sm:tracking-widest text-center">
               {profile.referral_code}
             </div>
             <button onClick={() => copy(profile.referral_code!)}
@@ -1202,7 +1174,7 @@ function ProfileTab({ profile, onSave }: { profile: Profile | null; onSave: (p: 
           <div className="space-y-4">
             <div><label className="block text-sm font-medium text-gray-700 mb-1.5">Address Line 1</label><input type="text" value={form.address_line1 ?? ""} onChange={(e) => f("address_line1", e.target.value)} className={inp} /></div>
             <div><label className="block text-sm font-medium text-gray-700 mb-1.5">Address Line 2</label><input type="text" value={form.address_line2 ?? ""} onChange={(e) => f("address_line2", e.target.value)} className={inp} /></div>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div><label className="block text-sm font-medium text-gray-700 mb-1.5">City</label><input type="text" value={form.city ?? ""} onChange={(e) => f("city", e.target.value)} className={inp} /></div>
               <div><label className="block text-sm font-medium text-gray-700 mb-1.5">District</label><input type="text" value={form.district ?? ""} onChange={(e) => f("district", e.target.value)} className={inp} /></div>
               <div><label className="block text-sm font-medium text-gray-700 mb-1.5">State</label><input type="text" value={form.state ?? ""} onChange={(e) => f("state", e.target.value)} className={inp} /></div>
@@ -1509,24 +1481,8 @@ export default function DashboardPage() {
   const [dataLoading, setDataLoading] = useState(true);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [unreadNotifCount, setUnreadNotifCount] = useState(0);
-  const [unreadChatCount, setUnreadChatCount] = useState(0);
 
   useEffect(() => { if (!loading && !user) router.push("/login"); }, [loading, user, router]);
-
-  // Poll chat unread count
-  useEffect(() => {
-    if (!user) return;
-    let cancelled = false;
-    async function fetchChatUnread() {
-      try {
-        const data = await api.get<{ unread_count: number }>("/api/v1/chat/unread");
-        if (!cancelled) setUnreadChatCount(data.unread_count);
-      } catch { /* ignore */ }
-    }
-    fetchChatUnread();
-    const id = setInterval(fetchChatUnread, 5000);
-    return () => { cancelled = true; clearInterval(id); };
-  }, [user]);
 
   useEffect(() => {
     if (!user) return;
@@ -1632,11 +1588,6 @@ export default function DashboardPage() {
                       className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-colors mb-1 ${activeSection === item.id ? item.activeColor : "text-gray-600 hover:bg-gray-100"}`}>
                       <span className={activeSection === item.id ? "text-white" : item.iconColor}>{item.icon}</span>
                       <span className="flex-1 text-left">{item.label}</span>
-                      {item.id === "chat" && unreadChatCount > 0 && (
-                        <span className="w-5 h-5 bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center shrink-0">
-                          {unreadChatCount > 9 ? "9+" : unreadChatCount}
-                        </span>
-                      )}
                     </button>
                   ))}
                 </div>
@@ -1656,11 +1607,6 @@ export default function DashboardPage() {
                         className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-colors mb-1 ${activeSection === item.id ? "bg-teal-500 text-white" : "text-gray-600 hover:bg-gray-100"}`}>
                         {item.icon}
                         <span className="flex-1 text-left">{item.label}</span>
-                        {item.id === "chat" && unreadChatCount > 0 && (
-                          <span className="w-5 h-5 bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center shrink-0">
-                            {unreadChatCount > 9 ? "9+" : unreadChatCount}
-                          </span>
-                        )}
                       </button>
                     ))}
                   </div>
@@ -1677,7 +1623,6 @@ export default function DashboardPage() {
                     {activeSection === "applications" && <ApplicationsTab loans={loans} />}
                     {activeSection === "documents" && <DocumentsTab loans={loans} />}
                     {activeSection === "notifications" && <NotificationsTab />}
-                    {activeSection === "chat" && user && <ChatSection userId={user.id} />}
                     {activeSection === "profile" && <ProfileTab profile={profile} onSave={setProfile} />}
                   </>
                 )}
@@ -1686,7 +1631,7 @@ export default function DashboardPage() {
           </>
         )}
       </div>
-      {user && <ChatWidget userId={user.id} unread={unreadChatCount} />}
+{/* Chat widget removed — only chatbot on public pages */}
     </div>
   );
 }

@@ -129,9 +129,9 @@ export const WhyFundMyCampus: React.FC = () => {
           whileInView="visible"
           viewport={{ once: true }}
           variants={fadeInUp}
-          className="mt-20 bg-black rounded-3xl p-8 md:p-12"
+          className="mt-20 bg-black rounded-3xl p-5 sm:p-8 md:p-12"
         >
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 text-center">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-8 text-center">
             <div>
               <h4 className="font-serif text-3xl md:text-4xl text-teal-500 mb-2">₹500Cr+</h4>
               <p className="text-gray-300">Loans Disbursed</p>
