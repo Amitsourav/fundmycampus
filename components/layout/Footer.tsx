@@ -9,7 +9,7 @@ export const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-black text-gray-200">
+    <footer className="bg-black text-gray-200 overflow-hidden">
       <div className="max-w-screen-xl mx-auto px-4 sm:px-6 md:px-8 py-12 sm:py-16 md:py-24">
         <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp}
           className="grid grid-cols-1 lg:grid-cols-12 gap-10 mb-16">
@@ -23,7 +23,7 @@ export const Footer: React.FC = () => {
           </div>
 
           {/* Links — 9 cols, split into sub-grid */}
-          <div className="lg:col-span-9 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6 sm:gap-8 lg:gap-10">
+          <div className="lg:col-span-9 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6 sm:gap-8 lg:gap-6">
             {/* Services */}
             <div>
               <h4 className="text-sm uppercase tracking-wide-lg mb-5 text-gray-100 font-semibold">Services</h4>
