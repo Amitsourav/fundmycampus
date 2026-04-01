@@ -645,7 +645,19 @@ export function SignupForm() {
         <BasicDetailsStep
           data={basic}
           onChange={(d) => setBasic((p) => ({ ...p, ...d }))}
-          onNext={() => setStep(2)}
+          onNext={async () => {
+            // Save basic details to profile immediately so they're not lost if user skips later steps
+            try {
+              await api.patch("/api/v1/profiles/me", {
+                full_name: basic.full_name,
+                phone: basic.phone,
+                gender: basic.gender,
+                is_whatsapp: basic.whatsapp_same,
+                ...(!basic.whatsapp_same && basic.whatsapp_number ? { whatsapp_number: basic.whatsapp_number } : {}),
+              });
+            } catch { /* continue even if save fails */ }
+            setStep(2);
+          }}
         />
       )}
       {step === 2 && (
