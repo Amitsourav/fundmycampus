@@ -55,12 +55,24 @@ function GoogleIcon() {
   );
 }
 
+function useIsMobile() {
+  const [mobile, setMobile] = useState(false);
+  useEffect(() => {
+    function calc() { setMobile(window.innerWidth < 640); }
+    calc();
+    window.addEventListener("resize", calc);
+    return () => window.removeEventListener("resize", calc);
+  }, []);
+  return mobile;
+}
+
 function useSlideDistance() {
   const [dist, setDist] = useState(260);
   useEffect(() => {
     function calc() {
       const w = window.innerWidth;
-      if (w < 1100) setDist(140);
+      if (w < 640) setDist(120);
+      else if (w < 1100) setDist(140);
       else if (w < 1400) setDist(180);
       else setDist(260);
     }
@@ -78,6 +90,7 @@ function ReviewPanel({
   scaleY,
   isSelected,
   slideDistance,
+  isMobile,
   onSelect,
 }: {
   index: number;
@@ -86,6 +99,7 @@ function ReviewPanel({
   scaleY: ReturnType<typeof useSpring>;
   isSelected: boolean;
   slideDistance: number;
+  isMobile: boolean;
   onSelect: (index: number) => void;
 }) {
   const t = index / (total - 1);
@@ -93,8 +107,8 @@ function ReviewPanel({
   const review = REVIEWS[index];
   const avatarColor = AVATAR_COLORS[index];
 
-  const w = 220 + t * 40;
-  const h = 180 + t * 50;
+  const w = isMobile ? 150 + t * 25 : 220 + t * 40;
+  const h = isMobile ? 130 + t * 30 : 180 + t * 50;
   const opacity = 0.35 + t * 0.65;
 
   return (
@@ -115,7 +129,7 @@ function ReviewPanel({
       style={{
         width: w,
         height: h,
-        marginLeft: -w / 2,
+        marginLeft: isMobile ? 0 : -w / 2,
         marginTop: -h / 2,
         translateZ: isSelected ? baseZ + 60 : baseZ,
         y: isSelected ? undefined : waveY,
@@ -184,6 +198,7 @@ export default function StackedPanels() {
   const isHovering = useRef(false);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const slideDistance = useSlideDistance();
+  const isMobile = useIsMobile();
 
   const waveYSprings = Array.from({ length: PANEL_COUNT }, () =>
     // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -253,8 +268,8 @@ export default function StackedPanels() {
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       onClick={handleContainerClick}
-      className="relative w-full h-full flex items-center justify-center select-none"
-      style={{ perspective: "900px" }}
+      className="relative w-full h-full flex items-center select-none"
+      style={{ perspective: "900px", justifyContent: isMobile ? "flex-start" : "center", paddingLeft: isMobile ? "20px" : "0" }}
     >
       <motion.div
         style={{
@@ -275,6 +290,7 @@ export default function StackedPanels() {
             scaleY={scaleYSprings[i]}
             isSelected={selectedIndex === i}
             slideDistance={slideDistance}
+            isMobile={isMobile}
             onSelect={handleSelect}
           />
         ))}

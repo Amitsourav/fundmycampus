@@ -1,3 +1,13 @@
 {
-  "framework": "nextjs"
+  "framework": "nextjs",
+  "rewrites": [
+    {
+      "source": "/education-loan-for-MBA",
+      "destination": "https://landing.fundmycampus.com/"
+    },
+    {
+      "source": "/education-loan-for-MBA/:path*",
+      "destination": "https://landing.fundmycampus.com/:path*"
+    }
+  ]
 }

@@ -71,12 +71,12 @@ export const Hero: React.FC = () => {
 
       {/* Main Content */}
       <div className="relative z-10 w-full">
-        <div className="max-w-screen-xl mx-auto px-6 md:px-8 pt-28 md:pt-32 pb-6">
+        <div className="max-w-screen-xl mx-auto px-6 md:px-8 pt-24 md:pt-32 pb-6">
           <motion.div
             initial="hidden"
             animate="visible"
             variants={staggerContainer}
-            className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center"
+            className="grid grid-cols-1 lg:grid-cols-12 gap-2 sm:gap-6 lg:gap-12 items-center"
           >
             {/* Left Content */}
             <div className="lg:col-span-6 order-2 lg:order-1">
@@ -133,7 +133,7 @@ export const Hero: React.FC = () => {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="lg:col-span-6 order-1 lg:order-2 hidden md:flex justify-center items-center"
             >
-              <div className="relative w-full h-[350px] sm:h-[400px] lg:h-[450px]">
+              <div className="relative w-full h-[220px] sm:h-[350px] md:h-[400px] lg:h-[450px]">
                 <StackedPanels />
               </div>
             </motion.div>
